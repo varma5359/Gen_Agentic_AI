@@ -33,5 +33,5 @@ This repository contains the approved 70-day TechPhile.ai GenAI & Agentic AI Dev
 - Avoid filler and repetition; correctness and teachability come first.
 
 ## Phase status
-- Phase 1 — Days 1–10: class notes and interview guides published.
+- Phase 1 — Days 1–10: rebuilt beginner-first class notes and interview guides; see the links above.
 - Phases 2–9: to be authored and committed phase by phase.

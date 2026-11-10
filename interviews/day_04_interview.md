@@ -419,3 +419,42 @@ Be ready to explain:
 | Answer interview follow-ups | /5 |
 
 **Trainer note:** A student is ready to move forward when they can explain the concept, modify a working example and solve a small task without copying the complete solution.
+
+
+## Additional mentor-led interview drills
+
+### How to answer a question when you are a beginner
+1. Listen to the complete question.
+2. Identify the exact Python feature being asked about.
+3. Give a simple definition.
+4. Explain the purpose before describing syntax.
+5. Write the smallest example that demonstrates the feature.
+6. Predict and explain its output.
+7. Mention one limitation or common error.
+8. Connect it to the day's mini-project.
+
+### Interviewer follow-up ladder
+- What problem does this feature solve?
+- Can you explain it without using a technical definition?
+- What is the smallest working example?
+- What happens when the input changes?
+- Does the operation change the original value or return a new value?
+- What happens for empty or invalid input?
+- How would you test this behavior?
+- Where would you use it in a real application?
+- What would you improve before production use?
+
+### Practical communication drill
+Ask the student to explain one code example in this order: input, variable, operation, output, error case and practical use. The student must not read the answer word for word. The trainer should ask one follow-up after each explanation.
+
+### Code review drill
+- Are names meaningful?
+- Is each function focused on one task?
+- Is the output predictable?
+- Are invalid inputs considered?
+- Are secrets kept outside source code?
+- Can another beginner run the project using the README?
+- Is there at least one test for normal behavior and one test for an edge case?
+
+### Student reflection
+Write down the question that was hardest to answer. Revisit the matching class-note section, create a smaller example and explain it again the next day.

@@ -606,3 +606,1006 @@ day_09_project/
 - Be ready to teach the concept to another beginner.
 
 **Day 9 completion:** mark complete only when you can explain the concepts, run the examples and demonstrate your mini-project.
+
+# Deep teaching workbook — guided labs and mentor walkthroughs
+
+This workbook is part of the class lesson. Complete each lab with your trainer; do not treat it as optional filler.
+
+## Guided classroom lab 1: Learning objectives
+
+### Step 1 — Say the idea in everyday language
+Today's idea is "Learning objectives". Before typing code, explain what problem this feature solves. Use an example from a college, student portal, chat application or simple business process.
+
+Ask yourself:
+- What information do I start with?
+- What action does the program perform?
+- What result should I see?
+- What should happen if the input is missing?
+- What should happen if the input is the wrong type?
+
+### Step 2 — Read the smallest example
+Open the first code example in this lesson. Read it from top to bottom.
+Do not run it immediately.
+Underline the variable names.
+Circle the function or method name.
+Mark the input values.
+Mark the line that produces the result.
+Write a one-sentence explanation beside every important line.
+
+### Step 3 — Predict before execution
+Write down what you expect the program to display.
+Run the program once.
+Compare the actual result with your prediction.
+If the result differs, do not randomly change the code.
+Check the value, type, order of operations and indentation.
+Run the smallest part that reproduces the difference.
+
+### Step 4 — Change one thing at a time
+Change one input value.
+Predict the new result.
+Run the program again.
+Restore the original value.
+Change a second value.
+Predict again.
+Run again.
+Explain the difference between the two results.
+
+### Step 5 — Trace the program
+Use a notebook to make a trace table.
+
+| Step | Variable or operation | Value before | Action | Value after |
+|---:|---|---|---|---|
+| 1 | First input | Empty | Supply sample input | Sample input |
+| 2 | First operation | Sample input | Apply the lesson concept | Intermediate result |
+| 3 | Second operation | Intermediate result | Continue processing | Final result |
+| 4 | Output | Final result | Display or return | Visible result |
+
+Fill the table with the actual values from your program.
+Do not copy the words 'sample input' into every cell; write the real values.
+
+### Step 6 — Beginner coding challenge
+Build a tiny program that demonstrates "Learning objectives" without using a framework.
+Use no more than three variables at first.
+Use one small function if the concept requires a function.
+Use sample values that a college student can understand.
+Print the result with a clear label.
+Run the program.
+Change one input.
+Run it again.
+Explain the change.
+
+### Step 7 — Make the program safer
+Ask what could go wrong if the user supplies an empty value.
+Ask what could go wrong if the user supplies a different data type.
+Ask what could go wrong if the collection has no items.
+Ask what could go wrong if a requested key or index does not exist.
+Choose a suitable validation or exception-handling approach.
+Do not catch every possible exception without understanding it.
+Show the user a helpful message when an expected problem occurs.
+
+### Step 8 — Improve readability
+Use names that describe the meaning of each value.
+Keep one operation per line while learning.
+Add a short comment only when it explains a reason that is not obvious.
+Remove code that is no longer used.
+Keep the example small enough to explain aloud.
+Do not compress beginner code into a clever one-liner.
+
+### Step 9 — Explain the concept to another person
+Start with a one-sentence definition.
+Describe why a developer needs it.
+Walk through the example.
+Explain the expected output.
+Describe one common error.
+Give one practical application.
+Ask the other person to change an input and predict the result.
+
+### Step 10 — Trainer observation
+The trainer should ask the student to close the notes.
+The student should recreate the smallest example.
+The student should explain each important line.
+The student should modify one input without help.
+The student should identify one limitation.
+The trainer should correct misunderstandings before moving forward.
+
+### Independent practice record
+- [ ] I explained the concept in simple words.
+- [ ] I typed the example myself.
+- [ ] I predicted the output.
+- [ ] I ran the code successfully.
+- [ ] I changed an input and explained the result.
+- [ ] I tested one unusual input.
+- [ ] I completed the challenge.
+- [ ] I explained the code aloud.
+
+**Mastery evidence:** the student can independently demonstrate "Learning objectives" and explain why the output is correct.
+
+---
+
+## Guided classroom lab 2: Important vocabulary
+
+### Step 1 — Say the idea in everyday language
+Today's idea is "Important vocabulary". Before typing code, explain what problem this feature solves. Use an example from a college, student portal, chat application or simple business process.
+
+Ask yourself:
+- What information do I start with?
+- What action does the program perform?
+- What result should I see?
+- What should happen if the input is missing?
+- What should happen if the input is the wrong type?
+
+### Step 2 — Read the smallest example
+Open the first code example in this lesson. Read it from top to bottom.
+Do not run it immediately.
+Underline the variable names.
+Circle the function or method name.
+Mark the input values.
+Mark the line that produces the result.
+Write a one-sentence explanation beside every important line.
+
+### Step 3 — Predict before execution
+Write down what you expect the program to display.
+Run the program once.
+Compare the actual result with your prediction.
+If the result differs, do not randomly change the code.
+Check the value, type, order of operations and indentation.
+Run the smallest part that reproduces the difference.
+
+### Step 4 — Change one thing at a time
+Change one input value.
+Predict the new result.
+Run the program again.
+Restore the original value.
+Change a second value.
+Predict again.
+Run again.
+Explain the difference between the two results.
+
+### Step 5 — Trace the program
+Use a notebook to make a trace table.
+
+| Step | Variable or operation | Value before | Action | Value after |
+|---:|---|---|---|---|
+| 1 | First input | Empty | Supply sample input | Sample input |
+| 2 | First operation | Sample input | Apply the lesson concept | Intermediate result |
+| 3 | Second operation | Intermediate result | Continue processing | Final result |
+| 4 | Output | Final result | Display or return | Visible result |
+
+Fill the table with the actual values from your program.
+Do not copy the words 'sample input' into every cell; write the real values.
+
+### Step 6 — Beginner coding challenge
+Build a tiny program that demonstrates "Important vocabulary" without using a framework.
+Use no more than three variables at first.
+Use one small function if the concept requires a function.
+Use sample values that a college student can understand.
+Print the result with a clear label.
+Run the program.
+Change one input.
+Run it again.
+Explain the change.
+
+### Step 7 — Make the program safer
+Ask what could go wrong if the user supplies an empty value.
+Ask what could go wrong if the user supplies a different data type.
+Ask what could go wrong if the collection has no items.
+Ask what could go wrong if a requested key or index does not exist.
+Choose a suitable validation or exception-handling approach.
+Do not catch every possible exception without understanding it.
+Show the user a helpful message when an expected problem occurs.
+
+### Step 8 — Improve readability
+Use names that describe the meaning of each value.
+Keep one operation per line while learning.
+Add a short comment only when it explains a reason that is not obvious.
+Remove code that is no longer used.
+Keep the example small enough to explain aloud.
+Do not compress beginner code into a clever one-liner.
+
+### Step 9 — Explain the concept to another person
+Start with a one-sentence definition.
+Describe why a developer needs it.
+Walk through the example.
+Explain the expected output.
+Describe one common error.
+Give one practical application.
+Ask the other person to change an input and predict the result.
+
+### Step 10 — Trainer observation
+The trainer should ask the student to close the notes.
+The student should recreate the smallest example.
+The student should explain each important line.
+The student should modify one input without help.
+The student should identify one limitation.
+The trainer should correct misunderstandings before moving forward.
+
+### Independent practice record
+- [ ] I explained the concept in simple words.
+- [ ] I typed the example myself.
+- [ ] I predicted the output.
+- [ ] I ran the code successfully.
+- [ ] I changed an input and explained the result.
+- [ ] I tested one unusual input.
+- [ ] I completed the challenge.
+- [ ] I explained the code aloud.
+
+**Mastery evidence:** the student can independently demonstrate "Important vocabulary" and explain why the output is correct.
+
+---
+
+## Guided classroom lab 3: Class plan
+
+### Step 1 — Say the idea in everyday language
+Today's idea is "Class plan". Before typing code, explain what problem this feature solves. Use an example from a college, student portal, chat application or simple business process.
+
+Ask yourself:
+- What information do I start with?
+- What action does the program perform?
+- What result should I see?
+- What should happen if the input is missing?
+- What should happen if the input is the wrong type?
+
+### Step 2 — Read the smallest example
+Open the first code example in this lesson. Read it from top to bottom.
+Do not run it immediately.
+Underline the variable names.
+Circle the function or method name.
+Mark the input values.
+Mark the line that produces the result.
+Write a one-sentence explanation beside every important line.
+
+### Step 3 — Predict before execution
+Write down what you expect the program to display.
+Run the program once.
+Compare the actual result with your prediction.
+If the result differs, do not randomly change the code.
+Check the value, type, order of operations and indentation.
+Run the smallest part that reproduces the difference.
+
+### Step 4 — Change one thing at a time
+Change one input value.
+Predict the new result.
+Run the program again.
+Restore the original value.
+Change a second value.
+Predict again.
+Run again.
+Explain the difference between the two results.
+
+### Step 5 — Trace the program
+Use a notebook to make a trace table.
+
+| Step | Variable or operation | Value before | Action | Value after |
+|---:|---|---|---|---|
+| 1 | First input | Empty | Supply sample input | Sample input |
+| 2 | First operation | Sample input | Apply the lesson concept | Intermediate result |
+| 3 | Second operation | Intermediate result | Continue processing | Final result |
+| 4 | Output | Final result | Display or return | Visible result |
+
+Fill the table with the actual values from your program.
+Do not copy the words 'sample input' into every cell; write the real values.
+
+### Step 6 — Beginner coding challenge
+Build a tiny program that demonstrates "Class plan" without using a framework.
+Use no more than three variables at first.
+Use one small function if the concept requires a function.
+Use sample values that a college student can understand.
+Print the result with a clear label.
+Run the program.
+Change one input.
+Run it again.
+Explain the change.
+
+### Step 7 — Make the program safer
+Ask what could go wrong if the user supplies an empty value.
+Ask what could go wrong if the user supplies a different data type.
+Ask what could go wrong if the collection has no items.
+Ask what could go wrong if a requested key or index does not exist.
+Choose a suitable validation or exception-handling approach.
+Do not catch every possible exception without understanding it.
+Show the user a helpful message when an expected problem occurs.
+
+### Step 8 — Improve readability
+Use names that describe the meaning of each value.
+Keep one operation per line while learning.
+Add a short comment only when it explains a reason that is not obvious.
+Remove code that is no longer used.
+Keep the example small enough to explain aloud.
+Do not compress beginner code into a clever one-liner.
+
+### Step 9 — Explain the concept to another person
+Start with a one-sentence definition.
+Describe why a developer needs it.
+Walk through the example.
+Explain the expected output.
+Describe one common error.
+Give one practical application.
+Ask the other person to change an input and predict the result.
+
+### Step 10 — Trainer observation
+The trainer should ask the student to close the notes.
+The student should recreate the smallest example.
+The student should explain each important line.
+The student should modify one input without help.
+The student should identify one limitation.
+The trainer should correct misunderstandings before moving forward.
+
+### Independent practice record
+- [ ] I explained the concept in simple words.
+- [ ] I typed the example myself.
+- [ ] I predicted the output.
+- [ ] I ran the code successfully.
+- [ ] I changed an input and explained the result.
+- [ ] I tested one unusual input.
+- [ ] I completed the challenge.
+- [ ] I explained the code aloud.
+
+**Mastery evidence:** the student can independently demonstrate "Class plan" and explain why the output is correct.
+
+---
+
+## Guided classroom lab 4: FastAPI application
+
+### Step 1 — Say the idea in everyday language
+Today's idea is "FastAPI application". Before typing code, explain what problem this feature solves. Use an example from a college, student portal, chat application or simple business process.
+
+Ask yourself:
+- What information do I start with?
+- What action does the program perform?
+- What result should I see?
+- What should happen if the input is missing?
+- What should happen if the input is the wrong type?
+
+### Step 2 — Read the smallest example
+Open the first code example in this lesson. Read it from top to bottom.
+Do not run it immediately.
+Underline the variable names.
+Circle the function or method name.
+Mark the input values.
+Mark the line that produces the result.
+Write a one-sentence explanation beside every important line.
+
+### Step 3 — Predict before execution
+Write down what you expect the program to display.
+Run the program once.
+Compare the actual result with your prediction.
+If the result differs, do not randomly change the code.
+Check the value, type, order of operations and indentation.
+Run the smallest part that reproduces the difference.
+
+### Step 4 — Change one thing at a time
+Change one input value.
+Predict the new result.
+Run the program again.
+Restore the original value.
+Change a second value.
+Predict again.
+Run again.
+Explain the difference between the two results.
+
+### Step 5 — Trace the program
+Use a notebook to make a trace table.
+
+| Step | Variable or operation | Value before | Action | Value after |
+|---:|---|---|---|---|
+| 1 | First input | Empty | Supply sample input | Sample input |
+| 2 | First operation | Sample input | Apply the lesson concept | Intermediate result |
+| 3 | Second operation | Intermediate result | Continue processing | Final result |
+| 4 | Output | Final result | Display or return | Visible result |
+
+Fill the table with the actual values from your program.
+Do not copy the words 'sample input' into every cell; write the real values.
+
+### Step 6 — Beginner coding challenge
+Build a tiny program that demonstrates "FastAPI application" without using a framework.
+Use no more than three variables at first.
+Use one small function if the concept requires a function.
+Use sample values that a college student can understand.
+Print the result with a clear label.
+Run the program.
+Change one input.
+Run it again.
+Explain the change.
+
+### Step 7 — Make the program safer
+Ask what could go wrong if the user supplies an empty value.
+Ask what could go wrong if the user supplies a different data type.
+Ask what could go wrong if the collection has no items.
+Ask what could go wrong if a requested key or index does not exist.
+Choose a suitable validation or exception-handling approach.
+Do not catch every possible exception without understanding it.
+Show the user a helpful message when an expected problem occurs.
+
+### Step 8 — Improve readability
+Use names that describe the meaning of each value.
+Keep one operation per line while learning.
+Add a short comment only when it explains a reason that is not obvious.
+Remove code that is no longer used.
+Keep the example small enough to explain aloud.
+Do not compress beginner code into a clever one-liner.
+
+### Step 9 — Explain the concept to another person
+Start with a one-sentence definition.
+Describe why a developer needs it.
+Walk through the example.
+Explain the expected output.
+Describe one common error.
+Give one practical application.
+Ask the other person to change an input and predict the result.
+
+### Step 10 — Trainer observation
+The trainer should ask the student to close the notes.
+The student should recreate the smallest example.
+The student should explain each important line.
+The student should modify one input without help.
+The student should identify one limitation.
+The trainer should correct misunderstandings before moving forward.
+
+### Independent practice record
+- [ ] I explained the concept in simple words.
+- [ ] I typed the example myself.
+- [ ] I predicted the output.
+- [ ] I ran the code successfully.
+- [ ] I changed an input and explained the result.
+- [ ] I tested one unusual input.
+- [ ] I completed the challenge.
+- [ ] I explained the code aloud.
+
+**Mastery evidence:** the student can independently demonstrate "FastAPI application" and explain why the output is correct.
+
+---
+
+## Guided classroom lab 5: Path parameters
+
+### Step 1 — Say the idea in everyday language
+Today's idea is "Path parameters". Before typing code, explain what problem this feature solves. Use an example from a college, student portal, chat application or simple business process.
+
+Ask yourself:
+- What information do I start with?
+- What action does the program perform?
+- What result should I see?
+- What should happen if the input is missing?
+- What should happen if the input is the wrong type?
+
+### Step 2 — Read the smallest example
+Open the first code example in this lesson. Read it from top to bottom.
+Do not run it immediately.
+Underline the variable names.
+Circle the function or method name.
+Mark the input values.
+Mark the line that produces the result.
+Write a one-sentence explanation beside every important line.
+
+### Step 3 — Predict before execution
+Write down what you expect the program to display.
+Run the program once.
+Compare the actual result with your prediction.
+If the result differs, do not randomly change the code.
+Check the value, type, order of operations and indentation.
+Run the smallest part that reproduces the difference.
+
+### Step 4 — Change one thing at a time
+Change one input value.
+Predict the new result.
+Run the program again.
+Restore the original value.
+Change a second value.
+Predict again.
+Run again.
+Explain the difference between the two results.
+
+### Step 5 — Trace the program
+Use a notebook to make a trace table.
+
+| Step | Variable or operation | Value before | Action | Value after |
+|---:|---|---|---|---|
+| 1 | First input | Empty | Supply sample input | Sample input |
+| 2 | First operation | Sample input | Apply the lesson concept | Intermediate result |
+| 3 | Second operation | Intermediate result | Continue processing | Final result |
+| 4 | Output | Final result | Display or return | Visible result |
+
+Fill the table with the actual values from your program.
+Do not copy the words 'sample input' into every cell; write the real values.
+
+### Step 6 — Beginner coding challenge
+Build a tiny program that demonstrates "Path parameters" without using a framework.
+Use no more than three variables at first.
+Use one small function if the concept requires a function.
+Use sample values that a college student can understand.
+Print the result with a clear label.
+Run the program.
+Change one input.
+Run it again.
+Explain the change.
+
+### Step 7 — Make the program safer
+Ask what could go wrong if the user supplies an empty value.
+Ask what could go wrong if the user supplies a different data type.
+Ask what could go wrong if the collection has no items.
+Ask what could go wrong if a requested key or index does not exist.
+Choose a suitable validation or exception-handling approach.
+Do not catch every possible exception without understanding it.
+Show the user a helpful message when an expected problem occurs.
+
+### Step 8 — Improve readability
+Use names that describe the meaning of each value.
+Keep one operation per line while learning.
+Add a short comment only when it explains a reason that is not obvious.
+Remove code that is no longer used.
+Keep the example small enough to explain aloud.
+Do not compress beginner code into a clever one-liner.
+
+### Step 9 — Explain the concept to another person
+Start with a one-sentence definition.
+Describe why a developer needs it.
+Walk through the example.
+Explain the expected output.
+Describe one common error.
+Give one practical application.
+Ask the other person to change an input and predict the result.
+
+### Step 10 — Trainer observation
+The trainer should ask the student to close the notes.
+The student should recreate the smallest example.
+The student should explain each important line.
+The student should modify one input without help.
+The student should identify one limitation.
+The trainer should correct misunderstandings before moving forward.
+
+### Independent practice record
+- [ ] I explained the concept in simple words.
+- [ ] I typed the example myself.
+- [ ] I predicted the output.
+- [ ] I ran the code successfully.
+- [ ] I changed an input and explained the result.
+- [ ] I tested one unusual input.
+- [ ] I completed the challenge.
+- [ ] I explained the code aloud.
+
+**Mastery evidence:** the student can independently demonstrate "Path parameters" and explain why the output is correct.
+
+---
+
+## Guided classroom lab 6: Query parameters
+
+### Step 1 — Say the idea in everyday language
+Today's idea is "Query parameters". Before typing code, explain what problem this feature solves. Use an example from a college, student portal, chat application or simple business process.
+
+Ask yourself:
+- What information do I start with?
+- What action does the program perform?
+- What result should I see?
+- What should happen if the input is missing?
+- What should happen if the input is the wrong type?
+
+### Step 2 — Read the smallest example
+Open the first code example in this lesson. Read it from top to bottom.
+Do not run it immediately.
+Underline the variable names.
+Circle the function or method name.
+Mark the input values.
+Mark the line that produces the result.
+Write a one-sentence explanation beside every important line.
+
+### Step 3 — Predict before execution
+Write down what you expect the program to display.
+Run the program once.
+Compare the actual result with your prediction.
+If the result differs, do not randomly change the code.
+Check the value, type, order of operations and indentation.
+Run the smallest part that reproduces the difference.
+
+### Step 4 — Change one thing at a time
+Change one input value.
+Predict the new result.
+Run the program again.
+Restore the original value.
+Change a second value.
+Predict again.
+Run again.
+Explain the difference between the two results.
+
+### Step 5 — Trace the program
+Use a notebook to make a trace table.
+
+| Step | Variable or operation | Value before | Action | Value after |
+|---:|---|---|---|---|
+| 1 | First input | Empty | Supply sample input | Sample input |
+| 2 | First operation | Sample input | Apply the lesson concept | Intermediate result |
+| 3 | Second operation | Intermediate result | Continue processing | Final result |
+| 4 | Output | Final result | Display or return | Visible result |
+
+Fill the table with the actual values from your program.
+Do not copy the words 'sample input' into every cell; write the real values.
+
+### Step 6 — Beginner coding challenge
+Build a tiny program that demonstrates "Query parameters" without using a framework.
+Use no more than three variables at first.
+Use one small function if the concept requires a function.
+Use sample values that a college student can understand.
+Print the result with a clear label.
+Run the program.
+Change one input.
+Run it again.
+Explain the change.
+
+### Step 7 — Make the program safer
+Ask what could go wrong if the user supplies an empty value.
+Ask what could go wrong if the user supplies a different data type.
+Ask what could go wrong if the collection has no items.
+Ask what could go wrong if a requested key or index does not exist.
+Choose a suitable validation or exception-handling approach.
+Do not catch every possible exception without understanding it.
+Show the user a helpful message when an expected problem occurs.
+
+### Step 8 — Improve readability
+Use names that describe the meaning of each value.
+Keep one operation per line while learning.
+Add a short comment only when it explains a reason that is not obvious.
+Remove code that is no longer used.
+Keep the example small enough to explain aloud.
+Do not compress beginner code into a clever one-liner.
+
+### Step 9 — Explain the concept to another person
+Start with a one-sentence definition.
+Describe why a developer needs it.
+Walk through the example.
+Explain the expected output.
+Describe one common error.
+Give one practical application.
+Ask the other person to change an input and predict the result.
+
+### Step 10 — Trainer observation
+The trainer should ask the student to close the notes.
+The student should recreate the smallest example.
+The student should explain each important line.
+The student should modify one input without help.
+The student should identify one limitation.
+The trainer should correct misunderstandings before moving forward.
+
+### Independent practice record
+- [ ] I explained the concept in simple words.
+- [ ] I typed the example myself.
+- [ ] I predicted the output.
+- [ ] I ran the code successfully.
+- [ ] I changed an input and explained the result.
+- [ ] I tested one unusual input.
+- [ ] I completed the challenge.
+- [ ] I explained the code aloud.
+
+**Mastery evidence:** the student can independently demonstrate "Query parameters" and explain why the output is correct.
+
+---
+
+## Guided classroom lab 7: Pydantic request models
+
+### Step 1 — Say the idea in everyday language
+Today's idea is "Pydantic request models". Before typing code, explain what problem this feature solves. Use an example from a college, student portal, chat application or simple business process.
+
+Ask yourself:
+- What information do I start with?
+- What action does the program perform?
+- What result should I see?
+- What should happen if the input is missing?
+- What should happen if the input is the wrong type?
+
+### Step 2 — Read the smallest example
+Open the first code example in this lesson. Read it from top to bottom.
+Do not run it immediately.
+Underline the variable names.
+Circle the function or method name.
+Mark the input values.
+Mark the line that produces the result.
+Write a one-sentence explanation beside every important line.
+
+### Step 3 — Predict before execution
+Write down what you expect the program to display.
+Run the program once.
+Compare the actual result with your prediction.
+If the result differs, do not randomly change the code.
+Check the value, type, order of operations and indentation.
+Run the smallest part that reproduces the difference.
+
+### Step 4 — Change one thing at a time
+Change one input value.
+Predict the new result.
+Run the program again.
+Restore the original value.
+Change a second value.
+Predict again.
+Run again.
+Explain the difference between the two results.
+
+### Step 5 — Trace the program
+Use a notebook to make a trace table.
+
+| Step | Variable or operation | Value before | Action | Value after |
+|---:|---|---|---|---|
+| 1 | First input | Empty | Supply sample input | Sample input |
+| 2 | First operation | Sample input | Apply the lesson concept | Intermediate result |
+| 3 | Second operation | Intermediate result | Continue processing | Final result |
+| 4 | Output | Final result | Display or return | Visible result |
+
+Fill the table with the actual values from your program.
+Do not copy the words 'sample input' into every cell; write the real values.
+
+### Step 6 — Beginner coding challenge
+Build a tiny program that demonstrates "Pydantic request models" without using a framework.
+Use no more than three variables at first.
+Use one small function if the concept requires a function.
+Use sample values that a college student can understand.
+Print the result with a clear label.
+Run the program.
+Change one input.
+Run it again.
+Explain the change.
+
+### Step 7 — Make the program safer
+Ask what could go wrong if the user supplies an empty value.
+Ask what could go wrong if the user supplies a different data type.
+Ask what could go wrong if the collection has no items.
+Ask what could go wrong if a requested key or index does not exist.
+Choose a suitable validation or exception-handling approach.
+Do not catch every possible exception without understanding it.
+Show the user a helpful message when an expected problem occurs.
+
+### Step 8 — Improve readability
+Use names that describe the meaning of each value.
+Keep one operation per line while learning.
+Add a short comment only when it explains a reason that is not obvious.
+Remove code that is no longer used.
+Keep the example small enough to explain aloud.
+Do not compress beginner code into a clever one-liner.
+
+### Step 9 — Explain the concept to another person
+Start with a one-sentence definition.
+Describe why a developer needs it.
+Walk through the example.
+Explain the expected output.
+Describe one common error.
+Give one practical application.
+Ask the other person to change an input and predict the result.
+
+### Step 10 — Trainer observation
+The trainer should ask the student to close the notes.
+The student should recreate the smallest example.
+The student should explain each important line.
+The student should modify one input without help.
+The student should identify one limitation.
+The trainer should correct misunderstandings before moving forward.
+
+### Independent practice record
+- [ ] I explained the concept in simple words.
+- [ ] I typed the example myself.
+- [ ] I predicted the output.
+- [ ] I ran the code successfully.
+- [ ] I changed an input and explained the result.
+- [ ] I tested one unusual input.
+- [ ] I completed the challenge.
+- [ ] I explained the code aloud.
+
+**Mastery evidence:** the student can independently demonstrate "Pydantic request models" and explain why the output is correct.
+
+---
+
+## Guided classroom lab 8: Response models
+
+### Step 1 — Say the idea in everyday language
+Today's idea is "Response models". Before typing code, explain what problem this feature solves. Use an example from a college, student portal, chat application or simple business process.
+
+Ask yourself:
+- What information do I start with?
+- What action does the program perform?
+- What result should I see?
+- What should happen if the input is missing?
+- What should happen if the input is the wrong type?
+
+### Step 2 — Read the smallest example
+Open the first code example in this lesson. Read it from top to bottom.
+Do not run it immediately.
+Underline the variable names.
+Circle the function or method name.
+Mark the input values.
+Mark the line that produces the result.
+Write a one-sentence explanation beside every important line.
+
+### Step 3 — Predict before execution
+Write down what you expect the program to display.
+Run the program once.
+Compare the actual result with your prediction.
+If the result differs, do not randomly change the code.
+Check the value, type, order of operations and indentation.
+Run the smallest part that reproduces the difference.
+
+### Step 4 — Change one thing at a time
+Change one input value.
+Predict the new result.
+Run the program again.
+Restore the original value.
+Change a second value.
+Predict again.
+Run again.
+Explain the difference between the two results.
+
+### Step 5 — Trace the program
+Use a notebook to make a trace table.
+
+| Step | Variable or operation | Value before | Action | Value after |
+|---:|---|---|---|---|
+| 1 | First input | Empty | Supply sample input | Sample input |
+| 2 | First operation | Sample input | Apply the lesson concept | Intermediate result |
+| 3 | Second operation | Intermediate result | Continue processing | Final result |
+| 4 | Output | Final result | Display or return | Visible result |
+
+Fill the table with the actual values from your program.
+Do not copy the words 'sample input' into every cell; write the real values.
+
+### Step 6 — Beginner coding challenge
+Build a tiny program that demonstrates "Response models" without using a framework.
+Use no more than three variables at first.
+Use one small function if the concept requires a function.
+Use sample values that a college student can understand.
+Print the result with a clear label.
+Run the program.
+Change one input.
+Run it again.
+Explain the change.
+
+### Step 7 — Make the program safer
+Ask what could go wrong if the user supplies an empty value.
+Ask what could go wrong if the user supplies a different data type.
+Ask what could go wrong if the collection has no items.
+Ask what could go wrong if a requested key or index does not exist.
+Choose a suitable validation or exception-handling approach.
+Do not catch every possible exception without understanding it.
+Show the user a helpful message when an expected problem occurs.
+
+### Step 8 — Improve readability
+Use names that describe the meaning of each value.
+Keep one operation per line while learning.
+Add a short comment only when it explains a reason that is not obvious.
+Remove code that is no longer used.
+Keep the example small enough to explain aloud.
+Do not compress beginner code into a clever one-liner.
+
+### Step 9 — Explain the concept to another person
+Start with a one-sentence definition.
+Describe why a developer needs it.
+Walk through the example.
+Explain the expected output.
+Describe one common error.
+Give one practical application.
+Ask the other person to change an input and predict the result.
+
+### Step 10 — Trainer observation
+The trainer should ask the student to close the notes.
+The student should recreate the smallest example.
+The student should explain each important line.
+The student should modify one input without help.
+The student should identify one limitation.
+The trainer should correct misunderstandings before moving forward.
+
+### Independent practice record
+- [ ] I explained the concept in simple words.
+- [ ] I typed the example myself.
+- [ ] I predicted the output.
+- [ ] I ran the code successfully.
+- [ ] I changed an input and explained the result.
+- [ ] I tested one unusual input.
+- [ ] I completed the challenge.
+- [ ] I explained the code aloud.
+
+**Mastery evidence:** the student can independently demonstrate "Response models" and explain why the output is correct.
+
+---
+
+## Guided classroom lab 9: API structure and dependency basics
+
+### Step 1 — Say the idea in everyday language
+Today's idea is "API structure and dependency basics". Before typing code, explain what problem this feature solves. Use an example from a college, student portal, chat application or simple business process.
+
+Ask yourself:
+- What information do I start with?
+- What action does the program perform?
+- What result should I see?
+- What should happen if the input is missing?
+- What should happen if the input is the wrong type?
+
+### Step 2 — Read the smallest example
+Open the first code example in this lesson. Read it from top to bottom.
+Do not run it immediately.
+Underline the variable names.
+Circle the function or method name.
+Mark the input values.
+Mark the line that produces the result.
+Write a one-sentence explanation beside every important line.
+
+### Step 3 — Predict before execution
+Write down what you expect the program to display.
+Run the program once.
+Compare the actual result with your prediction.
+If the result differs, do not randomly change the code.
+Check the value, type, order of operations and indentation.
+Run the smallest part that reproduces the difference.
+
+### Step 4 — Change one thing at a time
+Change one input value.
+Predict the new result.
+Run the program again.
+Restore the original value.
+Change a second value.
+Predict again.
+Run again.
+Explain the difference between the two results.
+
+### Step 5 — Trace the program
+Use a notebook to make a trace table.
+
+| Step | Variable or operation | Value before | Action | Value after |
+|---:|---|---|---|---|
+| 1 | First input | Empty | Supply sample input | Sample input |
+| 2 | First operation | Sample input | Apply the lesson concept | Intermediate result |
+| 3 | Second operation | Intermediate result | Continue processing | Final result |
+| 4 | Output | Final result | Display or return | Visible result |
+
+Fill the table with the actual values from your program.
+Do not copy the words 'sample input' into every cell; write the real values.
+
+### Step 6 — Beginner coding challenge
+Build a tiny program that demonstrates "API structure and dependency basics" without using a framework.
+Use no more than three variables at first.
+Use one small function if the concept requires a function.
+Use sample values that a college student can understand.
+Print the result with a clear label.
+Run the program.
+Change one input.
+Run it again.
+Explain the change.
+
+### Step 7 — Make the program safer
+Ask what could go wrong if the user supplies an empty value.
+Ask what could go wrong if the user supplies a different data type.
+Ask what could go wrong if the collection has no items.
+Ask what could go wrong if a requested key or index does not exist.
+Choose a suitable validation or exception-handling approach.
+Do not catch every possible exception without understanding it.
+Show the user a helpful message when an expected problem occurs.
+
+### Step 8 — Improve readability
+Use names that describe the meaning of each value.
+Keep one operation per line while learning.
+Add a short comment only when it explains a reason that is not obvious.
+Remove code that is no longer used.
+Keep the example small enough to explain aloud.
+Do not compress beginner code into a clever one-liner.
+
+### Step 9 — Explain the concept to another person
+Start with a one-sentence definition.
+Describe why a developer needs it.
+Walk through the example.
+Explain the expected output.
+Describe one common error.
+Give one practical application.
+Ask the other person to change an input and predict the result.
+
+### Step 10 — Trainer observation
+The trainer should ask the student to close the notes.
+The student should recreate the smallest example.
+The student should explain each important line.
+The student should modify one input without help.
+The student should identify one limitation.
+The trainer should correct misunderstandings before moving forward.
+
+### Independent practice record
+- [ ] I explained the concept in simple words.
+- [ ] I typed the example myself.
+- [ ] I predicted the output.
+- [ ] I ran the code successfully.
+- [ ] I changed an input and explained the result.
+- [ ] I tested one unusual input.
+- [ ] I completed the challenge.
+- [ ] I explained the code aloud.
+
+**Mastery evidence:** the student can independently demonstrate "API structure and dependency basics" and explain why the output is correct.
+
+---
