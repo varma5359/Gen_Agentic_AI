@@ -32,6 +32,28 @@ This repository contains the approved 70-day TechPhile.ai GenAI & Agentic AI Dev
 - Follow the approved day-wise syllabus and project titles.
 - Avoid filler and repetition; correctness and teachability come first.
 
+## Phase 2 — Generative AI and LLM Foundations
+
+| Day | Topic | Class notes | Interview preparation |
+|---:|---|---|---|
+| 11 | AI, ML, Deep Learning, Generative AI and transformer fundamentals | [Notes](notes/day_11_notes.md) | [Interview](interviews/day_11_interview.md) |
+| 12 | Tokens, tokenization, context windows, model inputs and outputs | [Notes](notes/day_12_notes.md) | [Interview](interviews/day_12_interview.md) |
+| 13 | Temperature, top-p, max tokens, model limitations and hallucinations | [Notes](notes/day_13_notes.md) | [Interview](interviews/day_13_interview.md) |
+| 14 | System prompts, user prompts, zero-shot and few-shot prompting | [Notes](notes/day_14_notes.md) | [Interview](interviews/day_14_interview.md) |
+| 15 | Prompt templates, role prompting, prompt structure and prompt testing | [Notes](notes/day_15_notes.md) | [Interview](interviews/day_15_interview.md) |
+
+## Phase 3 — LLM Application Development
+
+| Day | Topic | Class notes | Interview preparation |
+|---:|---|---|---|
+| 16 | OpenAI and Gemini API integration, SDK usage, API keys, model selection and secure configuration | [Notes](notes/day_16_notes.md) | [Interview](interviews/day_16_interview.md) |
+| 17 | Structured outputs, JSON responses, Pydantic schemas, output validation and parsing | [Notes](notes/day_17_notes.md) | [Interview](interviews/day_17_interview.md) |
+| 18 | Streaming responses, conversation history, message roles and multi-turn conversations | [Notes](notes/day_18_notes.md) | [Interview](interviews/day_18_interview.md) |
+| 19 | API errors, retries, timeouts, rate limits, fallback handling and exception management | [Notes](notes/day_19_notes.md) | [Interview](interviews/day_19_interview.md) |
+| 20 | FastAPI and LLM integration, backend architecture, modular code and API documentation | [Notes](notes/day_20_notes.md) | [Interview](interviews/day_20_interview.md) |
+
 ## Phase status
-- Phase 1 — Days 1–10: rebuilt beginner-first class notes and interview guides; see the links above.
-- Phases 2–9: to be authored and committed phase by phase.
+- Phase 1 — Days 1–10: beginner-first class notes and interview guides are present.
+- Phase 2 — Days 11–15: GenAI and LLM foundations materials are present.
+- Phase 3 — Days 16–20: LLM application development materials are present.
+- Phases 4–9: to be authored and committed phase by phase.
