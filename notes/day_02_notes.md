@@ -1611,3 +1611,637 @@ The trainer should correct misunderstandings before moving forward.
 **Mastery evidence:** the student can independently demonstrate "Choosing a data structure" and explain why the output is correct.
 
 ---
+
+
+---
+
+# 15. Essential method-by-method workbook — do not skip
+
+The earlier examples introduced the structures. This section teaches the operations individually. A method is called using the object, a dot, its name and parentheses: `messages.append("Hello")`.
+
+## 15.1 List methods — all eleven
+
+A list is ordered and changeable. Use it when you need to keep several items and may add, remove or update them.
+
+Start with:
+
+```python
+messages = ["Hi", "Explain loops", "Give an example"]
+```
+
+| Method | What it does | Argument | Return value | Changes original list? |
+|---|---|---|---|---|
+| `append(x)` | Adds x as one item at the end | One item | `None` | Yes |
+| `extend(items)` | Adds each item from an iterable | Iterable such as a list | `None` | Yes |
+| `insert(i, x)` | Inserts x at position i | Index and item | `None` | Yes |
+| `remove(x)` | Removes the first matching value | Value to remove | `None` | Yes |
+| `pop(i)` | Removes and gives back item at index i; default is last | Optional index | Removed item | Yes |
+| `clear()` | Removes every item | None | `None` | Yes |
+| `index(x)` | Finds first position of x | Value to find | Integer index | No |
+| `count(x)` | Counts occurrences of x | Value to count | Integer count | No |
+| `sort()` | Sorts the list in place | Optional `key`, `reverse` | `None` | Yes |
+| `reverse()` | Reverses item order in place | None | `None` | Yes |
+| `copy()` | Makes a shallow copy | None | New list | No |
+
+### A. append() — add one item
+
+```python
+messages = ["Hi", "How are you?"]
+result = messages.append("Explain Python")
+
+print(messages)
+print(result)
+```
+
+Output:
+
+```text
+['Hi', 'How are you?', 'Explain Python']
+None
+```
+
+**Understand it:** `append()` changes the existing list. It adds its argument as one single item. It does not return the updated list; its return value is `None`.
+
+A frequent beginner mistake is writing `messages = messages.append("Hello")`. That makes `messages` become `None`. Correct approach: call `messages.append("Hello")` on its own line.
+
+### B. extend() — add multiple items one by one
+
+```python
+messages = ["Hi"]
+messages.extend(["Hello", "Good morning"])
+print(messages)
+```
+
+Output:
+
+```text
+['Hi', 'Hello', 'Good morning']
+```
+
+### append() vs extend()
+
+```python
+a = ["Hi"]
+a.append(["Hello", "Bye"])
+print(a)
+
+b = ["Hi"]
+b.extend(["Hello", "Bye"])
+print(b)
+```
+
+Output:
+
+```text
+['Hi', ['Hello', 'Bye']]
+['Hi', 'Hello', 'Bye']
+```
+
+**Memory rule:**
+- `append(one_thing)`: put that one thing at the end. If it is a list, the whole list becomes one nested item.
+- `extend(iterable)`: take items out of the iterable and add them individually.
+
+### C. insert() — add at a chosen position
+
+```python
+messages = ["Hi", "Bye"]
+messages.insert(1, "Can you help?")
+print(messages)
+```
+
+Output:
+
+```text
+['Hi', 'Can you help?', 'Bye']
+```
+
+The first argument `1` is the index. Python positions start at zero, so index 1 is the second position.
+
+### D. remove() — remove by value
+
+```python
+messages = ["Hi", "Spam", "Hello", "Spam"]
+messages.remove("Spam")
+print(messages)
+```
+
+Output:
+
+```text
+['Hi', 'Hello', 'Spam']
+```
+
+It removes only the first matching value. If the value does not exist, Python raises `ValueError`.
+
+Safer beginner version:
+
+```python
+if "Spam" in messages:
+    messages.remove("Spam")
+```
+
+### E. pop() — remove by position and receive the removed item
+
+```python
+messages = ["Hi", "Hello", "Bye"]
+removed_message = messages.pop(1)
+
+print(removed_message)
+print(messages)
+```
+
+Output:
+
+```text
+Hello
+['Hi', 'Bye']
+```
+
+- `pop(1)` removes the item at index 1 and returns it.
+- `pop()` with no argument removes and returns the last item.
+- Popping from an empty list raises `IndexError`.
+
+### F. clear() — empty the list
+
+```python
+messages = ["Hi", "Hello"]
+result = messages.clear()
+
+print(messages)
+print(result)
+```
+
+Output:
+
+```text
+[]
+None
+```
+
+The same list object is emptied. The method returns `None`.
+
+### G. index() — find the first position
+
+```python
+messages = ["Hi", "Hello", "Hi"]
+print(messages.index("Hello"))
+print(messages.index("Hi"))
+```
+
+Output:
+
+```text
+1
+0
+```
+
+It returns the first matching index. If the value is missing, it raises `ValueError`. Check membership first when the value may be absent:
+
+```python
+if "Welcome" in messages:
+    print(messages.index("Welcome"))
+else:
+    print("Message not found")
+```
+
+### H. count() — count matching values
+
+```python
+messages = ["Hi", "Hello", "Hi", "Hi"]
+print(messages.count("Hi"))
+print(messages.count("Bye"))
+```
+
+Output:
+
+```text
+3
+0
+```
+
+It does not change the list. It returns an integer.
+
+### I. sort() — arrange values
+
+```python
+scores = [70, 95, 60, 85]
+result = scores.sort()
+
+print(scores)
+print(result)
+```
+
+Output:
+
+```text
+[60, 70, 85, 95]
+None
+```
+
+- `sort()` changes the original list.
+- By default, numbers are sorted from smallest to largest.
+- `sort(reverse=True)` sorts from largest to smallest.
+- Values must be comparable with one another.
+
+If you need a new sorted list while keeping the original unchanged, use the built-in `sorted(scores)` function:
+
+```python
+scores = [70, 95, 60]
+new_scores = sorted(scores)
+
+print(scores)
+print(new_scores)
+```
+
+Output:
+
+```text
+[70, 95, 60]
+[60, 70, 95]
+```
+
+### J. reverse() — reverse the current order
+
+```python
+messages = ["first", "second", "third"]
+result = messages.reverse()
+
+print(messages)
+print(result)
+```
+
+Output:
+
+```text
+['third', 'second', 'first']
+None
+```
+
+It reverses the existing order. It does not sort alphabetically.
+
+### K. copy() — create a shallow copy
+
+```python
+original = ["Python", "SQL"]
+backup = original.copy()
+
+backup.append("Git")
+
+print(original)
+print(backup)
+```
+
+Output:
+
+```text
+['Python', 'SQL']
+['Python', 'SQL', 'Git']
+```
+
+The new list is separate from the original at the outer list level. This is a **shallow copy**: if a list contains nested lists or other mutable objects, those inner objects are still shared. Deep copying is an advanced topic; do not assume `copy()` duplicates every nested object.
+
+### Quick check — predict before running
+
+```python
+items = [3, 1, 2]
+answer = items.append(4)
+print(items)
+print(answer)
+items.sort()
+print(items)
+```
+
+Expected output:
+
+```text
+[3, 1, 2, 4]
+None
+[1, 2, 3, 4]
+```
+
+## 15.2 String methods you must know
+
+Strings store text and are immutable. A string method normally returns a new string; it does not edit the original string in place.
+
+| Method / function | Purpose | Example | Result |
+|---|---|---|---|
+| `upper()` | Uppercase text | `"hello".upper()` | `"HELLO"` |
+| `lower()` | Lowercase text | `"HELLO".lower()` | `"hello"` |
+| `title()` | Capitalize each word | `"python basics".title()` | `"Python Basics"` |
+| `capitalize()` | Capitalize first character | `"python".capitalize()` | `"Python"` |
+| `strip()` | Remove surrounding whitespace | `" hi ".strip()` | `"hi"` |
+| `replace(old, new)` | Replace matching text | `"AI bot".replace("bot", "app")` | `"AI app"` |
+| `split(sep)` | Split text into a list | `"a,b".split(",")` | `["a", "b"]` |
+| `startswith(x)` | Check beginning | `"Python".startswith("Py")` | `True` |
+| `endswith(x)` | Check ending | `"notes.txt".endswith(".txt")` | `True` |
+| `find(x)` | Find first position; -1 if absent | `"hello".find("e")` | `1` |
+| `count(x)` | Count occurrences | `"banana".count("a")` | `3` |
+| `len(text)` | Count characters (built-in function) | `len("AI")` | `2` |
+| `" ".join(words)` | Join strings with a separator | `" ".join(["Hello", "Anu"])` | `"Hello Anu"` |
+
+**Important:** `split()` returns a list. `join()` is called on the separator string and expects an iterable of strings. If an item is not a string, join raises `TypeError`.
+
+## 15.3 Tuple operations
+
+A tuple is ordered but cannot be changed after it is created.
+
+| Operation | Example | Result / meaning |
+|---|---|---|
+| Read by index | `student[0]` | Reads first value |
+| Count | `student.count("CSE")` | Number of matches |
+| Find index | `student.index(101)` | First matching position |
+| Unpack | `name, roll = ("Anu", 101)` | Assigns values to variables |
+| One-item tuple | `("Python",)` | Comma makes it a tuple |
+
+Tuple methods `count()` and `index()` do not change the tuple. Attempting `student[0] = "Ravi"` raises `TypeError`.
+
+## 15.4 Set operations
+
+A set stores unique hashable values and does not support numeric indexing. Its display order is not guaranteed.
+
+| Method / operator | Purpose | Example |
+|---|---|---|
+| `add(x)` | Add one item | `skills.add("Git")` |
+| `update(items)` | Add items from an iterable | `skills.update(["SQL", "Docker"])` |
+| `discard(x)` | Remove if present; no error if absent | `skills.discard("Java")` |
+| `remove(x)` | Remove; raises `KeyError` if absent | `skills.remove("SQL")` |
+| `union(other)` / `|` | All unique items from both | `a | b` |
+| `intersection(other)` / `&` | Items in both | `a & b` |
+| `difference(other)` / `-` | Items in first but not second | `a - b` |
+| `issubset(other)` | Check whether all items are in other | `a.issubset(b)` |
+| `issuperset(other)` | Check whether set contains all items of other | `a.issuperset(b)` |
+
+Example:
+
+```python
+python_students = {"Anu", "Ravi", "Meena"}
+sql_students = {"Ravi", "Meena", "John"}
+
+print(python_students & sql_students)
+print(python_students - sql_students)
+print(python_students | sql_students)
+```
+
+The three results represent common students, Python-only students and everyone in either group. Set order may vary, so do not rely on printed order.
+
+## 15.5 Dictionary operations
+
+A dictionary maps keys to values. Keys are unique and must be hashable.
+
+| Method / operation | Purpose | Example |
+|---|---|---|
+| `data[key]` | Read required key | `student["name"]` |
+| `get(key, default)` | Read safely with a default | `student.get("age", 0)` |
+| `keys()` | View keys | `student.keys()` |
+| `values()` | View values | `student.values()` |
+| `items()` | View key-value pairs | `student.items()` |
+| `update(other)` | Add or replace values | `student.update({"age": 20})` |
+| `pop(key)` | Remove key and return its value | `student.pop("age")` |
+| `setdefault(key, default)` | Return existing value or insert default | `student.setdefault("city", "Unknown")` |
+| `copy()` | Make a shallow copy | `backup = student.copy()` |
+| `key in data` | Check key membership | `"name" in student` |
+
+Example:
+
+```python
+message = {"role": "user", "content": "Explain lists"}
+print(message.get("role"))
+print(message.get("timestamp", "not supplied"))
+message["content"] = "Explain Python lists"
+print(message)
+```
+
+Output:
+
+```text
+user
+not supplied
+{'role': 'user', 'content': 'Explain Python lists'}
+```
+
+## 15.6 Choose the right structure
+
+| Need | Use | Why |
+|---|---|---|
+| Store a question or answer | String | Text data |
+| Keep ordered chat messages and update them | List | Ordered and mutable |
+| Store a fixed pair or record | Tuple | Ordered and immutable |
+| Keep unique tags | Set | Removes duplicates |
+| Store role, content and timestamp by name | Dictionary | Key-value lookup |
+
+A real chat record can combine structures: a **list** holds the conversation, and each **dictionary** holds one message.
+
+## 16. Fully guided mini-project — AI Conversation Data Manager
+
+### What you will build
+
+A terminal program that stores chat messages, adds new messages, displays conversation history, counts messages by role, and lists unique words used in the conversation.
+
+### Step 1 — create the folder
+
+```text
+day_02_project/
+└── main.py
+```
+
+### Step 2 — type this complete program
+
+```python
+def create_message(role, content):
+    return {
+        "role": role,
+        "content": content.strip()
+    }
+
+
+def display_messages(conversation):
+    print("\nConversation history:")
+
+    for number, message in enumerate(conversation, start=1):
+        print(number, "-", message["role"], ":", message["content"])
+
+
+def count_user_messages(conversation):
+    total = 0
+
+    for message in conversation:
+        if message["role"] == "user":
+            total += 1
+
+    return total
+
+
+def collect_unique_words(conversation):
+    words = set()
+
+    for message in conversation:
+        cleaned_text = message["content"].lower()
+        for word in cleaned_text.split():
+            words.add(word.strip(".,!?"))
+
+    return words
+
+
+def main():
+    conversation = [
+        create_message("user", "Explain Python lists."),
+        create_message("assistant", "A list stores ordered items."),
+        create_message("user", "Show a simple list example.")
+    ]
+
+    display_messages(conversation)
+
+    new_text = input("\nEnter another user message: ").strip()
+
+    if new_text:
+        conversation.append(create_message("user", new_text))
+    else:
+        print("Empty message was not added.")
+
+    display_messages(conversation)
+
+    print("\nUser message count:", count_user_messages(conversation))
+    print("Unique words:", sorted(collect_unique_words(conversation)))
+
+
+if __name__ == "__main__":
+    main()
+```
+
+### Step 3 — run it
+
+From the `day_02_project` folder:
+
+**Windows**
+```bash
+py main.py
+```
+
+**macOS / Linux**
+```bash
+python3 main.py
+```
+
+### Step 4 — sample run
+
+If the user enters `What is a tuple?`, the beginning and end of the output will look like this:
+
+```text
+Conversation history:
+1 - user : Explain Python lists.
+2 - assistant : A list stores ordered items.
+3 - user : Show a simple list example.
+
+Enter another user message: What is a tuple?
+
+Conversation history:
+1 - user : Explain Python lists.
+2 - assistant : A list stores ordered items.
+3 - user : Show a simple list example.
+4 - user : What is a tuple?
+
+User message count: 3
+Unique words: [...]
+```
+
+The exact unique-word order is sorted alphabetically by the `sorted()` function. The complete list depends on the messages typed.
+
+### Step 5 — understand the program
+
+1. `create_message(role, content)` returns a dictionary. The dictionary labels each piece of data with a key.
+2. `conversation` is a list. It stores multiple message dictionaries in order.
+3. `display_messages()` uses a `for` loop to visit each dictionary.
+4. `enumerate(..., start=1)` supplies a display number beginning at 1. Python list indexes still begin at 0.
+5. `count_user_messages()` uses a counter. It increases only when the role equals `"user"`.
+6. `collect_unique_words()` uses a set so duplicate words are kept only once.
+7. `lower()` normalizes uppercase/lowercase differences.
+8. `split()` separates the text into words.
+9. `strip(".,!?")` removes those punctuation characters from the ends of each word.
+10. `sorted()` returns a sorted list for display; it does not change the set.
+11. `if __name__ == "__main__":` runs `main()` when this file is executed directly. You will learn this pattern more deeply later.
+
+### Step 6 — test the project
+
+| Test | Input | Expected behaviour |
+|---|---|---|
+| Normal message | `Can you explain dictionaries?` | Message is added |
+| Empty message | Press Enter without text | Message is not added |
+| Uppercase | `PYTHON IS USEFUL` | Unique-word collection uses lowercase |
+| Repeated word | `Python Python Python` | Word appears once in unique-word set |
+| No extra input | Press Enter | Original three messages remain |
+
+### Step 7 — common errors
+
+| Error | Cause | Fix |
+|---|---|---|
+| `KeyError: 'role'` | A message dictionary has no role key | Create every message using `create_message()` or check the key |
+| `AttributeError` on `strip` | Content is not a string | Check input type before calling string methods |
+| `IndentationError` | Code block indentation is inconsistent | Use four spaces per block level |
+| File not found | Terminal is not in the project folder | Change directory or open the correct folder |
+| Unexpected word count | Punctuation or capitalization differs | Inspect the normalized text and splitting logic |
+
+### Step 8 — extend the project independently
+
+1. Add an assistant message using `create_message()`.
+2. Add a function that counts assistant messages.
+3. Add a function that returns the latest message using `pop()` only on a copy, so the original history stays unchanged.
+4. Add a dictionary for the learner profile with name and course.
+5. Explain why a list of dictionaries is suitable for conversation history.
+
+### Project completion criteria
+
+- [ ] I can explain why the conversation is a list.
+- [ ] I can explain why each message is a dictionary.
+- [ ] I can explain why unique words are stored in a set.
+- [ ] I can explain what every function returns.
+- [ ] I can run all five test cases.
+- [ ] I can add one feature without copying the solution.
+
+## 17. Day 2 independent challenge
+
+Create a second program from a blank file. It must:
+1. Ask for three skills from the user.
+2. Store them in a list.
+3. Display the first and last skill.
+4. Remove duplicates using a set.
+5. Store the learner name and unique skills in a dictionary.
+6. Display a clean report.
+
+**Hints:** use `input()`, `split(",")`, `strip()`, `set()` and a dictionary. Do not look at the project solution until you have tried for at least 15 minutes.
+
+**Sample solution**
+
+```python
+name = input("Enter learner name: ").strip()
+skills_text = input("Enter three skills separated by commas: ")
+
+skills = [skill.strip() for skill in skills_text.split(",") if skill.strip()]
+unique_skills = sorted(set(skills))
+
+profile = {
+    "name": name,
+    "skills": unique_skills
+}
+
+print("\nLearner:", profile["name"])
+print("First entered skill:", skills[0] if skills else "Not supplied")
+print("Last entered skill:", skills[-1] if skills else "Not supplied")
+print("Unique skills:", profile["skills"])
+```
+
+This solution uses a list comprehension. If you have not studied comprehensions yet, replace that line with a normal `for` loop. Day 3 will explain comprehensions in detail.
+
+## 18. Day 2 final readiness gate
+
+Move to Day 3 only if you can answer yes to these:
+
+- [ ] Can I explain the difference between string, list, tuple, set and dictionary?
+- [ ] Can I explain all eleven list methods and predict their return values?
+- [ ] Can I distinguish `append()` from `extend()` with code?
+- [ ] Can I explain which list methods mutate the list?
+- [ ] Can I explain why `append()`, `sort()` and `reverse()` return `None`?
+- [ ] Can I build a list of dictionaries to represent chat history?
+- [ ] Can I run and modify the Conversation Data Manager?
+- [ ] Can I identify and fix one missing-key or invalid-input problem?
+
+If any answer is no, repeat that section and its code exercise. Understanding these structures is essential before learning functions, APIs and LLM conversation messages.
