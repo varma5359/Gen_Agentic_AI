@@ -20,17 +20,24 @@ This repository contains the approved 70-day TechPhile.ai GenAI & Agentic AI Dev
 | 9 | FastAPI, Routes, Pydantic Models, Request Validation and Response Models | [Notes](notes/day_09_notes.md) | [Interview](interviews/day_09_interview.md) |
 | 10 | SQL Fundamentals, Relational Database Concepts, Git, GitHub, Virtual Environments, pytest and Debugging | [Notes](notes/day_10_notes.md) | [Interview](interviews/day_10_interview.md) |
 
-## Teaching standard
-- Assume the learner is a college student or fresher starting from beginner level.
-- Explain each concept in plain language before introducing technical terms.
-- Start with small beginner code; introduce intermediate patterns after the basics.
-- Show expected output and explain what the code does.
-- Explain methods, functions, parameters, arguments, return values and common errors where relevant.
-- Use college, student, business and AI-application examples.
-- Include guided practice, a mini-project, quiz and interview practice.
-- Keep class notes and interview preparation separate.
-- Follow the approved day-wise syllabus and project titles.
-- Avoid filler and repetition; correctness and teachability come first.
+## TechPhile self-learning quality standard
+
+These materials are designed for students who may have no mentor and should not need another AI assistant to understand a lesson. Each day must be independently learnable.
+
+Every lesson must include:
+1. **Start here:** prerequisites, learning outcomes, time plan and instructions for using the notes.
+2. **Teach every term:** plain-English meaning, purpose, when to use it, and a relatable example before advanced terminology.
+3. **Show the flow:** diagrams, tables and step-by-step sequences where they make a concept clearer.
+4. **Teach code, do not merely show it:** explain syntax, arguments, return values, side effects and common mistakes for every important function or method introduced.
+5. **Run it:** provide file names, folder structure, commands labelled by operating system or execution location, sample inputs and exact expected output.
+6. **Build it:** guide the approved mini-project from an empty folder to a working result; explain each component and how it connects to the day's concept.
+7. **Troubleshoot:** include likely errors, why they happen, how to diagnose them and precise fixes.
+8. **Practise independently:** exercises first, then worked solutions and explanations.
+9. **Check understanding:** knowledge checks, code-reading questions, interview answers and a completion checklist.
+10. **Connect the days:** explain how today's work is used in the next lesson and in the larger capstone.
+
+Do not use long theory-only paragraphs, unexplained code, fake outputs, placeholder sections, repetitive filler or untested claims. Keep the approved syllabus and project titles intact. A lesson is not publication-ready merely because a file exists; code, commands, outputs, links and project steps must be reviewed.
+
 
 ## Phase 2 — Generative AI and LLM Foundations
 
