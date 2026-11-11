@@ -1,99 +1,157 @@
-# Day 9 — FastAPI, routes, Pydantic models, request validation and response models.
+# Day 9 — FastAPI, routes, Pydantic models, request validation and response models
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Duration:** 2–3 hours  
-**Level:** Intermediate
+**Phase 1 | 2–3 hours | Project: Student Information REST API**
 
-> **Self-learning instruction:** Read one section at a time. Type the code yourself, run it and compare the result. These notes are designed to teach without a trainer or video.
+## Learning objectives
+Install and run FastAPI; create routes; use path and query parameters; define Pydantic request/response models; validate inputs; return appropriate status codes and errors.
 
-## 1. Understand the topic
+## 1. What is FastAPI?
+FastAPI is a Python framework for building HTTP APIs. It maps HTTP requests to Python functions, validates request data using type annotations and Pydantic, and generates interactive API documentation.
 
-FastAPI builds Python APIs and generates OpenAPI documentation. A route maps an HTTP method and path to a function. Path parameters identify resources; query parameters filter. Pydantic models define and validate JSON request bodies. response_model controls public output. An in-memory dictionary is a learning prototype because it resets on restart.
+A route is a URL path plus an HTTP method. A path operation function runs when a matching request arrives.
 
-## 2. Why this matters in an AI application
+## 2. Install and run
+Create/activate a virtual environment first. Install:
+~~~bash
+python -m pip install fastapi uvicorn
+~~~
+Create main.py, then run:
+~~~bash
+uvicorn main:app --reload
+~~~
+main is the module/file name, app is the FastAPI object. --reload is for development. Open the local /docs route for interactive API documentation.
 
-A GenAI application is still software. It needs input handling, business logic, APIs, data, validation, security, tests and deployment. Today's concepts are building blocks for those responsibilities. A small example demonstrates one concept; it is not automatically production-ready.
+## 3. First API
+~~~python
+from fastapi import FastAPI
 
-## 3. Guided coding walkthrough
+app = FastAPI(title="TechPhile Student API")
 
-### Step 1 — Understand the task
+@app.get("/")
+def home():
+    return {"message": "Student API is running"}
+~~~
 
-Read the code and predict the output. Identify the input, the main operation and the value produced.
+FastAPI() creates the application. @app.get registers a GET route. home runs when that route is requested. Returning a dictionary produces JSON.
 
-### Step 2 — Code
+## 4. Path and query parameters
+~~~python
+@app.get("/students/{student_id}")
+def get_student(student_id: int):
+    return {"student_id": student_id}
 
+@app.get("/search")
+def search_students(course: str = "Python"):
+    return {"course": course}
+~~~
+
+student_id is in the URL path and is validated as an integer. course is a query parameter because it is not in the path. Try /students/12 and /search?course=GenAI. Invalid integer input produces a validation response.
+
+## 5. Pydantic request model
+A request body often contains multiple fields. A Pydantic model describes and validates the expected data.
+
+~~~python
+from pydantic import BaseModel, Field
+
+class StudentCreate(BaseModel):
+    name: str = Field(min_length=2, max_length=60)
+    email: str
+    course: str
+    score: float = Field(ge=0, le=100)
+~~~
+
+BaseModel defines the schema. Field adds constraints. Pydantic parses JSON into a model and reports invalid values. Email is a string in this beginner example; a production service should use format validation and a verification workflow.
+
+## 6. Complete API example
 ~~~python
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-app = FastAPI()
-class StudentCreate(BaseModel):
-    name: str = Field(min_length=2)
-    email: str
-    age: int = Field(ge=16, le=100)
+
+app = FastAPI(title="TechPhile Student API")
 students = {}
 next_id = 1
-@app.post("/students", status_code=201)
+
+class StudentCreate(BaseModel):
+    name: str = Field(min_length=2, max_length=60)
+    email: str
+    course: str
+    score: float = Field(ge=0, le=100)
+
+class StudentResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+    course: str
+    score: float
+
+@app.post("/students", response_model=StudentResponse, status_code=201)
 def create_student(student: StudentCreate):
     global next_id
-    saved = {"id": next_id, **student.model_dump()}
-    students[next_id] = saved
+    student_id = next_id
     next_id += 1
-    return saved
-@app.get("/students/{student_id}")
+    record = {"id": student_id, **student.model_dump()}
+    students[student_id] = record
+    return record
+
+@app.get("/students/{student_id}", response_model=StudentResponse)
 def get_student(student_id: int):
     if student_id not in students:
         raise HTTPException(status_code=404, detail="Student not found")
     return students[student_id]
 ~~~
 
-### Step 3 — Expected output
+StudentCreate defines accepted input. StudentResponse defines the output shape. POST creates a record and returns 201. GET retrieves one record. HTTPException returns a deliberate 404 when the record is absent.
 
-~~~text
-POST /students with {"name":"Asha Rao","email":"asha@example.com","age":22} returns 201. GET /students/1 returns 200 when present.
+Important limitation: students is an in-memory dictionary. It resets when the server restarts and is not safe persistent storage for multiple workers. Day 10 introduces SQL.
+
+## 7. Request and response
+POST /students body:
+~~~json
+{
+  "name": "Asha",
+  "email": "asha@example.test",
+  "course": "GenAI",
+  "score": 88
+}
 ~~~
+A successful response contains an id and the validated fields. Score 120 fails because the permitted range is 0–100.
 
-### Step 4 — Explain the code line by line
+## 8. Industry scenario
+A student portal exposes endpoints to create and retrieve profiles. A future AI service may call these backend APIs, but must respect authentication and authorisation. Today we focus on routes, schemas and validation.
 
-- BaseModel defines input structure and validation.
-- Field adds constraints.
-- The route decorator registers method and path.
-- FastAPI validates the request before calling the handler.
-- HTTPException returns a deliberate 404.
-- Run uvicorn main:app --reload and test /docs; 422 usually indicates invalid input.
+## 9. Common mistakes
+| Mistake | Fix |
+|---|---|
+| Wrong Uvicorn module path | Run from folder containing main.py |
+| Forget route decorator | Add @app.get or @app.post |
+| Treat path ID as trusted | Validate type and existence |
+| No request schema | Define Pydantic model |
+| Return 200 for missing record | Raise HTTPException 404 |
+| Claim dictionary data is persistent | Explain reset on restart |
+| Use global state in production | Use database and concurrency-safe design |
 
-### Step 5 — Interpret the result
+## 10. Exercises
+1. Add GET /health.
+2. Add GET /students returning all current records.
+3. Add minimum length to course.
+4. Submit invalid score and inspect validation.
+5. Request unknown ID and verify 404.
+6. Explain request model versus response model.
 
-Answer in your own words: What input did the program receive? What operation did it perform? What result did it produce? What would change if the input changed? What should be validated before using this in a larger application?
+## 11. Five-question quiz
+1. A route is: A path and method mapping B database C model D variable. **Answer A.**
+2. @app.post registers: A GET B POST path operation C class D table. **Answer B.**
+3. Pydantic is used for: A request validation B DNS C image generation D SQL engine. **Answer A.**
+4. Newly created resource commonly returns: A 200 only B 201 C 404 D 500. **Answer B.**
+5. What happens to dictionary storage on restart? A persists B clears C uploads D encrypts. **Answer B.**
 
-## 4. Common mistakes and troubleshooting
+## Completion checklist
+- [ ] Install FastAPI and Uvicorn in a virtual environment.
+- [ ] Run local API and open /docs.
+- [ ] Create GET and POST routes.
+- [ ] Use path and query parameters.
+- [ ] Define Pydantic request and response models.
+- [ ] Validate input and return 404 errors.
+- [ ] Complete Student Information REST API.
 
-- Read the complete traceback and identify the exception type and line.
-- Confirm the active Python interpreter, installed packages, current folder and filename.
-- Check types, missing values, boundaries and external response formats.
-- Reduce a complex failure to the smallest reproducible example.
-- Fix the cause rather than hiding errors with broad exception handling.
-
-## 5. Independent practice
-
-1. Recreate the example from a blank file.
-2. Change at least two inputs and predict the output before running.
-3. Add one validation or failure case relevant to this topic.
-4. Explain the changed output in your own words.
-5. Save the code in a clearly named project folder.
-
-## 6. Interview-ready summary
-
-- Define the concept directly.
-- Explain the problem it solves.
-- Explain when to use it and when a simpler approach is better.
-- Give one practical AI-application example.
-- Mention one limitation or common failure mode.
-
-## 7. Completion checklist
-
-- [ ] I can explain the concept without copying the definition.
-- [ ] I typed and ran the example.
-- [ ] I understand the expected output.
-- [ ] I completed the independent practice.
-- [ ] I can identify and fix a common error.
-- [ ] I am ready to attempt the approved project.
+**Next:** Day 10 — SQL fundamentals, relational database concepts, Git, GitHub, virtual environments, pytest and debugging.
