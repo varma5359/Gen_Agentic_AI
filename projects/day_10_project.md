@@ -1,83 +1,191 @@
 # Day 10 Project — Version-Controlled Database-Connected Python API
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Approved topic:** SQL fundamentals, relational database concepts, Git, GitHub, virtual environments, pytest and debugging.  
-**Estimated duration:** 30–75 minutes (Day 10 may take longer)  
-**Mode:** Independent self-learning
+## Objective
+Build a small Python API backed by SQLite, test its data-access logic, isolate dependencies and track code with Git. Production systems need stronger authentication, migrations and deployment controls.
 
-## 1. Problem statement and objective
-
-Build a small student-record API prototype with SQLite, Git, pytest and setup documentation.
-
-## 2. Prerequisites
-
-SQL, SQLite, parameterized queries, Git, GitHub, virtual environments, pytest and debugging.
-
-Complete the day's class notes first. Use only concepts already introduced in the pathway. No paid API key is required unless an optional extension explicitly adds one.
-
-## 3. Functional requirements
-
-- Solve the stated objective.
-- Use readable names and small functions or classes with clear responsibilities.
-- Validate input before processing.
-- Provide useful behaviour for normal and invalid inputs.
-- Keep credentials and sensitive values out of source code.
-
-## 4. Step-by-step implementation plan
-
-1. Create database.py, student_repository.py, app.py and tests/test_students.py.
-2. Initialize table, implement create/get/list, expose routes or CLI, write tests and document setup.
-
-Do not skip steps. Run the program after each meaningful change. If an error occurs, fix it before adding another feature.
-
-## 5. Suggested folder structure
-
+## Folder structure
 ~~~text
-day_10_project/
-├── app.py
-├── database.py
-├── student_repository.py
-├── tests/
-│   └── test_students.py
-├── requirements.txt
-├── .gitignore
-└── README.md
+student_api/
+    app.py
+    database.py
+    test_database.py
+    requirements.txt
+    .gitignore
+    README.md
 ~~~
 
-Create only files you actually use. Do not add empty modules merely to make the project look larger.
+## Step 1 — Environment
+Windows:
+~~~powershell
+py -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install fastapi uvicorn pytest
+~~~
+macOS/Linux:
+~~~bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install fastapi uvicorn pytest
+~~~
 
-## 6. Sample data and expected behaviour
+## Step 2 — database.py
+~~~python
+import sqlite3
+from pathlib import Path
 
-Start with two or three small records. Before running the program, write down the expected result for each record. Compare actual and expected behaviour and explain any difference.
+DB_PATH = Path(__file__).resolve().parent / "students.db"
 
-## 7. Test cases and validation
+def get_connection():
+    connection = sqlite3.connect(DB_PATH)
+    connection.row_factory = sqlite3.Row
+    return connection
 
-Test insert/retrieval, duplicate email, missing ID, invalid input and fresh-environment setup. Keep .env, .venv and private data out of Git.
+def initialize_database():
+    with get_connection() as connection:
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS students (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                course TEXT NOT NULL
+            )
+        """)
 
-Record each test as: input, expected result, actual result and PASS/FAIL. Do not mark a test passed until you have run it.
+def create_student(name, course):
+    with get_connection() as connection:
+        cursor = connection.execute(
+            "INSERT INTO students (name, course) VALUES (?, ?)",
+            (name, course)
+        )
+        return cursor.lastrowid
 
-## 8. Common debugging method
+def get_student(student_id):
+    with get_connection() as connection:
+        row = connection.execute(
+            "SELECT id, name, course FROM students WHERE id = ?",
+            (student_id,)
+        ).fetchone()
+        return dict(row) if row else None
 
-1. Read the full error message.
-2. Confirm the command, file path and active Python environment.
-3. Inspect relevant inputs and variable values.
-4. Reduce the problem to the smallest reproducible example.
-5. Fix the cause and repeat the failing test.
+def list_students():
+    with get_connection() as connection:
+        rows = connection.execute(
+            "SELECT id, name, course FROM students ORDER BY id"
+        ).fetchall()
+        return [dict(row) for row in rows]
+~~~
 
-## 9. Submission checklist
+The placeholders bind values separately from SQL syntax. row_factory enables column-name access. The connection context manager manages transaction completion; production code should make transaction and cleanup policy explicit.
 
-- [ ] Source files and folder structure are saved.
-- [ ] Setup and run instructions are written.
-- [ ] Example input and output are recorded.
-- [ ] Normal and invalid cases have been tested.
-- [ ] Known limitations are documented.
-- [ ] No credentials, private data or unnecessary environment files are committed.
-- [ ] I can explain the design and code I wrote.
+## Step 3 — app.py
+~~~python
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
+from database import initialize_database, create_student, get_student, list_students
 
-## 10. Interview explanation
+app = FastAPI(title="Database Connected Student API")
+initialize_database()
 
-Prepare a 60–90 second explanation covering the problem, your design, the key concepts, one challenge, how you tested the result and one improvement you would make before production.
+class StudentCreate(BaseModel):
+    name: str = Field(min_length=2, max_length=60)
+    course: str = Field(min_length=2, max_length=80)
 
-## 11. Optional extension
+@app.post("/students", status_code=201)
+def add_student(student: StudentCreate):
+    student_id = create_student(student.name, student.course)
+    return get_student(student_id)
 
-Add one small feature only after all required behaviour works. Keep it within concepts already taught; do not introduce an advanced framework early.
+@app.get("/students")
+def read_students():
+    return list_students()
+
+@app.get("/students/{student_id}")
+def read_student(student_id: int):
+    student = get_student(student_id)
+    if student is None:
+        raise HTTPException(status_code=404, detail="Student not found")
+    return student
+~~~
+
+Run: uvicorn app:app --reload. Open /docs.
+
+POST body:
+~~~json
+{"name": "Asha", "course": "GenAI"}
+~~~
+
+Expected: 201 with a generated ID. GET /students lists records; GET /students/1 returns one record. Unlike Day 9's dictionary, SQLite data persists after restart.
+
+## Step 4 — test_database.py
+~~~python
+from database import create_student, get_student, list_students
+
+def test_create_and_get_student():
+    student_id = create_student("Test Learner", "Python")
+    student = get_student(student_id)
+    assert student is not None
+    assert student["name"] == "Test Learner"
+    assert student["course"] == "Python"
+
+def test_list_students_returns_list():
+    result = list_students()
+    assert isinstance(result, list)
+~~~
+
+Run pytest -q. This starter uses a local database for simplicity. A professional suite should isolate tests with a temporary database so runs do not depend on prior local records.
+
+## Step 5 — requirements.txt
+~~~text
+fastapi
+uvicorn
+pytest
+~~~
+Pin tested versions for reproducible deployment.
+
+## Step 6 — .gitignore
+~~~text
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+students.db
+.env
+~~~
+
+Exclude local database files because they may contain learner data. Never commit credentials or personal information.
+
+## Step 7 — Git workflow
+~~~bash
+git init
+git status
+git add app.py database.py test_database.py requirements.txt .gitignore README.md
+git status
+git commit -m "Build database-connected student API"
+~~~
+
+Create an empty GitHub repository, then use its actual remote URL:
+~~~bash
+git remote add origin https://github.com/USERNAME/REPOSITORY.git
+git branch -M main
+git push -u origin main
+~~~
+
+Replace placeholders. Review staged files before committing.
+
+## Test plan
+| Test | Action | Expected |
+|---|---|---|
+| TC01 | Start API | Server starts |
+| TC02 | POST valid student | 201 and ID |
+| TC03 | GET list | Created record appears |
+| TC04 | GET existing ID | Details returned |
+| TC05 | GET unknown ID | 404 |
+| TC06 | POST too-short name | Validation error |
+| TC07 | Restart and GET record | Record still exists |
+| TC08 | Run pytest | Tests pass |
+| TC09 | Inspect Git status | No .venv, .env or database staged |
+
+## Production gaps
+No authentication, authorisation, pagination, migrations, structured logging, pooling or isolated test database is included. Do not deploy this demo with real personal records as-is.
+
+## Submission
+Submit source, requirements, .gitignore, test output, API examples and GitHub URL. Explain how SQLite persistence differs from Day 9 in-memory storage.
