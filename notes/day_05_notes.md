@@ -1,90 +1,182 @@
-# Day 5 — Python modules, packages, exceptions, JSON, file handling and logging.
+# Day 5 — Python modules, packages, exceptions, JSON, file handling and logging
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Duration:** 2–3 hours  
-**Level:** Beginner to Intermediate
+**Phase 1 | 2–3 hours | Beginner | Project: AI Configuration and File Management Utility**
 
-> **Self-learning instruction:** Read one section at a time. Type the code yourself, run it and compare the result. These notes are designed to teach without a trainer or video.
+## 1. Why these concepts matter
+A useful application splits code into maintainable files, reads and writes data, handles failures and records what happened. A program that only works when every operation succeeds is not robust.
 
-## 1. Understand the topic
+## 2. Modules and imports
+A module is a Python file that can be imported.
 
-A module is a Python file; a package groups modules. pathlib.Path represents paths. Use with when opening files so resources close reliably. JSON is a text format: dumps/loads convert Python data and JSON strings; dump/load work with file objects. Catch specific expected exceptions. Logging records events; never log secrets.
+Create text_utils.py:
+~~~python
+def clean_text(text):
+    return " ".join(text.strip().split())
+~~~
 
-## 2. Why this matters in an AI application
+Create app.py:
+~~~python
+from text_utils import clean_text
 
-A GenAI application is still software. It needs input handling, business logic, APIs, data, validation, security, tests and deployment. Today's concepts are building blocks for those responsibilities. A small example demonstrates one concept; it is not automatically production-ready.
+question = "  Explain   JSON  "
+print(clean_text(question))
+~~~
 
-## 3. Guided coding walkthrough
+Run from the folder containing both files. Output: Explain JSON. The import makes the function available in app.py.
 
-### Step 1 — Understand the task
+## 3. Packages
+A package groups related modules. Example:
 
-Read the code and predict the output. Identify the input, the main operation and the value produced.
+~~~text
+ai_utility/
+    app.py
+    config/
+        __init__.py
+        settings.py
+    services/
+        __init__.py
+        text_utils.py
+~~~
 
-### Step 2 — Code
+__init__.py marks a regular package and can contain initialization code. Modern Python also supports namespace packages; this course uses explicit package markers for clarity. Run imports from the project root so Python can resolve package paths.
+
+## 4. Exceptions
+An exception is raised when an operation cannot complete normally.
+
+~~~python
+try:
+    age = int(input("Enter age: "))
+    print("Next year:", age + 1)
+except ValueError:
+    print("Please enter a whole number.")
+~~~
+
+try contains the operation that may fail. except ValueError handles invalid numeric text. Catch the exception you expect; do not silently suppress every error.
+
+### else and finally
+~~~python
+try:
+    number = int("25")
+except ValueError:
+    print("Invalid number")
+else:
+    print("Converted:", number)
+finally:
+    print("Conversion attempt finished")
+~~~
+
+else runs only if try succeeds. finally runs as control leaves the structure and is useful for cleanup.
+
+### Raise a meaningful error
+~~~python
+def validate_temperature(value):
+    if value < 0 or value > 1:
+        raise ValueError("Temperature must be between 0 and 1")
+    return value
+~~~
+
+raise signals that a function's input violates its contract.
+
+## 5. Text file handling
+Use with so the file is closed automatically.
+
+~~~python
+with open("question.txt", "w", encoding="utf-8") as file:
+    file.write("What is an embedding?\\n")
+    file.write("Explain in simple words.\\n")
+
+with open("question.txt", "r", encoding="utf-8") as file:
+    content = file.read()
+
+print(content)
+~~~
+
+Modes:
+- r reads an existing file.
+- w creates or overwrites a file.
+- a appends to the end.
+- x creates a new file and fails if it exists.
+
+w can destroy previous contents. Choose carefully. For large files, iterate line by line rather than reading everything into memory.
+
+## 6. JSON files
+JSON is a text format commonly used by APIs and configuration files.
 
 ~~~python
 import json
+
+settings = {
+    "application": "TechPhile Utility",
+    "provider": "demo",
+    "temperature": 0.2
+}
+
+with open("config.json", "w", encoding="utf-8") as file:
+    json.dump(settings, file, indent=2)
+
+with open("config.json", "r", encoding="utf-8") as file:
+    loaded = json.load(file)
+
+print(loaded["application"])
+~~~
+
+dump writes a Python object to a file. load reads JSON from a file. dumps converts an object to a JSON string; loads parses a JSON string. JSON supports objects, arrays, strings, numbers, booleans and null. Python sets and custom objects need conversion before serialization.
+
+## 7. Logging
+Logging records application events with severity and timestamps.
+
+~~~python
 import logging
-from pathlib import Path
-logging.basicConfig(level=logging.INFO)
-path = Path("config.json")
-config = {"app_name": "TechPhile", "max_results": 5}
-try:
-    path.write_text(json.dumps(config, indent=2), encoding="utf-8")
-    loaded = json.loads(path.read_text(encoding="utf-8"))
-except (OSError, json.JSONDecodeError):
-    logging.exception("Configuration operation failed")
-else:
-    print(loaded["app_name"])
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s"
+)
+
+logging.debug("Detailed diagnostic")
+logging.info("Application started")
+logging.warning("Optional configuration missing")
+logging.error("Could not read required file")
 ~~~
 
-### Step 3 — Expected output
+Levels: DEBUG, INFO, WARNING, ERROR and CRITICAL. The configured INFO level normally suppresses DEBUG messages. Never log API keys, passwords, access tokens or private user content. Log safe summaries and identifiers.
 
-~~~text
-TechPhile
-~~~
+## 8. Industry scenario
+An AI backend may load provider name, model choice and safe generation settings from configuration. Real credentials belong in environment variables or a secrets manager, not committed JSON files. Configuration validation should happen before the application starts serving requests.
 
-### Step 4 — Explain the code line by line
+## 9. Common errors
+| Error | Cause | Fix |
+|---|---|---|
+| ModuleNotFoundError | Wrong working directory or import path | Run from project root |
+| FileNotFoundError | Missing path | Check path and current directory |
+| JSONDecodeError | Invalid JSON | Check commas, quotes and structure |
+| Previous content lost | File opened with w | Use append or back up |
+| Hidden failure | Broad silent except | Catch specific exceptions |
+| Secret in log | Sensitive value logged | Redact and log safe metadata |
 
-- Path writes and reads UTF-8 text.
-- dumps serializes a dictionary; loads parses it.
-- except handles expected file/JSON failures; else runs after success.
-- Avoid naming local files json.py or logging.py.
-- Never write credentials or private data to logs.
+## 10. Exercises
+1. Create and import a reusable module.
+2. Write a text file and read it.
+3. Append a line without deleting earlier content.
+4. Save a dictionary to JSON and reload it.
+5. Catch ValueError from int("hello").
+6. Configure INFO and WARNING logs.
+7. Explain why with open is preferred.
 
-### Step 5 — Interpret the result
+## 11. Five-question quiz
+1. A module is: A Python file importable by another file B database table C loop D AI model. **Answer A:** modules organise reusable code.
+2. Which mode overwrites a file? A r B a C w D x. **Answer C:** w truncates existing content.
+3. Invalid JSON raises: A IndexError B JSONDecodeError C KeyError D StopIteration. **Answer B:** the JSON parser raises it.
+4. Benefit of with for files? A closes file reliably B encrypts C converts to JSON D prevents all errors. **Answer A:** context management handles cleanup.
+5. What must never be logged? A safe event name B duration C API secret D status code. **Answer C:** credentials must be protected.
 
-Answer in your own words: What input did the program receive? What operation did it perform? What result did it produce? What would change if the input changed? What should be validated before using this in a larger application?
+## 12. Completion checklist
+- [ ] Create/import a module and explain package layout.
+- [ ] Handle ValueError.
+- [ ] Read, write and append text.
+- [ ] Read/write JSON.
+- [ ] Configure logging and explain levels.
+- [ ] Explain safe secret handling.
+- [ ] Complete the project and test failure cases.
 
-## 4. Common mistakes and troubleshooting
-
-- Read the complete traceback and identify the exception type and line.
-- Confirm the active Python interpreter, installed packages, current folder and filename.
-- Check types, missing values, boundaries and external response formats.
-- Reduce a complex failure to the smallest reproducible example.
-- Fix the cause rather than hiding errors with broad exception handling.
-
-## 5. Independent practice
-
-1. Recreate the example from a blank file.
-2. Change at least two inputs and predict the output before running.
-3. Add one validation or failure case relevant to this topic.
-4. Explain the changed output in your own words.
-5. Save the code in a clearly named project folder.
-
-## 6. Interview-ready summary
-
-- Define the concept directly.
-- Explain the problem it solves.
-- Explain when to use it and when a simpler approach is better.
-- Give one practical AI-application example.
-- Mention one limitation or common failure mode.
-
-## 7. Completion checklist
-
-- [ ] I can explain the concept without copying the definition.
-- [ ] I typed and ran the example.
-- [ ] I understand the expected output.
-- [ ] I completed the independent practice.
-- [ ] I can identify and fix a common error.
-- [ ] I am ready to attempt the approved project.
+**Next:** Day 6 — Advanced Python: iterators, generators, decorators, context managers and type hints.
