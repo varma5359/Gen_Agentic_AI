@@ -1610,3 +1610,408 @@ The trainer should correct misunderstandings before moving forward.
 **Mastery evidence:** the student can independently demonstrate "Logging" and explain why the output is correct.
 
 ---
+
+
+---
+
+# 14. Full beginner walkthrough — build a reusable Student Records application
+
+The earlier examples introduced modules, packages, exceptions, JSON, files and logging. Now connect them in one small application. Follow the steps in order. Do not skip the folder setup.
+
+## 14.1 What problem are we solving?
+
+A course coordinator wants a small program to:
+- add a student's name and course,
+- list saved students,
+- keep records after the program closes,
+- show a helpful message for invalid input,
+- record important application events in a log file.
+
+We will use only Python's standard library. No API key or internet access is needed.
+
+## 14.2 Understand the application flow
+
+```text
+User runs main.py
+      |
+      v
+Show menu
+      |
+      +---- 1: Add student
+      |        |
+      |        v
+      |    Validate name/course
+      |        |
+      |        v
+      |    Student module creates record
+      |        |
+      |        v
+      |    JSON module saves records
+      |        |
+      |        v
+      |    Logger records success
+      |
+      +---- 2: List students
+      |        |
+      |        v
+      |    JSON module reads file
+      |        |
+      |        v
+      |    Display each record
+      |
+      +---- 3: Exit
+```
+
+## 14.3 Create the project folders
+
+Create this exact structure:
+
+```text
+student_records/
+├── main.py
+├── students.py
+├── storage.py
+├── app_logger.py
+├── data/
+│   └── students.json
+└── logs/
+```
+
+Create `data` and `logs` as folders. Create `students.json` and put exactly `[]` inside it. This represents an empty JSON list.
+
+**What is each file for?**
+
+| File | Responsibility |
+|---|---|
+| `main.py` | Shows the menu and connects the modules |
+| `students.py` | Validates and creates student records |
+| `storage.py` | Reads and writes JSON data |
+| `app_logger.py` | Configures application logging |
+| `data/students.json` | Stores records between runs |
+| `logs/` | Receives the log file |
+
+## 14.4 Create students.py
+
+```python
+def create_student(name, course):
+    cleaned_name = name.strip()
+    cleaned_course = course.strip()
+
+    if not cleaned_name:
+        raise ValueError("Student name cannot be empty")
+
+    if not cleaned_course:
+        raise ValueError("Course name cannot be empty")
+
+    return {
+        "name": cleaned_name,
+        "course": cleaned_course
+    }
+```
+
+Understand each line:
+- `def` defines a reusable function.
+- `name` and `course` are parameters. The caller supplies arguments.
+- `strip()` returns a new string without outside whitespace.
+- `if not cleaned_name` checks whether the cleaned string is empty.
+- `raise ValueError(...)` stops invalid data from being accepted and gives the caller a meaningful error.
+- The dictionary stores two named fields.
+- `return` sends the new dictionary back to the caller.
+
+This file does not run the menu. It only defines a function for another file to import.
+
+## 14.5 Create storage.py
+
+```python
+import json
+from pathlib import Path
+
+DATA_FILE = Path(__file__).parent / "data" / "students.json"
+
+
+def load_students():
+    if not DATA_FILE.exists():
+        return []
+
+    try:
+        with DATA_FILE.open("r", encoding="utf-8") as file:
+            students = json.load(file)
+    except json.JSONDecodeError as error:
+        raise ValueError("The students.json file contains invalid JSON") from error
+
+    if not isinstance(students, list):
+        raise ValueError("The students.json file must contain a JSON list")
+
+    return students
+
+
+def save_students(students):
+    with DATA_FILE.open("w", encoding="utf-8") as file:
+        json.dump(students, file, indent=4, ensure_ascii=False)
+```
+
+### Understand the new Python tools
+
+| Code | Meaning |
+|---|---|
+| `import json` | Loads Python's built-in JSON module |
+| `from pathlib import Path` | Imports the Path class for filesystem paths |
+| `__file__` | Path of the current Python file |
+| `Path(__file__).parent` | Folder containing storage.py |
+| `/ "data" / "students.json"` | Builds a path using Path objects |
+| `.exists()` | Returns True if the path exists |
+| `.open("r", encoding="utf-8")` | Opens a text file for reading |
+| `with` | Ensures the file is closed when the block finishes |
+| `json.load(file)` | Reads JSON text and converts it to Python data |
+| `json.dump(data, file)` | Converts Python data to JSON and writes it |
+| `indent=4` | Makes the saved JSON easier for humans to read |
+| `ensure_ascii=False` | Keeps normal Unicode characters readable |
+
+**Why use `Path(__file__)` instead of a simple relative path?** A relative path depends on the folder from which the terminal command is run. Building the data path from the file's own location makes this small project more reliable.
+
+### JSON load vs loads; dump vs dumps
+
+- `json.load(file)`: read JSON from an open file.
+- `json.loads(text)`: parse JSON from a Python string.
+- `json.dump(data, file)`: write Python data to an open file.
+- `json.dumps(data)`: return JSON text as a string.
+
+The `load/dump` pair works with files. The `loads/dumps` pair works with strings.
+
+## 14.6 Create app_logger.py
+
+```python
+import logging
+from pathlib import Path
+
+LOG_FILE = Path(__file__).parent / "logs" / "app.log"
+LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+logging.basicConfig(
+    filename=LOG_FILE,
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+    encoding="utf-8",
+    force=True
+)
+
+logger = logging.getLogger("student_records")
+```
+
+Understand:
+- `import logging` loads Python's logging module.
+- `mkdir(parents=True, exist_ok=True)` creates the logs folder if needed. Existing folder is not treated as an error.
+- `basicConfig()` configures the default logging system.
+- `filename` sends log messages to a file.
+- `level=logging.INFO` records INFO and more severe messages.
+- `format` controls how each log line looks.
+- `getLogger("student_records")` returns a named logger that other modules can use.
+
+Logging levels, from less severe to more severe: DEBUG, INFO, WARNING, ERROR, CRITICAL.
+
+Do not log passwords, API keys, private student data or full sensitive request bodies.
+
+## 14.7 Create main.py
+
+```python
+from students import create_student
+from storage import load_students, save_students
+from app_logger import logger
+
+
+def add_student():
+    name = input("Student name: ")
+    course = input("Course name: ")
+
+    try:
+        student = create_student(name, course)
+        students = load_students()
+        students.append(student)
+        save_students(students)
+        logger.info("Student record added")
+        print("Student saved successfully.")
+    except ValueError as error:
+        logger.warning("Student record was not added: %s", error)
+        print("Cannot save student:", error)
+    except OSError as error:
+        logger.exception("File operation failed")
+        print("Could not access the data file:", error)
+
+
+def list_students():
+    try:
+        students = load_students()
+    except (ValueError, OSError) as error:
+        logger.exception("Could not load student records")
+        print("Could not read student records:", error)
+        return
+
+    if not students:
+        print("No student records yet.")
+        return
+
+    print("\nSaved students:")
+    for number, student in enumerate(students, start=1):
+        print(f"{number}. {student['name']} — {student['course']}")
+
+
+def main():
+    while True:
+        print("\nSTUDENT RECORDS")
+        print("1. Add student")
+        print("2. List students")
+        print("3. Exit")
+
+        choice = input("Choose 1, 2 or 3: ").strip()
+
+        if choice == "1":
+            add_student()
+        elif choice == "2":
+            list_students()
+        elif choice == "3":
+            print("Goodbye.")
+            break
+        else:
+            print("Please enter 1, 2 or 3.")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+### Understand the main.py code
+
+- The three import statements reuse functions and the logger from other files. This is why we split code into modules.
+- `while True` repeats the menu until the user chooses Exit.
+- `input()` returns text typed by the user.
+- `try` contains code that may fail.
+- `except ValueError` handles expected invalid data.
+- `except OSError` handles file and operating-system errors.
+- `logger.info()` records a normal successful event.
+- `logger.warning()` records an unexpected or invalid user action.
+- `logger.exception()` records an error with traceback details. Use it inside an exception handler.
+- `enumerate(students, start=1)` provides each record with a display number beginning at 1.
+- `break` exits the menu loop.
+- The final `if __name__ == "__main__"` runs the menu only when main.py is executed directly. Importing main.py from another module will not automatically start the menu.
+
+## 14.8 Run the application
+
+Open a terminal in the `student_records` folder.
+
+Windows:
+
+```bash
+py main.py
+```
+
+macOS/Linux:
+
+```bash
+python3 main.py
+```
+
+No pip installation is required. All imported modules are part of Python's standard library.
+
+## 14.9 Test it step by step
+
+First run:
+
+```text
+STUDENT RECORDS
+1. Add student
+2. List students
+3. Exit
+Choose 1, 2 or 3: 1
+Student name: Anu
+Course name: Python
+Student saved successfully.
+```
+
+Choose option 2:
+
+```text
+Saved students:
+1. Anu — Python
+```
+
+Choose option 3 to close the program. Run it again and choose option 2. The record should still be there because it was written to students.json.
+
+Your JSON file should now contain:
+
+```json
+[
+    {
+        "name": "Anu",
+        "course": "Python"
+    }
+]
+```
+
+The log file `logs/app.log` should contain a timestamped record that a student was added. Exact timestamps will differ.
+
+## 14.10 Deliberately test errors
+
+| Test | Action | Expected result |
+|---|---|---|
+| Empty name | Choose Add and press Enter at name | Helpful validation message |
+| Empty course | Enter name, leave course empty | Helpful validation message |
+| Invalid menu choice | Enter 9 | Menu asks for 1, 2 or 3 |
+| Empty database | Put `[]` in students.json | "No student records yet." |
+| Invalid JSON | Replace file content with `hello` | Helpful read error; details in log |
+| Missing JSON file | Rename students.json and list | Empty list is returned; later save recreates it |
+
+Restore students.json to `[]` after the tests if you want to start fresh.
+
+## 14.11 Common mistakes and fixes
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `ModuleNotFoundError: No module named 'students'` | Running from an unexpected location or file is named incorrectly | Keep main.py and students.py in the same project folder; run from that folder |
+| `FileNotFoundError` | Folder or file path is wrong | Check the exact spelling and project structure |
+| JSON decode error | File contains invalid JSON text | Replace with `[]` or valid JSON |
+| Nothing is saved | save_students() was not called or wrong file was edited | Trace add_student() and inspect data/students.json |
+| Duplicate records | The same student was added more than once | This beginner version does not check duplicates; add that feature as an exercise |
+| Log file is missing | Application has not configured logging or no log event occurred | Run Add or an error case; inspect logs/app.log |
+
+## 14.12 Extend the project independently
+
+Complete in this order:
+
+1. Add a menu option to search for a student by name.
+2. Prevent duplicate student names (compare normalized lowercase names).
+3. Add a delete option. Ask for confirmation before deleting.
+4. Add a student ID field.
+5. Move the data-file path into a configuration constant.
+6. Write tests for create_student() and the JSON storage functions in a later testing lesson.
+
+For every extension, write down: input, expected behavior, invalid case, and test result before coding.
+
+## 14.13 Day 5 knowledge check
+
+1. What is a module? A Python file that can contain reusable code.
+2. What is a package? A way to organize related modules in a directory; regular packages commonly include `__init__.py`.
+3. What does import do? It makes names from another module available to the current module.
+4. What is an exception? An object representing an error or unusual condition during execution.
+5. What does try/except do? It runs code that may fail and handles selected exceptions.
+6. What does finally do? It runs whether an exception occurred or not, commonly for cleanup.
+7. What is JSON? A text format for exchanging structured data.
+8. What is serialization? Converting an in-memory object into a storable/transmittable representation.
+9. What is deserialization? Converting stored/transmitted data back into program objects.
+10. Why use with open()? It ensures the file is closed after the block.
+11. What is logging? Recording useful runtime events and diagnostic details.
+12. Why not log secrets? Log files may be accessible to more people and retained longer than expected.
+
+## 14.14 Day 5 readiness gate
+
+Do not move forward until you can:
+- Create and import your own module.
+- Explain the difference between a module and a package.
+- Read and write a JSON file.
+- Explain load/loadS and dump/dumps correctly.
+- Use try/except to handle a known error.
+- Explain why with is used for files.
+- Configure a logger and identify its levels.
+- Run Student Records from the project folder.
+- Close and reopen the app and confirm data persists.
+- Explain the job of each file without reading the answer.
+- Add one feature and test both a normal and invalid case.
