@@ -21,7 +21,7 @@ Each day has three independent files:
 |---|---:|---|---|
 | 1 | 1–10 | Python and Software Development Foundations | Draft package committed for Days 1–10; final technical review and Phase 1 assessment validation pending |
 | 2 | 11–15 | Generative AI and LLM Foundations | First complete draft package committed; technical/teaching review pending |
-| 3 | 16–20 | LLM Application Development | Not started |
+| 3 | 16–20 | LLM Application Development | Revised class notes committed for Days 16–20 (1,108–1,276 lines each); project/interview guides and phase assessment still require creation or audit |
 | 4 | 21–25 | Embeddings and Vector Databases | Not started |
 | 5 | 26–32 | RAG Engineering | Not started |
 | 6 | 33–40 | GenAI Frameworks and Production Applications | Not started |
@@ -62,6 +62,32 @@ Each day has three independent files:
 | 15 | [Notes](notes/day_15_notes.md) | [Interview](interview_questions/day_15_interview.md) | [Project](projects/day_15_project.md) |
 
 [Phase 2 assessment](assessments/phase_02_assessment.md)
+
+
+## Phase 3 — LLM Application Development
+
+**Outcome:** Integrate LLM providers, validate structured outputs, build streaming conversations, handle API failures and expose LLM functionality through FastAPI.
+
+| Day | Class notes | Approved project |
+|---:|---|---|
+| 16 | [Notes](notes/day_16_notes.md) | Python LLM API Integration Application |
+| 17 | [Notes](notes/day_17_notes.md) | Resume Information Extraction Application |
+| 18 | [Notes](notes/day_18_notes.md) | Streaming Conversational Chatbot |
+| 19 | [Notes](notes/day_19_notes.md) | Resilient LLM API Client |
+| 20 | [Notes](notes/day_20_notes.md) | LLM-Powered REST API |
+
+**Verified class-note line counts (GitHub files fetched after commit):**
+
+| Day | Lines |
+|---:|---:|
+| 16 | 1,276 |
+| 17 | 1,225 |
+| 18 | 1,261 |
+| 19 | 1,169 |
+| 20 | 1,108 |
+| **Total** | **6,039** |
+
+**Phase 3 status:** Class notes are committed. This does not mean the complete Phase 3 learning package is finished: project guides, interview guides and the cumulative assessment still need to be developed and reviewed.
 
 ## How students should study
 
