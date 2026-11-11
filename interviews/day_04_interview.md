@@ -458,3 +458,210 @@ Ask the student to explain one code example in this order: input, variable, oper
 
 ### Student reflection
 Write down the question that was hardest to answer. Revisit the matching class-note section, create a smaller example and explain it again the next day.
+
+
+---
+
+## 6. OOP interview questions with clear answers
+
+### Q8. What is the difference between a class and an object?
+
+A class defines a type and describes its possible data and behavior. An object is one instance created from that class. One class can create many separate objects.
+
+### Q9. What are __init__ and self?
+
+`__init__` initializes the new object. `self` refers to the current instance and is used to read or update its attributes. Python supplies the instance automatically when an instance method is called through an object.
+
+### Q10. What is the difference between an attribute and a method?
+
+An attribute stores data on an object. A method is a function defined in a class that performs an operation, often using that object's data.
+
+### Q11. What is the difference between instance and class attributes?
+
+An instance attribute belongs to one object and can have a different value on each object. A class attribute is defined on the class and is shared unless an instance overrides it with its own attribute.
+
+### Q12. What is encapsulation?
+
+Encapsulation groups data and related operations together. A class can validate a value through a method or property before updating its internal state. In Python, a leading underscore is a convention for internal use, not strong security.
+
+### Q13. What is a property?
+
+A property allows a method to be accessed with attribute-like syntax. A setter can validate values when someone assigns to the attribute.
+
+### Q14. What is inheritance?
+
+Inheritance lets a child class reuse and specialize behavior from a parent class. Use it when the child is genuinely a more specific kind of the parent.
+
+### Q15. What is method overriding?
+
+Overriding occurs when a child class defines a method with the same name as an inherited method, providing specialized behavior.
+
+### Q16. What does super() do?
+
+`super()` provides access to the next implementation in the method resolution order. It is commonly used by a child initializer to reuse the parent's initialization.
+
+### Q17. What is composition?
+
+Composition means one object contains or uses another object. For example, an Assistant can have a Prompt and a MessageStore.
+
+### Q18. What is dependency injection?
+
+Dependency injection means an object receives the components it needs from outside. This makes it easier to replace a real database with a test version or change a component without rewriting the class.
+
+### Q19. When should you use a function instead of a class?
+
+Use a function for a focused operation that does not need to retain object state. Use a class when related data and behavior belong together. Do not create classes just to make every piece of code look object-oriented.
+
+## 7. Code-output interview drills
+
+### Drill 1 — separate objects
+
+```python
+class Student:
+    def __init__(self, name):
+        self.name = name
+
+a = Student("Anu")
+b = Student("Ravi")
+print(a.name)
+print(b.name)
+```
+
+Answer:
+
+```text
+Anu
+Ravi
+```
+
+Each object stores its own name.
+
+### Drill 2 — instance method
+
+```python
+class Counter:
+    def __init__(self):
+        self.value = 0
+
+    def increase(self):
+        self.value += 1
+
+counter = Counter()
+counter.increase()
+counter.increase()
+print(counter.value)
+```
+
+Answer: `2`.
+
+### Drill 3 — overriding
+
+```python
+class Tool:
+    def run(self):
+        return "Base"
+
+class SearchTool(Tool):
+    def run(self):
+        return "Search"
+
+print(SearchTool().run())
+```
+
+Answer: `Search`. The child implementation overrides the inherited method.
+
+### Drill 4 — class attribute
+
+```python
+class Course:
+    platform = "TechPhile"
+
+one = Course()
+two = Course()
+print(one.platform, two.platform)
+```
+
+Answer: `TechPhile TechPhile`.
+
+### Drill 5 — composition
+
+```python
+class Engine:
+    def start(self):
+        return "Started"
+
+class Car:
+    def __init__(self, engine):
+        self.engine = engine
+
+car = Car(Engine())
+print(car.engine.start())
+```
+
+Answer: `Started`. Car has an Engine object.
+
+## 8. Practical coding interview challenge
+
+**Task:** Create a `CourseProgress` class that stores a learner's name and completed lesson count. Add a method that completes one lesson and another method that returns a readable progress message.
+
+**One possible solution:**
+
+```python
+class CourseProgress:
+    def __init__(self, learner_name):
+        self.learner_name = learner_name
+        self.completed_lessons = 0
+
+    def complete_lesson(self):
+        self.completed_lessons += 1
+
+    def report(self):
+        return f"{self.learner_name}: {self.completed_lessons} lessons completed"
+
+
+learner = CourseProgress("Anu")
+learner.complete_lesson()
+learner.complete_lesson()
+print(learner.report())
+```
+
+Output:
+
+```text
+Anu: 2 lessons completed
+```
+
+Explain:
+- The class defines the learner progress object.
+- `__init__` initializes two instance attributes.
+- Each call to `complete_lesson()` increases the count.
+- `report()` returns a string.
+- The caller prints the returned string.
+
+## 9. Project discussion — AI Application Component Manager
+
+Be ready to explain:
+
+1. **What does the project do?** It prepares a prompt, stores user messages and connects reusable components.
+2. **Does it call an LLM?** No. It is a plain-Python OOP exercise. It does not make a network request or require an API key.
+3. **Why is Prompt a class?** It stores an instruction and provides a method to build a prepared prompt.
+4. **Why is MessageStore a class?** It owns the message list and exposes methods to add and retrieve messages.
+5. **Why does Assistant receive Prompt and MessageStore?** This is composition and dependency injection. The components can be replaced independently.
+6. **Why does SafeTextAssistant inherit from TextAssistant?** It is a specialized assistant that adds a blank-input check.
+7. **Why call super()?** To reuse the parent's receive_question() implementation after validation.
+8. **How is invalid input handled?** The program raises a ValueError with a clear message.
+9. **What would you improve?** Add automated tests, persistent storage, role validation and an actual model client in a later lesson.
+10. **What is one limitation?** The prompt is prepared but no AI response is generated.
+
+## 10. Final interview readiness checklist
+
+- [ ] I can explain class vs object.
+- [ ] I can explain `__init__` and `self`.
+- [ ] I can identify attributes and methods.
+- [ ] I can explain class vs instance attributes.
+- [ ] I can explain encapsulation and properties.
+- [ ] I can explain inheritance and overriding.
+- [ ] I can explain `super()`.
+- [ ] I can explain composition and dependency injection.
+- [ ] I can complete the CourseProgress coding challenge.
+- [ ] I can explain the AI Application Component Manager and its limitations.
