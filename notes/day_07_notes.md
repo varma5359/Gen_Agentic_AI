@@ -1,88 +1,141 @@
-# Day 7 — Asynchronous Python: async, await, asyncio, HTTP fundamentals and concurrent API requests.
+# Day 7 — Asynchronous Python: async, await, asyncio, HTTP fundamentals and concurrent API requests
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Duration:** 2–3 hours  
-**Level:** Intermediate
+**Phase 1 | 2–3 hours | Project: Asynchronous API Data Fetcher**
 
-> **Self-learning instruction:** Read one section at a time. Type the code yourself, run it and compare the result. These notes are designed to teach without a trainer or video.
+## Learning objectives
+Explain synchronous and asynchronous execution, define coroutine/event loop, use async/await and gather, understand HTTP requests/responses, make asynchronous HTTP requests and bound concurrent work.
 
-## 1. Understand the topic
-
-Synchronous code waits before continuing. Async code can pause at await so an event loop can run other tasks during I/O waits. async def defines a coroutine function; await suspends a coroutine. asyncio.run manages a top-level loop. asyncio.gather runs independent awaitables concurrently. Async is useful for I/O-bound work, not automatically faster for CPU-heavy work.
-
-## 2. Why this matters in an AI application
-
-A GenAI application is still software. It needs input handling, business logic, APIs, data, validation, security, tests and deployment. Today's concepts are building blocks for those responsibilities. A small example demonstrates one concept; it is not automatically production-ready.
-
-## 3. Guided coding walkthrough
-
-### Step 1 — Understand the task
-
-Read the code and predict the output. Identify the input, the main operation and the value produced.
-
-### Step 2 — Code
+## 1. Why async?
+Programs often wait for network responses. In synchronous code, the next operation waits until the current call returns. Asynchronous code can pause a task during I/O so other tasks can make progress. It is useful for I/O-bound work, not automatically faster for CPU-heavy calculations.
 
 ~~~python
+import time
+def task(name):
+    print("Start", name)
+    time.sleep(2)
+    print("End", name)
+task("A")
+task("B")
+~~~
+
+These tasks run one after another, taking roughly four seconds.
+
+## 2. async and await
+~~~python
 import asyncio
-async def fetch_record(record_id):
-    print("Starting", record_id)
-    await asyncio.sleep(1)  # Simulates network waiting
-    return {"id": record_id, "status": "ok"}
+
+async def task(name):
+    print("Start", name)
+    await asyncio.sleep(2)
+    print("End", name)
+
 async def main():
-    results = await asyncio.gather(fetch_record(101), fetch_record(102), fetch_record(103))
-    print(results)
+    await asyncio.gather(task("A"), task("B"))
+
 asyncio.run(main())
 ~~~
 
-### Step 3 — Expected output
+Both tasks start before either finishes. Approximate duration is around two seconds plus overhead.
+- async def defines a coroutine function.
+- Calling it creates a coroutine object.
+- await pauses the current coroutine until the awaited operation completes.
+- gather schedules multiple awaitables and collects results.
+- asyncio.run starts an event loop for this script.
 
-~~~text
-Starting 101
-Starting 102
-Starting 103
-[{'id': 101, 'status': 'ok'}, {'id': 102, 'status': 'ok'}, {'id': 103, 'status': 'ok'}]
+Do not call asyncio.run inside an already-running event loop, as in some notebook environments.
+
+## 3. Concurrency versus parallelism
+Concurrency means tasks make progress during overlapping periods. Parallelism means simultaneous execution, often on multiple CPU cores. Asyncio provides cooperative concurrency, especially useful while waiting for I/O. CPU-heavy tasks need a different approach.
+
+## 4. HTTP request and response
+HTTP is a request-response protocol.
+
+| Request/response part | Meaning |
+|---|---|
+| Method | GET, POST, PUT, PATCH, DELETE |
+| URL | Resource location |
+| Headers | Metadata such as content type or authorization |
+| Body | Optional data sent to server |
+| Status | Outcome code |
+| Response body | Returned content |
+
+Common statuses: 200 success, 201 created, 400 bad request, 401 unauthenticated, 403 forbidden, 404 missing, 429 rate limited, 500 server error.
+
+## 5. Async HTTP using httpx
+Install httpx in your virtual environment. Then:
+
+~~~python
+import asyncio
+import httpx
+
+async def fetch_post(client, post_id):
+    url = f"https://jsonplaceholder.typicode.com/posts/{post_id}"
+    response = await client.get(url, timeout=10.0)
+    response.raise_for_status()
+    return response.json()
+
+async def main():
+    async with httpx.AsyncClient() as client:
+        results = await asyncio.gather(
+            fetch_post(client, 1),
+            fetch_post(client, 2),
+            fetch_post(client, 3)
+        )
+    for post in results:
+        print(post["id"], post["title"])
+
+asyncio.run(main())
 ~~~
 
-### Step 4 — Explain the code line by line
+AsyncClient manages reusable connections. await client.get performs the network operation asynchronously. timeout bounds waiting. raise_for_status raises for unsuccessful HTTP status. response.json parses JSON. async with closes the client.
 
-- asyncio.sleep simulates non-blocking waiting; it is not a real HTTP request.
-- gather runs independent coroutines concurrently and returns results in input order.
-- Use HTTPX AsyncClient for real async HTTP and set timeouts.
-- In notebooks use await main() rather than nesting asyncio.run().
+## 6. Errors and bounded concurrency
+Network calls may fail due to timeout, DNS, server errors or rate limits. A semaphore limits simultaneous operations.
 
-### Step 5 — Interpret the result
+~~~python
+limit = asyncio.Semaphore(3)
 
-Answer in your own words: What input did the program receive? What operation did it perform? What result did it produce? What would change if the input changed? What should be validated before using this in a larger application?
+async def limited_fetch(client, post_id):
+    async with limit:
+        return await fetch_post(client, post_id)
+~~~
 
-## 4. Common mistakes and troubleshooting
+Catch specific exceptions such as httpx.TimeoutException, httpx.HTTPStatusError and httpx.RequestError. Retries must be limited and delayed; never retry forever. A timeout does not prove the server did not process a request.
 
-- Read the complete traceback and identify the exception type and line.
-- Confirm the active Python interpreter, installed packages, current folder and filename.
-- Check types, missing values, boundaries and external response formats.
-- Reduce a complex failure to the smallest reproducible example.
-- Fix the cause rather than hiding errors with broad exception handling.
+## 7. Industry scenario
+An AI backend may retrieve several independent records before constructing context for a model. Async HTTP can overlap network waits. It improves orchestration around I/O; it does not guarantee the model itself generates faster.
 
-## 5. Independent practice
+## 8. Common mistakes
+| Mistake | Fix |
+|---|---|
+| Forget await | Await the coroutine operation |
+| Use time.sleep in async function | Use asyncio.sleep |
+| Forget to close client | Use async with |
+| No timeout | Set explicit timeout |
+| Gather huge request list without limit | Use semaphore or bounded workers |
+| Assume async speeds CPU calculations | Use appropriate CPU parallelism |
 
-1. Recreate the example from a blank file.
-2. Change at least two inputs and predict the output before running.
-3. Add one validation or failure case relevant to this topic.
-4. Explain the changed output in your own words.
-5. Save the code in a clearly named project folder.
+## 9. Exercises
+1. Run two asyncio.sleep tasks concurrently.
+2. Compare sequential and concurrent durations.
+3. Fetch three public test posts with httpx.
+4. Add timeout and HTTP error handling.
+5. Limit concurrency to two.
+6. Explain I/O-bound versus CPU-bound.
 
-## 6. Interview-ready summary
+## 10. Five-question quiz
+1. async def defines: A coroutine function B thread C database D class. **Answer A.**
+2. await: A pauses coroutine for awaitable B ends program C encrypts D starts OS. **Answer A.**
+3. Which blocks event loop? A asyncio.sleep B time.sleep C gather D async with. **Answer B.**
+4. HTTP 404 means: A Created B Not Found C Unauthorized D Rate limited. **Answer B.**
+5. Semaphore is used to: A limit concurrent tasks B parse JSON C define route D close file. **Answer A.**
 
-- Define the concept directly.
-- Explain the problem it solves.
-- Explain when to use it and when a simpler approach is better.
-- Give one practical AI-application example.
-- Mention one limitation or common failure mode.
+## Completion
+- [ ] Explain sync/async, coroutine and event loop.
+- [ ] Use await and gather.
+- [ ] Explain HTTP request/response.
+- [ ] Make async HTTP requests.
+- [ ] Add timeout and concurrency limit.
+- [ ] Complete the project.
 
-## 7. Completion checklist
-
-- [ ] I can explain the concept without copying the definition.
-- [ ] I typed and ran the example.
-- [ ] I understand the expected output.
-- [ ] I completed the independent practice.
-- [ ] I can identify and fix a common error.
-- [ ] I am ready to attempt the approved project.
+**Next:** Day 8 — REST APIs, HTTP methods, status codes, headers, requests and responses.
