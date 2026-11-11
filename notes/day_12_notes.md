@@ -134,3 +134,1054 @@ A learner uploads a long handbook. Sending every page with every question can be
 - How can an application reduce tokens without losing relevant evidence?
 
 **Completion check:** Inspect tokenisation and calculate a context budget. Next: generation settings and hallucinations.
+
+
+# 26. Extended tokenisation and budgeting laboratory
+
+Use the following cases as a practical workshop. These are not claims about exact token counts. They teach you to identify inputs that can make estimates inaccurate and to decide how an application should handle them.
+
+## Practical case 1 — Ordinary sentence
+
+**What happens:** A common short sentence may contain familiar word pieces, but punctuation and spaces are also handled by the tokenizer.
+
+**Developer action:** Use the model-associated tokenizer when a precise estimate is required.
+
+**Practice:** Compare the visible word count with the tokenizer output.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 2 — Rare technical vocabulary
+
+**What happens:** A specialised scientific term may be divided into several smaller pieces if it is not a common vocabulary entry.
+
+**Developer action:** Test representative domain terminology instead of assuming a word-based ratio.
+
+**Practice:** Collect five technical terms from your own subject and inspect their token pieces.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 3 — Hyphenated terms
+
+**What happens:** A hyphenated expression contains word parts and punctuation that may be segmented separately.
+
+**Developer action:** Do not treat a hyphenated phrase as a fixed number of tokens.
+
+**Practice:** Compare two spellings of the same compound term.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 4 — Apostrophes
+
+**What happens:** Contractions and possessives contain apostrophes whose treatment depends on the tokenizer.
+
+**Developer action:** Use the exact tokenizer rather than counting apostrophes as words.
+
+**Practice:** Inspect examples such as don't, students' and we're.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 5 — Repeated spaces
+
+**What happens:** Extra spaces change the input string and may affect token boundaries.
+
+**Developer action:** Normalise whitespace only when doing so preserves the meaning and formatting required by the application.
+
+**Practice:** Compare a single-space string with a double-space string.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 6 — New lines
+
+**What happens:** Newline characters are part of the input and may be represented by tokenizer-specific pieces.
+
+**Developer action:** Preserve code and document structure when line breaks carry meaning.
+
+**Practice:** Compare a paragraph on one line with the same paragraph on several lines.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 7 — Python code
+
+**What happens:** Code includes keywords, identifiers, operators, punctuation and indentation.
+
+**Developer action:** Use real token counts for code-heavy prompts; word count is especially misleading.
+
+**Practice:** Inspect a function definition and its token IDs.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 8 — SQL query
+
+**What happens:** SQL contains reserved words, table names, operators, quotes and punctuation.
+
+**Developer action:** Budget for the full query plus schema context and instructions.
+
+**Practice:** Compare a short SELECT with a query containing joins and nested conditions.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 9 — JSON object
+
+**What happens:** JSON includes property names, quotes, braces, commas and values.
+
+**Developer action:** Count the complete serialized request, not only the values.
+
+**Practice:** Add five fields and observe the effect on token usage.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 10 — Markdown table
+
+**What happens:** A table contains separators, headings and cell values.
+
+**Developer action:** Avoid sending irrelevant columns and duplicate rows.
+
+**Practice:** Compare the token usage of a table with and without unused columns.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 11 — Long URL
+
+**What happens:** A URL can contain domain, path, query parameters and punctuation.
+
+**Developer action:** Avoid including tracking parameters that are not needed for the task.
+
+**Practice:** Compare a base URL with a long URL containing many query parameters.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 12 — Email address
+
+**What happens:** An email address contains symbols and text segments.
+
+**Developer action:** Do not assume an email address is one token; also protect personal data.
+
+**Practice:** Inspect a synthetic email address and avoid using real user addresses in examples.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 13 — Long numeric identifier
+
+**What happens:** A long sequence of digits may be split into multiple tokens.
+
+**Developer action:** Do not assume numeric identifiers are a single token.
+
+**Practice:** Use a fake identifier and compare short and long forms.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 14 — Dates
+
+**What happens:** Dates can be represented in different formats and tokenised differently.
+
+**Developer action:** Use a consistent machine-readable format when the application needs reliable parsing.
+
+**Practice:** Compare 11/11/2026 with 2026-11-11.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 15 — Currency amounts
+
+**What happens:** Currency symbols, separators and decimal points may affect tokenisation.
+
+**Developer action:** Keep currency and locale clear; validate numeric values separately from generated text.
+
+**Practice:** Compare ₹1,25,000.50 with INR 125000.50.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 16 — Emoji
+
+**What happens:** Emoji and combined Unicode sequences may use multiple tokens.
+
+**Developer action:** Test emoji-heavy inputs with the actual tokenizer and supported interface.
+
+**Practice:** Compare a plain text reaction with several emoji.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 17 — Non-English text
+
+**What happens:** Different writing systems and scripts can have different tokenisation behaviour.
+
+**Developer action:** Test every language the product supports; do not extrapolate English estimates.
+
+**Practice:** Compare representative Hindi and English sentences.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 18 — Mixed-language text
+
+**What happens:** Code-switching combines scripts, vocabulary and punctuation.
+
+**Developer action:** Build evaluation inputs from real supported language patterns without exposing private data.
+
+**Practice:** Write a short Hindi-English mixed sentence and inspect it.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 19 — Accented characters
+
+**What happens:** Accented letters may be represented differently depending on normalisation and tokenizer design.
+
+**Developer action:** Preserve user text unless normalisation is an explicit product requirement.
+
+**Practice:** Compare composed and decomposed Unicode forms where your tooling permits.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 20 — Source code comments
+
+**What happens:** Comments are still text and can add to the prompt size.
+
+**Developer action:** Remove irrelevant comments only when doing so does not remove useful explanation or licensing information.
+
+**Practice:** Compare code with and without a long explanatory comment.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 21 — Stack trace
+
+**What happens:** Tracebacks contain paths, line numbers, exception names and repeated frames.
+
+**Developer action:** Send only relevant trace sections and preserve the final exception details.
+
+**Practice:** Compare a complete traceback with a carefully selected relevant excerpt.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 22 — Log file
+
+**What happens:** Logs can contain timestamps, IDs, repeated messages and stack traces.
+
+**Developer action:** Filter by time, severity and correlation ID before sending logs to a model.
+
+**Practice:** Design a filter for one error event rather than sending a whole day's log.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 23 — CSV data
+
+**What happens:** CSV contains delimiters, headers, values and repeated records.
+
+**Developer action:** Select relevant columns and rows; do not send a large dataset as raw text by default.
+
+**Practice:** Compare ten rows with one hundred rows.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 24 — HTML document
+
+**What happens:** HTML includes tags, attributes, scripts and visible text.
+
+**Developer action:** Extract relevant visible content safely and avoid sending unnecessary markup.
+
+**Practice:** Compare raw HTML with cleaned article text.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 25 — PDF extraction
+
+**What happens:** Extracted PDF text may include headers, footers, page numbers and layout artefacts.
+
+**Developer action:** Inspect extraction quality and remove repeated boilerplate carefully.
+
+**Practice:** Identify three artefacts that should not enter a question-answering prompt.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 26 — OCR output
+
+**What happens:** OCR may contain recognition errors and unusual spacing.
+
+**Developer action:** Clean and validate extracted text before relying on its token count or meaning.
+
+**Practice:** Correct a deliberately misspelled OCR sentence and compare it.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 27 — Repeated boilerplate
+
+**What happens:** Repeated disclaimers or page headers consume context without adding new evidence.
+
+**Developer action:** Deduplicate only when repetition is genuinely redundant and provenance remains clear.
+
+**Practice:** Find repeated headers in a multi-page document.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 28 — Long conversation
+
+**What happens:** A chat transcript can grow across many turns.
+
+**Developer action:** Select relevant recent turns or maintain a tested summary strategy.
+
+**Practice:** Create a short summary of an older conversation and list what it omits.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 29 — Tool schema
+
+**What happens:** Tool descriptions and parameter schemas may be part of the request format.
+
+**Developer action:** Keep tool definitions concise, specific and limited to tools needed for the task.
+
+**Practice:** Compare one necessary tool schema with an unrelated extra tool.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 30 — Tool result
+
+**What happens:** A tool may return large JSON or verbose text.
+
+**Developer action:** Filter the result to the fields required for the next decision.
+
+**Practice:** Design a minimal result containing status, identifier and relevant value.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 31 — Retrieved passages
+
+**What happens:** Retrieved chunks can vary greatly in length and relevance.
+
+**Developer action:** Select passages by relevance and fit them into a context budget.
+
+**Practice:** Compare three relevant short passages with ten mixed-quality passages.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 32 — Duplicate passages
+
+**What happens:** Near-duplicate chunks repeat information and waste context.
+
+**Developer action:** Deduplicate or diversify retrieval results where appropriate.
+
+**Practice:** Identify repeated sentences across two retrieved chunks.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 33 — Very short prompt
+
+**What happens:** A short user message still shares a request with instructions and other content.
+
+**Developer action:** Do not budget only the visible user message.
+
+**Practice:** Add the system instruction estimate to a short question.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 34 — Long system prompt
+
+**What happens:** A detailed instruction can consume a significant share of the request budget.
+
+**Developer action:** Remove ambiguity and redundancy, not essential constraints.
+
+**Practice:** Rewrite a verbose instruction into a concise checklist.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 35 — Few-shot examples
+
+**What happens:** Each example adds input content and can increase context use.
+
+**Developer action:** Use representative examples and evaluate whether each example improves performance.
+
+**Practice:** Compare zero-shot and three-example prompts.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 36 — Structured output schema
+
+**What happens:** A JSON schema or output specification may add request content.
+
+**Developer action:** Use only required fields and validate the returned structure.
+
+**Practice:** Compare a schema with four fields and one with twenty fields.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 37 — Multimodal request
+
+**What happens:** Images, audio and video may use provider-specific accounting beyond visible text tokens.
+
+**Developer action:** Follow the provider's modality-specific usage rules; text length alone is insufficient.
+
+**Practice:** List which non-text inputs your application may send.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 38 — Large generated answer
+
+**What happens:** The output allowance must be sufficient for the expected response.
+
+**Developer action:** Set a response limit based on the task and handle incomplete output.
+
+**Practice:** Compare a one-sentence answer with a detailed report requirement.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 39 — Summarisation input
+
+**What happens:** A long source may be too large to process in one request.
+
+**Developer action:** Use section-based summarisation and a final synthesis step when appropriate.
+
+**Practice:** Summarise three sections separately and combine the summaries.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 40 — Question with many constraints
+
+**What happens:** A prompt with multiple requirements consumes more content and is harder to satisfy.
+
+**Developer action:** Structure constraints clearly and test that all are represented in the final output.
+
+**Practice:** Turn a paragraph of requirements into a numbered checklist.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 41 — Sensitive personal data
+
+**What happens:** Private information does not become safe merely because it is tokenised.
+
+**Developer action:** Minimise data, enforce access controls and follow the organisation's data policy.
+
+**Practice:** Replace names and identifiers with synthetic values in a test.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 42 — Adversarial prompt text
+
+**What happens:** Untrusted document text can contain instructions that conflict with the application task.
+
+**Developer action:** Treat retrieved text as data, not trusted instructions, and apply prompt-injection controls.
+
+**Practice:** Create a harmless example document containing the phrase 'ignore previous directions' and explain the boundary.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 43 — Context near capacity
+
+**What happens:** Small overhead differences can cause a request to exceed its supported limit.
+
+**Developer action:** Reserve a measured safety margin and verify actual usage.
+
+**Practice:** Reduce the planned context by 10 percent and recalculate.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 44 — Tokenizer mismatch
+
+**What happens:** An unrelated tokenizer may undercount or overcount the target model's request.
+
+**Developer action:** Label estimates and compare them with provider usage.
+
+**Practice:** Record local estimates and actual usage for five test prompts.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 45 — Truncated JSON
+
+**What happens:** A response cut off at the output limit may not parse.
+
+**Developer action:** Detect incomplete output and handle it explicitly; do not treat partial JSON as valid.
+
+**Practice:** Create a deliberately incomplete JSON string and test parsing.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 46 — Truncated code
+
+**What happens:** A cut-off code response may be syntactically invalid or omit required logic.
+
+**Developer action:** Validate generated code with parsing and tests before use.
+
+**Practice:** Remove the final bracket from a code sample and observe the error.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 47 — Document with footnotes
+
+**What happens:** Footnotes and references may carry important qualifications.
+
+**Developer action:** Preserve citations and explanatory notes when they support claims.
+
+**Practice:** Compare a paragraph with and without its relevant footnote.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 48 — Tables with empty cells
+
+**What happens:** Empty cells and repeated separators may add noise or confuse interpretation.
+
+**Developer action:** Clean tables carefully while preserving column meaning.
+
+**Practice:** Convert a small table into compact key-value records.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 49 — Large list of examples
+
+**What happens:** Many examples consume context and may repeat the same pattern.
+
+**Developer action:** Select diverse examples that cover distinct edge cases.
+
+**Practice:** Choose five examples from a list of twenty and explain coverage.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+## Practical case 50 — Versioned policy text
+
+**What happens:** Older and newer policy sections may conflict and both consume context.
+
+**Developer action:** Retrieve the current approved version and preserve effective dates.
+
+**Practice:** Design metadata fields for policy version and effective date.
+
+**Record in your lab notebook:**
+- Input type:
+- What could increase the token count:
+- What content can safely be removed:
+- What content must be preserved:
+- Which tokenizer or provider documentation would you consult:
+- What test would confirm your estimate:
+
+**Expected reasoning:** The visible length of text is not enough to determine exact token usage. Identify the actual content, use the correct tokenizer where possible, and preserve information needed for the task.
+
+
+
+# 27. Lab report template
+
+For each case, write a short report with these headings:
+
+1. Scenario.
+2. Input sample (use synthetic data).
+3. Expected tokenizer behaviour (hypothesis only).
+4. Tokenizer used.
+5. Token pieces observed.
+6. Token IDs observed, if the library exposes them.
+7. Estimated count.
+8. Provider-reported count, if a real request was made.
+9. Difference between estimate and provider usage.
+10. Explanation of the difference.
+11. Application decision.
+12. Test case added.
+13. Limitation.
+14. What you would monitor in production.
+
+Do not invent observations. If you have not run a tokenizer or provider request, mark the result as “not measured”.
+
+# 28. Instructor-style walkthrough: designing a safe request budget
+
+Imagine that a learner asks a question about a long course PDF. The backend has already extracted the text and stored sections in a searchable index.
+
+The learner asks: “Explain the difference between supervised and unsupervised learning.”
+
+A poor design sends the entire PDF. A better design follows a sequence:
+
+1. Validate that the question is not empty.
+2. Identify the user's permitted course documents.
+3. Search for passages relevant to supervised and unsupervised learning.
+4. Remove duplicate or clearly irrelevant results.
+5. Inspect passage length.
+6. Estimate the complete prompt size.
+7. Reserve output allowance.
+8. Keep a safety margin.
+9. If the request is too large, retrieve fewer or shorter passages.
+10. Preserve source identifiers for citations.
+11. Send the request to the selected model.
+12. Inspect the provider response and usage information.
+13. Validate the answer and its citations.
+14. Record operational metrics without exposing private content unnecessarily.
+
+The design goal is not “send the maximum possible text”. The goal is “send enough relevant, trustworthy context to answer the question”.
+
+## Walkthrough decision table
+
+| Decision | Poor approach | Better approach |
+|---|---|---|
+| Document selection | Send every document | Restrict to authorised documents |
+| Retrieval | Take the first chunks | Rank by relevance and inspect quality |
+| Duplicate content | Keep repeated passages | Deduplicate where safe |
+| Budget | Count only the question | Account for the complete request |
+| Output | Use an arbitrary tiny limit | Reserve enough for the requested answer |
+| Overflow | Cut the prompt at a random character | Retrieve, summarise or split meaningfully |
+| Verification | Assume the estimate is exact | Compare with tokenizer/provider usage |
+| Citations | Drop source IDs | Preserve source metadata |
+
+## Walkthrough questions
+
+**Question:** Why not always choose the largest context window available?
+
+**Answer:** Capacity alone does not determine the best model. Cost, latency, quality, availability, privacy, retrieval quality and output requirements also matter.
+
+**Question:** If the request fits, does that prove the answer will be correct?
+
+**Answer:** No. A context-budget check only addresses request size. It does not prove that the retrieved evidence is relevant or that the model's answer is factual.
+
+**Question:** If a model accepts a large request, should the application send every document?
+
+**Answer:** No. Unnecessary context can reduce relevance, increase cost and latency, and make evaluation harder.
+
+# 29. Final practical assessment
+
+Complete these tasks without copying the lesson.
+
+1. Explain token, tokenizer and token ID.
+2. Give an example where word count differs from token count.
+3. Explain why a URL or code block can be difficult to estimate using word count.
+4. Explain context window in your own words.
+5. List at least five request components that may consume context.
+6. Distinguish input tokens from output tokens.
+7. Calculate a budget from a supplied table.
+8. Identify an over-capacity request.
+9. Propose two ways to reduce an oversized request without deleting random text.
+10. Explain why a provider usage report is useful.
+11. Build and run the analyzer.
+12. Test valid, invalid, negative and boundary values.
+13. Label all manual values as estimates.
+14. Write a README that explains the project's limitations.
+15. Explain how the project could be extended with a model-associated tokenizer.
+
+**Assessment standard:** A learner passes this practical assessment only when the program runs, the calculations are correct, invalid input is handled, the output clearly labels estimates, and the learner can explain why the program is not an exact provider token counter.
