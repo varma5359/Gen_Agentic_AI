@@ -1792,3 +1792,695 @@ The trainer should correct misunderstandings before moving forward.
 **Mastery evidence:** the student can independently demonstrate "Small reusable toolkit" and explain why the output is correct.
 
 ---
+
+
+---
+
+# 14. Learn every function concept by running it
+
+This section is the detailed classroom walkthrough. Type each example into a new file called `practice_functions.py`. Run one example at a time.
+
+## 14.1 Defining a function vs calling a function
+
+A function is a named, reusable group of Python statements.
+
+```python
+def say_hello():
+    print("Hello, learner!")
+
+print("Before calling")
+say_hello()
+print("After calling")
+```
+
+Output:
+
+```text
+Before calling
+Hello, learner!
+After calling
+```
+
+Read it in this order:
+1. `def` tells Python that a function is being defined.
+2. `say_hello` is the function's name.
+3. `()` holds parameters. This function has none.
+4. The colon `:` starts the function body.
+5. The indented `print()` belongs to the function.
+6. The line `say_hello()` calls it. That is when its body runs.
+
+**Important:** defining a function does not execute its body. Calling it does.
+
+Common mistakes:
+- `def say_hello()` without the colon causes a syntax error.
+- Missing indentation causes an indentation error.
+- Writing `say_hello` without parentheses refers to the function; it does not call it.
+- Defining a function but never calling it means its body does not run.
+
+## 14.2 Parameters and arguments
+
+A parameter is a variable name in the function definition. An argument is the actual value passed to the function call.
+
+```python
+def greet_student(name):
+    print("Welcome,", name)
+
+greet_student("Anu")
+greet_student("Ravi")
+```
+
+Output:
+
+```text
+Welcome, Anu
+Welcome, Ravi
+```
+
+Here, `name` is the parameter. `"Anu"` and `"Ravi"` are arguments. Each call supplies a different value.
+
+### Two parameters
+
+```python
+def calculate_total(price, quantity):
+    total = price * quantity
+    print("Total:", total)
+
+calculate_total(100, 3)
+```
+
+Output:
+
+```text
+Total: 300
+```
+
+The first argument goes to `price`; the second goes to `quantity`. This is positional argument matching.
+
+### Keyword arguments
+
+```python
+def student_card(name, course):
+    print(name, "is learning", course)
+
+student_card(course="GenAI", name="Meena")
+```
+
+Output:
+
+```text
+Meena is learning GenAI
+```
+
+Keyword arguments use parameter names, so the order can change. Use the exact parameter name. Do not put a positional argument after a keyword argument in the same call.
+
+### Default arguments
+
+```python
+def send_welcome(name, course="Python"):
+    print(f"Welcome {name}. Your course is {course}.")
+
+send_welcome("Anu")
+send_welcome("Ravi", "GenAI")
+```
+
+Output:
+
+```text
+Welcome Anu. Your course is Python.
+Welcome Ravi. Your course is GenAI.
+```
+
+The default `"Python"` is used only when the caller does not provide `course`.
+
+A default parameter must come after required parameters:
+
+```python
+def create_user(name, role="student"):
+    print(name, role)
+```
+
+Do not write `def create_user(role="student", name):`; Python rejects a required parameter after a default parameter.
+
+### Variable number of positional arguments: *args
+
+Use `*args` when a function should accept any number of extra positional arguments. Inside the function, `args` is a tuple.
+
+```python
+def calculate_sum(*numbers):
+    print(numbers)
+    return sum(numbers)
+
+print(calculate_sum(10, 20))
+print(calculate_sum(10, 20, 30, 40))
+```
+
+Output:
+
+```text
+(10, 20)
+30
+(10, 20, 30, 40)
+100
+```
+
+- The asterisk collects extra positional arguments into a tuple.
+- `sum()` is a built-in function that adds numeric items and returns the total.
+- Use `*args` only when the number of values genuinely varies.
+
+### Variable number of keyword arguments: **kwargs
+
+Use `**kwargs` when a function should accept extra named arguments. Inside the function, `kwargs` is a dictionary.
+
+```python
+def show_profile(**details):
+    for key, value in details.items():
+        print(key, ":", value)
+
+show_profile(name="Anu", course="Python", city="Hyderabad")
+```
+
+Output:
+
+```text
+name : Anu
+course : Python
+city : Hyderabad
+```
+
+- `**` collects extra keyword arguments.
+- `.items()` provides key-value pairs from the dictionary.
+- The names `args` and `kwargs` are conventions; the asterisks perform the collection.
+
+## 14.3 print() vs return — one of the most important differences
+
+`print()` displays something on the screen. `return` sends a result back to the code that called the function.
+
+```python
+def show_total(a, b):
+    print(a + b)
+
+def get_total(a, b):
+    return a + b
+
+first_result = show_total(5, 3)
+second_result = get_total(5, 3)
+
+print("First result:", first_result)
+print("Second result:", second_result)
+```
+
+Output:
+
+```text
+8
+First result: None
+Second result: 8
+```
+
+Why?
+- `show_total()` displays 8 but has no explicit return statement. Python therefore returns `None`.
+- `get_total()` returns 8. The caller stores it in `second_result`.
+
+Use `print()` when the goal is to show a message to a person. Use `return` when another part of the program must use the calculated result.
+
+### Return different data types
+
+```python
+def get_course():
+    return "Python"
+
+def get_score():
+    return 95
+
+def get_skills():
+    return ["Python", "SQL"]
+
+def get_student():
+    return {"name": "Anu", "score": 95}
+
+print(get_course())
+print(get_score())
+print(get_skills())
+print(get_student())
+```
+
+Output:
+
+```text
+Python
+95
+['Python', 'SQL']
+{'name': 'Anu', 'score': 95}
+```
+
+A function can return a string, number, list, dictionary or another object.
+
+### Returning more than one value
+
+```python
+def get_name_and_score():
+    return "Anu", 95
+
+name, score = get_name_and_score()
+print(name)
+print(score)
+```
+
+Output:
+
+```text
+Anu
+95
+```
+
+Python packages these returned values into a tuple. The assignment unpacks the tuple into two variables.
+
+### Early return
+
+```python
+def get_average(marks):
+    if len(marks) == 0:
+        return None
+
+    return sum(marks) / len(marks)
+
+print(get_average([80, 90, 100]))
+print(get_average([]))
+```
+
+Output:
+
+```text
+90.0
+None
+```
+
+The first return exits the function immediately when there are no marks. This avoids dividing by zero.
+
+## 14.4 Variable scope — where can a name be used?
+
+```python
+course = "GenAI"
+
+def show_topic():
+    topic = "Python functions"
+    print(course)
+    print(topic)
+
+show_topic()
+print(course)
+```
+
+Output:
+
+```text
+GenAI
+Python functions
+GenAI
+```
+
+- `course` is defined outside the function. It is a module-level (global) name.
+- `topic` is created inside the function. It is local to that function.
+- The function can read the global name, but code outside cannot directly read the function's local variable.
+
+This fails:
+
+```python
+def create_topic():
+    topic = "Functions"
+
+create_topic()
+print(topic)  # NameError: topic is not defined here
+```
+
+### Prefer parameters and return values
+
+Instead of changing a global variable, pass data in and return the result:
+
+```python
+def add_tax(price, tax_rate):
+    return price + (price * tax_rate)
+
+final_price = add_tax(100, 0.18)
+print(final_price)
+```
+
+Output:
+
+```text
+118.0
+```
+
+This function is easier to test because its inputs and output are visible. Avoid using `global` in beginner projects unless you have a clear reason.
+
+## 14.5 Comprehensions — first understand the loop
+
+A comprehension is a compact way to create a new collection. It does not magically make every program faster or easier to read.
+
+### List comprehension
+
+First, write the ordinary loop:
+
+```python
+scores = [40, 75, 90]
+passed = []
+
+for score in scores:
+    if score >= 50:
+        passed.append(score)
+
+print(passed)
+```
+
+Output:
+
+```text
+[75, 90]
+```
+
+Now the equivalent list comprehension:
+
+```python
+scores = [40, 75, 90]
+passed = [score for score in scores if score >= 50]
+print(passed)
+```
+
+Output:
+
+```text
+[75, 90]
+```
+
+Read it as: create a list of `score` values, for each `score` in `scores`, only if the score is at least 50.
+
+### Transform values
+
+```python
+names = ["anu", "ravi", "meena"]
+capital_names = [name.upper() for name in names]
+print(capital_names)
+```
+
+Output:
+
+```text
+['ANU', 'RAVI', 'MEENA']
+```
+
+`upper()` is a string method. It returns an uppercase string; it does not modify the original string.
+
+### Set comprehension
+
+```python
+words = ["ai", "python", "ai", "rag"]
+unique_lengths = {len(word) for word in words}
+print(unique_lengths)
+```
+
+Output contains the unique lengths 2, 3 and 6. Set display order is not guaranteed.
+
+### Dictionary comprehension
+
+```python
+names = ["Anu", "Ravi"]
+lengths = {name: len(name) for name in names}
+print(lengths)
+```
+
+Output:
+
+```text
+{'Anu': 3, 'Ravi': 4}
+```
+
+### When should you NOT use a comprehension?
+
+Use a normal loop when:
+- There are several steps inside the loop.
+- You need detailed error handling.
+- The comprehension becomes difficult to read.
+- You need to print progress or perform several side effects.
+
+Readable code is more important than short code.
+
+---
+
+# 15. Complete guided project — Reusable Text Processing Toolkit
+
+## What you are building
+
+A small command-line utility that receives text and reports:
+- cleaned text,
+- number of characters,
+- number of words,
+- unique words,
+- words longer than a chosen length.
+
+This is a foundation for later tasks such as cleaning user prompts, preparing documents for search and processing text before sending it to an LLM. It is not yet an LLM application; it uses plain Python only.
+
+## Step 1 — create the project
+
+Create this folder and file:
+
+```text
+day_03_project/
+└── main.py
+```
+
+## Step 2 — type the complete code
+
+```python
+def clean_text(text):
+    """Remove spaces from the beginning and end of text."""
+    return text.strip()
+
+
+def count_characters(text):
+    """Return the number of characters, including spaces."""
+    return len(text)
+
+
+def count_words(text):
+    """Return the number of words separated by whitespace."""
+    cleaned = clean_text(text)
+
+    if cleaned == "":
+        return 0
+
+    return len(cleaned.split())
+
+
+def get_unique_words(text):
+    """Return unique lowercase words without common punctuation."""
+    cleaned = clean_text(text).lower()
+    words = cleaned.split()
+
+    cleaned_words = []
+    for word in words:
+        word = word.strip(".,!?;:")
+        if word:
+            cleaned_words.append(word)
+
+    return sorted(set(cleaned_words))
+
+
+def get_long_words(text, minimum_length=5):
+    """Return words whose character count is at least minimum_length."""
+    cleaned = clean_text(text).lower()
+    words = cleaned.split()
+
+    result = []
+    for word in words:
+        word = word.strip(".,!?;:")
+        if len(word) >= minimum_length:
+            result.append(word)
+
+    return result
+
+
+def analyze_text(text):
+    """Return all text analysis results in one dictionary."""
+    cleaned = clean_text(text)
+
+    return {
+        "cleaned_text": cleaned,
+        "characters": count_characters(cleaned),
+        "words": count_words(cleaned),
+        "unique_words": get_unique_words(cleaned),
+        "long_words": get_long_words(cleaned)
+    }
+
+
+def main():
+    print("TECHPHILE TEXT TOOLKIT")
+    user_text = input("Enter a sentence: ")
+
+    if not user_text.strip():
+        print("Please enter some text. Empty input cannot be analyzed.")
+        return
+
+    report = analyze_text(user_text)
+
+    print("\n--- TEXT REPORT ---")
+    print("Cleaned text:", report["cleaned_text"])
+    print("Characters:", report["characters"])
+    print("Words:", report["words"])
+    print("Unique words:", report["unique_words"])
+    print("Long words:", report["long_words"])
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Step 3 — run the program
+
+Open a terminal in the `day_03_project` folder.
+
+Windows:
+
+```bash
+py main.py
+```
+
+macOS / Linux:
+
+```bash
+python3 main.py
+```
+
+No external package or API key is required. This project uses Python's built-in functions and string methods.
+
+## Step 4 — expected output
+
+Input:
+
+```text
+  Python helps students learn AI. Python is useful!
+```
+
+Output:
+
+```text
+TECHPHILE TEXT TOOLKIT
+Enter a sentence:   Python helps students learn AI. Python is useful!
+
+--- TEXT REPORT ---
+Cleaned text: Python helps students learn AI. Python is useful!
+Characters: 50
+Words: 9
+Unique words: ['ai', 'helps', 'is', 'learn', 'python', 'students', 'useful']
+Long words: ['python', 'helps', 'students', 'learn', 'python', 'useful']
+```
+
+## Step 5 — understand every function
+
+| Function | Input | What it does | Return value |
+|---|---|---|---|
+| `clean_text(text)` | One string | Removes surrounding whitespace | New string |
+| `count_characters(text)` | One string | Counts characters | Integer |
+| `count_words(text)` | One string | Splits text and counts words | Integer |
+| `get_unique_words(text)` | One string | Normalizes and removes duplicates | Sorted list |
+| `get_long_words(text, minimum_length=5)` | String and optional integer | Selects words meeting length threshold | List |
+| `analyze_text(text)` | One string | Calls the smaller functions | Dictionary |
+| `main()` | No parameters | Handles input and displays report | No explicit return; returns None |
+
+### Understand the Python features used
+
+- `def`: starts a function definition.
+- `return`: sends a result to the caller.
+- `strip()`: returns a string without surrounding whitespace.
+- `lower()`: returns a lowercase version of a string.
+- `split()`: returns a list of words.
+- `len()`: returns the number of characters or items.
+- `for`: visits each item in a sequence.
+- `append()`: adds one item to a list and returns None.
+- `if`: runs a block only when its condition is true.
+- `set()`: creates a collection of unique values.
+- `sorted()`: returns a new sorted list.
+- `dict`: stores named results as key-value pairs.
+- `input()`: reads text typed by the user.
+- `__name__ == "__main__"`: calls main when this file is run directly.
+
+## Step 6 — test it with these inputs
+
+| Test | Input | What should happen |
+|---|---|---|
+| Normal text | `Python is useful` | Report shows 3 words |
+| Leading/trailing spaces | `  Learn Python  ` | Cleaned text has no outside spaces |
+| Empty input | Press Enter | Friendly message; no report |
+| Repeated word | `AI AI Python` | Unique words contains AI once (lowercase) |
+| Punctuation | `Hello, world!` | Unique words are hello and world |
+| One word | `Python` | Word count is 1 |
+
+## Step 7 — common errors and how to fix them
+
+| Error / symptom | Why it happens | Fix |
+|---|---|---|
+| `IndentationError` | Function or loop body is not indented consistently | Use four spaces for each block |
+| `NameError` | Function name is misspelled or not defined before use | Check spelling and definition |
+| `TypeError` in `len()` or `strip()` | A non-string value was passed | Convert or validate the value before using string methods |
+| Program shows no report | `main()` was not called | Keep the final `if __name__...` block |
+| File not found | Terminal is in a different folder | Change directory to `day_03_project` |
+| Word count surprises you | Punctuation is attached to a word or multiple spaces exist | Inspect `split()` output; whitespace splitting handles repeated spaces |
+
+## Step 8 — improve the project
+
+Try these in order. Do not skip to the last task.
+
+1. Add `count_sentences(text)`. Start by counting periods, question marks and exclamation marks. State the limitation: abbreviations such as "Dr." also contain periods.
+2. Add an optional `minimum_length` argument to `get_long_words()`. Call it with 4 and then 7.
+3. Add a function that returns the most frequent word. Hint: use a dictionary as a counter.
+4. Add a menu so the user can analyze more than one sentence without restarting the program.
+5. Add automated tests after learning the testing topic later in the course.
+
+## Step 9 — project submission checklist
+
+- [ ] I created the folder and typed the code into `main.py`.
+- [ ] I can run it using the correct command for my operating system.
+- [ ] I understand the input and output of each function.
+- [ ] I can explain why the smaller functions return values.
+- [ ] I tested normal, empty and repeated-word inputs.
+- [ ] I can add one new feature without copying a finished answer.
+- [ ] I can explain how text cleaning helps prepare data for a future AI application.
+
+---
+
+# 16. Day 3 self-assessment — answer before reading the guide
+
+1. What is the difference between defining and calling a function?
+2. In `def greet(name):`, what is `name`?
+3. In `greet("Anu")`, what is `"Anu"`?
+4. What is the difference between `print()` and `return`?
+5. What does a function return if it reaches the end without a return statement?
+6. What is a local variable?
+7. Why should a mutable list not normally be used as a default argument?
+8. What do `*args` and `**kwargs` collect?
+9. What does a list comprehension create?
+10. When is a normal for loop clearer than a comprehension?
+
+## Answer guide
+
+1. Defining creates the function; calling executes its body.
+2. It is a parameter.
+3. It is an argument.
+4. print displays output; return sends a value back to the caller.
+5. `None`.
+6. A variable created inside a function and normally available only there.
+7. The same list object can be reused across calls, causing unexpected shared changes.
+8. `*args` collects extra positional arguments into a tuple; `**kwargs` collects extra keyword arguments into a dictionary.
+9. A new list built by iterating over values, optionally transforming or filtering them.
+10. When the logic has several steps, side effects or complex error handling.
+
+## Day 3 readiness gate
+
+Do not move on until you can:
+- Define and call a function without looking at notes.
+- Pass positional, keyword and default arguments.
+- Explain `*args` and `**kwargs` with a small example.
+- Predict the result of a function that prints versus one that returns.
+- Explain local and global scope.
+- Convert a simple for loop into a readable list comprehension.
+- Run the Text Processing Toolkit and explain each function.
+- Add one small feature and test it yourself.
