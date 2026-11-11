@@ -1,139 +1,157 @@
-# Day 01 — Interview Preparation
+# Day 01 — Interview Preparation and Code Understanding
 
-**Topic:** Introduction to AI Application Development, GenAI and Agentic AI career roles, Python revision and development environment  
-**Mini-project:** AI Application Development Concept Explorer
+**Topic:** Introduction to AI application development, GenAI and Agentic AI career roles, Python basics and development environment  
+**Mini-project:** AI Application Development Concept Explorer  
+**Level:** Beginner
 
-## Beginner questions and answers
+> Use this file after completing the Day 01 class notes and coding tasks. First answer aloud without reading. Then compare your answer with the sample. Interview answers should be clear and correct, not memorised word for word.
+
+## 1. Concept questions
 
 ### Q1. What is software?
-
-**Answer:** Software is a set of instructions that tells a computer what work to perform.
+Software is a set of instructions that tells a computer how to perform tasks.
 
 ### Q2. What is an application?
+An application is software designed to help a user complete a task, such as learning, shopping or communication.
 
-**Answer:** An application is software designed to help a user complete a task, such as learning, shopping or communication.
-
-### Q3. What are input, processing and output?
-
-**Answer:** Input is information supplied to a program. Processing is the work performed. Output is the result.
+### Q3. Explain input, processing and output.
+Input is the information supplied to a program. Processing is the work the program performs. Output is the result it produces.
 
 ### Q4. What is Artificial Intelligence?
-
-**Answer:** AI is the broad field of building computer systems that perform tasks associated with human intelligence.
+AI is the field of building computer systems that perform tasks such as recognising patterns, understanding language or making predictions.
 
 ### Q5. What is Machine Learning?
-
-**Answer:** Machine Learning is an approach where a model learns patterns from data.
+Machine Learning is an approach in which a model learns patterns from data or examples.
 
 ### Q6. What is Deep Learning?
-
-**Answer:** Deep Learning uses neural networks with multiple layers.
+Deep Learning is a type of machine learning that uses neural networks with multiple layers.
 
 ### Q7. What is Generative AI?
-
-**Answer:** Generative AI creates new content such as text, code, images, audio or video.
+Generative AI creates new content, such as text, code, images or audio, based on patterns learned during training.
 
 ### Q8. What is an LLM?
-
-**Answer:** An LLM is a Large Language Model that processes and generates language.
+LLM means Large Language Model. It is a model designed to process and generate language.
 
 ### Q9. What is a prompt?
+A prompt is the instruction or input supplied to a model.
 
-**Answer:** A prompt is the instruction or input supplied to a model.
+### Q10. Does an LLM always give correct answers?
+No. It can produce incorrect or unsupported information. Developers should test outputs and use suitable safeguards.
 
-### Q10. What is Agentic AI?
+### Q11. What is the difference between a chatbot and an AI agent?
+A chatbot may simply respond to messages. An AI agent can select from permitted actions, use tools and observe results while working toward a goal.
 
-**Answer:** Agentic AI systems can use models and tools to take steps toward a goal within defined limits.
+### Q12. What is the difference between a workflow and an agent?
+A workflow follows a sequence defined by a developer. An agent can choose actions based on the goal and observations, within defined boundaries.
 
-### Q11. What is the difference between a workflow and an agent?
+### Q13. Why is Python used in AI application development?
+Python is used to write application logic, process data, call APIs and connect AI models with user-facing applications.
 
-**Answer:** A workflow follows a defined sequence. An agent can select actions based on the task and observations.
+## 2. Python fundamentals
 
-### Q12. Why is Python useful for AI applications?
+### Q14. What is a variable?
+A variable is a name that refers to a value.
 
-**Answer:** Python is widely used for application development, APIs, data processing and AI integrations.
+### Q15. What is a data type?
+A data type describes the kind of value, such as text, an integer, a decimal number or True/False.
 
-### Q13. What is a variable?
+### Q16. Name four basic Python data types.
+- `str`: text, for example `"Python"`.
+- `int`: whole number, for example `25`.
+- `float`: decimal number, for example `75.5`.
+- `bool`: Boolean value, either `True` or `False`.
 
-**Answer:** A variable is a name that refers to a value.
+### Q17. What does `print()` do?
+It displays information in the terminal. It returns `None`.
 
-### Q14. What is a data type?
+### Q18. What does `input()` do?
+It waits for the user to type something and returns the entered value as a string.
 
-**Answer:** A data type describes what kind of value is being used, such as text, integer, float or Boolean.
+### Q19. Why do we use `int()`?
+It converts suitable values, such as the text `"20"`, into an integer `20`.
 
-### Q15. What does input() do?
+### Q20. What is the difference between `=` and `==`?
+`=` assigns a value to a variable. `==` compares two values and produces True or False.
 
-**Answer:** input() asks the user to enter information and returns the entered value as a string.
+### Q21. What is a condition?
+A condition is a test that helps a program choose which block of code should run.
 
-### Q16. What does print() do?
+### Q22. What is a loop?
+A loop repeats instructions. A `for` loop can process each item in a collection.
 
-**Answer:** print() displays information.
+### Q23. What is a function?
+A function is a named, reusable block of code that performs a task.
 
-### Q17. What is a condition?
+### Q24. What is a parameter?
+A parameter is a named placeholder in a function definition.
 
-**Answer:** A condition lets a program choose which block of code should run.
+### Q25. What is an argument?
+An argument is the actual value passed to a function when it is called.
 
-### Q18. What is a loop?
+### Q26. What is the difference between `print()` and `return`?
+`print()` displays information. `return` sends a value from a function back to the code that called it.
 
-**Answer:** A loop repeats instructions.
+### Q27. What is debugging?
+Debugging is finding and fixing the cause of a problem in a program.
 
-### Q19. What is a function?
+### Q28. What is an interpreter?
+A Python interpreter runs Python code.
 
-**Answer:** A function is a reusable block of code that performs a task.
+## 3. Code-reading questions
 
-### Q20. What is debugging?
-
-**Answer:** Debugging is finding and fixing the cause of a program problem.
-
-### Q21. What is VS Code?
-
-**Answer:** VS Code is a code editor that helps developers write and manage source files.
-
-### Q22. What is a Python interpreter?
-
-**Answer:** The interpreter executes Python code.
-
-### Q23. Why should API keys be protected?
-
-**Answer:** An API key is a credential. If exposed, another person may use the associated service or account.
-
-### Q24. Does an LLM always provide correct information?
-
-**Answer:** No. LLMs can generate incorrect or unsupported answers, so applications need validation and evaluation.
-
-## Code-reading questions
-
-### 1. What is the output?
+### Q29. What is the output?
 
 ```python
 name = "Anu"
 print("Hello", name)
 ```
 
-**Answer:** Hello Anu
-
-### 2. What is the data type?
-
-```python
-age = 20
-print(type(age).__name__)
+**Answer**
+```text
+Hello Anu
 ```
 
-**Answer:** int
+### Q30. What is the type of `marks`?
 
-### 3. What does this condition display?
+```python
+marks = 85
+print(type(marks))
+```
+
+**Answer:** `<class 'int'>`.
+
+### Q31. What does this program display?
+
+```python
+age = input("Enter age: ")
+print(type(age))
+```
+
+**Answer:** `<class 'str'>`, because `input()` returns text.
+
+### Q32. What is the output?
+
+```python
+age = int("20")
+print(age + 1)
+```
+
+**Answer:** `21`.
+
+### Q33. What is the output?
 
 ```python
 marks = 35
+
 if marks >= 40:
     print("Pass")
 else:
     print("Fail")
 ```
 
-**Answer:** Fail
+**Answer:** `Fail`.
 
-### 4. How many times does this loop run?
+### Q34. How many times does this loop run?
 
 ```python
 for number in range(1, 4):
@@ -142,65 +160,111 @@ for number in range(1, 4):
 
 **Answer:** Three times. It displays 1, 2 and 3.
 
-### 5. What does this function return?
+### Q35. What does this function return?
 
 ```python
 def add(a, b):
     return a + b
 
-print(add(2, 3))
+result = add(2, 3)
+print(result)
 ```
 
-**Answer:** 5
+**Answer:** It returns `5`, which is stored in `result` and then displayed.
 
-## Practical coding tasks
+### Q36. What happens here?
 
-1. Ask for a student's name and display a welcome message.
-2. Ask for two numbers and display their sum.
-3. Check whether marks are pass or fail.
+```python
+def say_hello():
+    print("Hello")
+
+result = say_hello()
+print(result)
+```
+
+**Answer**
+```text
+Hello
+None
+```
+
+The function prints Hello but has no explicit return value, so Python returns `None`.
+
+## 4. Mini-project discussion — AI Application Development Concept Explorer
+
+Be ready to explain the project in your own words.
+
+1. **What problem does it solve?**  
+   It gives a beginner a simple introduction to the topics in the GenAI and Agentic AI pathway and displays a suggested next step.
+
+2. **Why did you create functions?**  
+   To separate tasks into reusable, understandable blocks.
+
+3. **Why did you use a list?**  
+   To store several learning topics together and process them using a loop.
+
+4. **Why did you use a loop?**  
+   To display every topic without writing a separate print statement for each one.
+
+5. **Why did you use `strip()`?**  
+   To remove spaces at the beginning and end of user-entered text.
+
+6. **Why did you use `lower()`?**  
+   To make the level comparison work even if the user types uppercase letters.
+
+7. **What does `recommend_next_step()` return?**  
+   A text message based on the experience level supplied to it.
+
+8. **Why is `main()` called at the bottom?**  
+   Defining a function does not run it. Calling `main()` starts the main program sequence.
+
+9. **What happens if the learner enters an empty name?**  
+   The program uses the default name `Learner`.
+
+10. **What would you improve next?**  
+    I would keep asking for the experience level until the user enters one of the accepted choices. I could also add a quiz and save progress.
+
+## 5. Practical coding tasks
+
+Try these without looking at the solutions in the class notes:
+
+1. Ask for a learner's name and display a welcome message.
+2. Ask for two whole numbers and display their sum.
+3. Check whether a mark is pass or fail.
 4. Display five course topics using a loop.
 5. Write a function that returns a welcome message.
-6. Create a list of AI learning topics and print each topic.
-7. Explain the difference between a chatbot and an AI agent.
-8. Check the Python version from the terminal.
-9. Create a Python file and run it from VS Code.
-10. Explain one debugging process you used.
+6. Explain why `input()` needs conversion before numeric addition.
+7. Run a Python file from the terminal and describe each step.
+8. Intentionally misspell a variable name, observe the error and fix it.
 
-## Mini-project interview — AI Application Development Concept Explorer
+## 6. Mock interview
 
-Be ready to explain:
-1. What does the project help a learner understand?
-2. Which information does it accept?
-3. Why did you use a list for learning topics?
-4. Why did you use a loop?
-5. Why did you create a function?
-6. What does the program display?
-7. What happens if the student enters an empty name?
-8. How would you improve the program next?
+**Interviewer:** You are new to GenAI development. What are you learning first?
 
-## Mock interview
+**Student:** I am learning Python and software development fundamentals first. I need to understand variables, data structures, functions, APIs and error handling before I build applications that connect to language models.
 
-**Interviewer:** What is the difference between AI and Generative AI?
+**Interviewer:** What is an LLM-powered application?
 
-**Student:** AI is the broad field of intelligent computer systems. Generative AI is a category that creates new content such as text, code or images.
+**Student:** It is a software application that sends input to a large language model, receives the generated output and presents or uses that output as part of a user task.
 
-**Interviewer:** Is every chatbot an agent?
+**Interviewer:** Can you trust every response from an LLM?
 
-**Student:** No. A chatbot may simply respond to messages. An agent can choose and use tools to complete steps toward a goal.
+**Student:** No. A model can generate incorrect information. An application should validate inputs and outputs, test its behaviour and provide suitable safeguards.
 
-**Interviewer:** Why do you need Python before learning LangChain?
+**Interviewer:** What did you build today?
 
-**Student:** Frameworks use Python concepts such as functions, classes, data structures, APIs and exception handling. Understanding those basics helps me debug framework code.
+**Student:** I built a Python terminal application called AI Application Development Concept Explorer. It collects a learner's name and experience level, displays the pathway topics and gives a suggested next step. I used variables, input, conditions, loops, lists and functions.
 
-**Interviewer:** How do you know your first program works?
+## 7. Self-check before the next lesson
 
-**Student:** I run it with a known input, compare the actual output with the expected output and test another input.
+You are ready to move on when you can do these without copying:
 
-## Self-assessment
+- [ ] Explain AI, Generative AI, LLM, chatbot, workflow and agent.
+- [ ] Explain the purpose of variables and the four basic data types.
+- [ ] Explain why `input()` returns a string.
+- [ ] Write a condition and a loop.
+- [ ] Define a function with a parameter and return a value.
+- [ ] Explain the difference between printing and returning.
+- [ ] Run your mini-project and explain its main functions.
 
-- [ ] I can explain AI, ML and Deep Learning.
-- [ ] I can explain Generative AI and LLM.
-- [ ] I can describe a simple agent workflow.
-- [ ] I can write and run beginner Python code.
-- [ ] I can explain every line of my mini-project.
-- [ ] I can answer the questions without memorizing blindly.
+If you cannot explain one answer, revisit that section in the Day 01 class notes and repeat its small code example.
