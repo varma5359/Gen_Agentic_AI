@@ -1,87 +1,34 @@
-# Day 10 Interview Questions — Day 10 — SQL fundamentals, relational database concepts, Git, GitHub, virtual environments, pytest and debugging
+# Day 10 Interview Guide — SQL, Git, Virtual Environments, pytest and Debugging
 
-**Phase:** 1 — Python and Software Development Foundations
+## Q1. What is a relational database?
+It stores structured data in tables with rows and columns. Relationships use keys. A primary key uniquely identifies a row.
 
-## How to use this guide
+## Q2. Primary key versus foreign key?
+A primary key identifies a row in its own table. A foreign key references a key in another table to represent a relationship and support referential integrity.
 
-Answer each question aloud before reading the suggested answer. Use your own words. A strong fresher answer defines the concept, explains its purpose and gives a relevant example.
+## Q3. Explain SELECT, INSERT, UPDATE and DELETE.
+SELECT reads; INSERT adds; UPDATE changes; DELETE removes rows. Always inspect WHERE conditions before UPDATE and DELETE; without WHERE, all rows may be affected.
 
-## Section 1 — Core interview questions
+## Q4. What is SQL injection and how do you prevent it?
+It occurs when untrusted input changes the meaning of dynamically constructed SQL. Use parameterized queries rather than concatenating user input. Validation complements but does not replace parameterization.
 
-### Q1. Primary key versus foreign key?
+## Q5. Why use a virtual environment?
+It isolates project dependencies. .venv should not be committed; recreate it from dependency instructions.
 
-**Answer:** A primary key uniquely identifies a row; a foreign key references a key in another table.
+## Q6. Git versus GitHub?
+Git tracks changes locally. GitHub hosts repositories and supports collaboration. A commit records local history; push sends commits to a remote.
 
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
+## Q7. Explain add, commit and push.
+add stages selected changes; commit records staged changes; push uploads local commits to a remote. Inspect git status before committing.
 
-### Q2. DELETE versus UPDATE?
+## Q8. What is pytest?
+A Python test framework that discovers tests and checks assertions. Cover normal, boundary and invalid behaviour. Passing tests do not prove absence of all defects.
 
-**Answer:** DELETE removes matching rows; UPDATE changes values in matching rows. Both require a carefully checked WHERE clause.
+## Q9. Why use SQL placeholders?
+They bind values separately from SQL syntax, reducing injection risk and handling quoting. Dynamic table/column identifiers need strict allow-list handling rather than ordinary value placeholders.
 
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
+## Q10. Why is Day 10 API more durable than Day 9?
+Day 9 used a Python dictionary that disappears on process restart. Day 10 uses SQLite, which persists records in a database file. SQLite is not automatically the best choice for every production workload.
 
-### Q3. What is SQL injection?
-
-**Answer:** An attack where untrusted input changes SQL meaning. Parameterized queries keep input as data.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q4. Git versus GitHub?
-
-**Answer:** Git is version control; GitHub hosts repositories and collaboration workflows.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q5. How debug a failing test?
-
-**Answer:** Read the traceback and assertion, reproduce the smallest case, compare expected and actual values, fix the cause and add a regression test.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-## Section 2 — Difference-based questions
-
-Compare the related concepts from today's notes. Explain their meaning, practical difference and when you would choose each one. Use the comparison table in the class notes as a revision starting point; add an example from your own code.
-
-## Section 3 — Practical implementation questions
-
-1. Explain how you would recreate today's guided example from an empty project.
-2. Which inputs should be validated before the main operation starts?
-3. What should the program return or display on success and failure?
-4. What tests would you write for a normal case, an edge case and an invalid case?
-5. What would you change before using the example in a production application?
-
-## Section 4 — Scenario-based questions
-
-### Scenario A — Your code works for one input but fails for another
-
-**Expected approach**
-1. Reproduce the failure using the exact input.
-2. Read the complete traceback or response details.
-3. Inspect assumptions about types, missing values and boundaries.
-4. Fix the underlying cause instead of hiding the error.
-5. Add a regression test and rerun the relevant tests.
-
-### Scenario B — A prototype must become part of a business application
-
-**Expected approach**
-1. Confirm the business requirement and expected behaviour.
-2. Separate input validation, business logic and external dependencies.
-3. Define clear data structures and interfaces.
-4. Add persistence, security and observability appropriate to the use case.
-5. Add tests, documentation and deployment controls.
-
-## Section 5 — Troubleshooting questions
-
-- What exact error or status code do you see?
-- Can you reproduce the issue with a smaller input?
-- Which line or request boundary first shows incorrect behaviour?
-- What changed immediately before the failure?
-- How will you verify the fix and prevent regression?
-
-## Section 6 — Strong points to remember
-
-- Define the concept directly before giving an example.
-- Explain why the approach fits the requirement.
-- Mention one limitation and how you would handle it.
-- Do not claim a demonstration is production-ready without the persistence, security, testing and operational controls it needs.
-- Explain your own contribution honestly.
+## Practical task
+Explain a POST request through FastAPI validation, parameterized SQL INSERT, transaction commit and JSON response. Describe how you would test it and track changes in Git.
