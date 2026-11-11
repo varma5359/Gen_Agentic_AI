@@ -1,78 +1,277 @@
 # Day 2 Project — AI Conversation Data Manager
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Approved topic:** Python data structures: strings, lists, tuples, sets and dictionaries.  
-**Estimated duration:** 30–75 minutes (Day 10 may take longer)  
-**Mode:** Independent self-learning
+**Approved title:** AI Conversation Data Manager  
+**Level:** Beginner | **Time:** 45–60 minutes  
+**Prerequisite:** Day 2 class notes  
+**External services:** None
 
-## 1. Problem statement and objective
+## 1. Business problem
 
-Build a conversation-history manager that stores user and assistant messages, cleans text, lists messages and reports unique roles.
+A chat application receives messages from a user and an assistant. It needs to preserve message order, identify who sent each message, display the conversation and count messages by role.
 
-## 2. Prerequisites
+Build a small terminal program that manages conversation data in Python memory. It does not call an LLM and does not store data permanently.
 
-Strings, lists, dictionaries, sets, indexing and loops.
+## 2. Requirements
 
-Complete the day's class notes first. Use only concepts already introduced in the pathway. No paid API key is required unless an optional extension explicitly adds one.
+1. Store a conversation as an ordered list.
+2. Represent each message as a dictionary with role and content.
+3. Add user and assistant messages.
+4. Display messages in order.
+5. Count total messages and messages by role.
+6. Extract unique words from message content using a set.
+7. Handle an empty conversation without crashing.
 
-## 3. Functional requirements
+## 3. Design before coding
 
-- Solve the stated objective.
-- Use readable names and small functions or classes with clear responsibilities.
-- Validate input before processing.
-- Provide useful behaviour for normal and invalid inputs.
-- Keep credentials and sensitive values out of source code.
+~~~text
+Create empty messages list
+       |
+       v
+Add message dictionaries
+       |
+       v
+Display conversation in order
+       |
+       v
+Count messages by role
+       |
+       v
+Collect unique words
+       |
+       v
+Display summary
+~~~
 
-## 4. Step-by-step implementation plan
-
-1. Create a list of message dictionaries.
-2. Write functions to add a message, display history and summarize roles.
-3. Strip whitespace.
-4. Validate role and content.
-
-Do not skip steps. Run the program after each meaningful change. If an error occurs, fix it before adding another feature.
-
-## 5. Suggested folder structure
+## 4. Create the project
 
 ~~~text
 day_02_project/
 └── conversation_manager.py
 ~~~
 
-Create only files you actually use. Do not add empty modules merely to make the project look larger.
+## 5. Build step by step
 
-## 6. Sample data and expected behaviour
+### Step 1 — Create an empty conversation
 
-Start with two or three small records. Before running the program, write down the expected result for each record. Compare actual and expected behaviour and explain any difference.
+~~~python
+conversation = []
+print(conversation)
+~~~
 
-## 7. Test cases and validation
+Output: []
 
-Test empty history, one message, multiple messages, duplicate roles, blank content and unsupported roles. Preserve conversation order.
+An empty list is suitable because messages arrive in sequence and the collection will grow.
 
-Record each test as: input, expected result, actual result and PASS/FAIL. Do not mark a test passed until you have run it.
+### Step 2 — Add message records
 
-## 8. Common debugging method
+~~~python
+conversation.append({
+    "role": "user",
+    "content": "What is Python?"
+})
 
-1. Read the full error message.
-2. Confirm the command, file path and active Python environment.
-3. Inspect relevant inputs and variable values.
-4. Reduce the problem to the smallest reproducible example.
-5. Fix the cause and repeat the failing test.
+conversation.append({
+    "role": "assistant",
+    "content": "Python is a programming language."
+})
 
-## 9. Submission checklist
+print(conversation)
+~~~
 
-- [ ] Source files and folder structure are saved.
-- [ ] Setup and run instructions are written.
-- [ ] Example input and output are recorded.
-- [ ] Normal and invalid cases have been tested.
-- [ ] Known limitations are documented.
-- [ ] No credentials, private data or unnecessary environment files are committed.
-- [ ] I can explain the design and code I wrote.
+Each dictionary is one message record. The keys role and content describe its fields. append() adds each record to the end of the list.
 
-## 10. Interview explanation
+### Step 3 — Display messages
 
-Prepare a 60–90 second explanation covering the problem, your design, the key concepts, one challenge, how you tested the result and one improvement you would make before production.
+~~~python
+for message in conversation:
+    print(f'{message["role"].upper()}: {message["content"]}')
+~~~
 
-## 11. Optional extension
+Output:
 
-Add one small feature only after all required behaviour works. Keep it within concepts already taught; do not introduce an advanced framework early.
+~~~text
+USER: What is Python?
+ASSISTANT: Python is a programming language.
+~~~
+
+The loop visits each dictionary. The role is converted to uppercase for display; content is printed as stored.
+
+### Step 4 — Count messages by role
+
+~~~python
+user_count = 0
+assistant_count = 0
+
+for message in conversation:
+    if message["role"] == "user":
+        user_count = user_count + 1
+    elif message["role"] == "assistant":
+        assistant_count = assistant_count + 1
+
+print("User messages:", user_count)
+print("Assistant messages:", assistant_count)
+~~~
+
+The counters start at zero. Each matching record increases the appropriate counter by one.
+
+### Step 5 — Collect unique words
+
+~~~python
+unique_words = set()
+
+for message in conversation:
+    words = message["content"].lower().split()
+    for word in words:
+        unique_words.add(word.strip("?!.,:;"))
+
+print("Unique words:", sorted(unique_words))
+~~~
+
+- set() creates an empty set.
+- lower() normalises letter case.
+- split() separates text on whitespace.
+- add() stores a word only once.
+- sorted() returns a sorted list for readable output.
+
+This is a simple demonstration, not a full natural-language tokenizer. Punctuation and contractions require more careful handling in real text-processing systems.
+
+## 6. Complete runnable program
+
+~~~python
+conversation = []
+
+conversation.append({
+    "role": "user",
+    "content": "What is Python?"
+})
+conversation.append({
+    "role": "assistant",
+    "content": "Python is a programming language."
+})
+conversation.append({
+    "role": "user",
+    "content": "Where is Python used?"
+})
+conversation.append({
+    "role": "assistant",
+    "content": "Python is used in web development, data and AI."
+})
+
+print("===== CONVERSATION =====")
+for message in conversation:
+    print(f'{message["role"].upper()}: {message["content"]}')
+
+user_count = 0
+assistant_count = 0
+
+for message in conversation:
+    if message["role"] == "user":
+        user_count += 1
+    elif message["role"] == "assistant":
+        assistant_count += 1
+
+print()
+print("===== SUMMARY =====")
+print("Total messages:", len(conversation))
+print("User messages:", user_count)
+print("Assistant messages:", assistant_count)
+
+unique_words = set()
+for message in conversation:
+    for word in message["content"].lower().split():
+        unique_words.add(word.strip("?!.,:;"))
+
+print("Unique words:", sorted(unique_words))
+~~~
+
+## 7. Sample output
+
+~~~text
+===== CONVERSATION =====
+USER: What is Python?
+ASSISTANT: Python is a programming language.
+USER: Where is Python used?
+ASSISTANT: Python is used in web development, data and AI.
+
+===== SUMMARY =====
+Total messages: 4
+User messages: 2
+Assistant messages: 2
+Unique words: ['a', 'ai', 'and', 'data', 'development', 'in', 'is', 'language', 'programming', 'python', 'used', 'web', 'where', 'what']
+~~~
+
+The list retains the original message order. sorted() alphabetises only the unique-word output.
+
+## 8. Test cases
+
+| Test | Setup | Expected result |
+|---|---|---|
+| TC01 | Empty list | Total messages = 0 |
+| TC02 | One user record | User count = 1 |
+| TC03 | One assistant record | Assistant count = 1 |
+| TC04 | Two user and two assistant records | Counts = 2 and 2 |
+| TC05 | Same word appears twice | Set contains it once |
+| TC06 | Same word appears in upper/lower case | Lowercase normalisation treats them alike |
+| TC07 | Four messages added | Display order matches insertion order |
+
+For TC01, temporarily leave conversation empty and run the summary. It should not crash.
+
+## 9. Common mistakes
+
+| Mistake | Why it fails | Correction |
+|---|---|---|
+| conversation["role"] | conversation is a list | Select a message first |
+| message.role | Dictionary keys use key lookup | Use message["role"] |
+| unique_words.append(word) | Sets do not have append() | Use add() |
+| Counter starts at 1 | Off-by-one result | Start at 0 |
+| Duplicate words remain | List allows duplicates | Use a set |
+| Message order changes | Set does not represent a sequence | Use a list |
+
+## 10. Independent tasks
+
+1. Add a third role called system and count it separately.
+2. Add a timestamp field to each message dictionary.
+3. Display only user messages.
+4. Check whether a particular word exists in the unique-word set.
+5. Ask the user to type one new message and append it to the conversation.
+
+## 11. Project README
+
+Create README.md:
+
+~~~markdown
+# AI Conversation Data Manager
+
+## Problem
+A chat application needs to organise user and assistant messages.
+
+## Features
+- Stores messages in order.
+- Represents each message with role and content.
+- Counts messages by role.
+- Displays unique words.
+
+## Technology
+Python 3 standard library.
+
+## Run
+Windows: py conversation_manager.py
+macOS/Linux: python3 conversation_manager.py
+
+## Limitations
+This is an in-memory learning program. It does not call an LLM or persist data.
+~~~
+
+## 12. Submission checklist
+
+- [ ] conversation_manager.py runs successfully.
+- [ ] Message order is correct.
+- [ ] User and assistant counts are correct.
+- [ ] Unique words are collected.
+- [ ] Empty conversation does not crash.
+- [ ] Test results are recorded.
+- [ ] README is complete.
+- [ ] I can explain why a list of dictionaries is used.
+- [ ] I can explain why a set is used for unique words.
+
+**Completion standard:** Rebuild the program from a blank file, explain each collection and demonstrate the test cases.
