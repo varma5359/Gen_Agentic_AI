@@ -1,78 +1,84 @@
 # Day 8 Project — External API Integration Client
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Approved topic:** REST APIs, HTTP methods, status codes, headers, requests and responses.  
-**Estimated duration:** 30–75 minutes (Day 10 may take longer)  
-**Mode:** Independent self-learning
+## Objective
+Create a Python client that reads and creates sample posts using a public test API. Practise GET, POST, query parameters, JSON, status checks and errors.
 
-## 1. Problem statement and objective
+## Setup
+Create and activate a virtual environment, then install requests:
+Windows: py -m venv .venv; .venv\Scripts\Activate.ps1; python -m pip install requests  
+macOS/Linux: python3 -m venv .venv; source .venv/bin/activate; python -m pip install requests
 
-Build a reusable API client that calls a documented public test endpoint, parses JSON and reports HTTP or network errors clearly.
+## Create api_client.py
+~~~python
+import requests
 
-## 2. Prerequisites
+BASE_URL = "https://jsonplaceholder.typicode.com"
 
-HTTP methods, URLs, headers, query parameters, JSON, status codes and requests package.
+def get_posts(user_id):
+    response = requests.get(
+        f"{BASE_URL}/posts",
+        params={"userId": user_id},
+        timeout=10
+    )
+    response.raise_for_status()
+    data = response.json()
+    if not isinstance(data, list):
+        raise ValueError("Expected a list of posts")
+    return data
 
-Complete the day's class notes first. Use only concepts already introduced in the pathway. No paid API key is required unless an optional extension explicitly adds one.
+def create_post(title, body, user_id):
+    payload = {"title": title, "body": body, "userId": user_id}
+    response = requests.post(
+        f"{BASE_URL}/posts",
+        json=payload,
+        timeout=10
+    )
+    response.raise_for_status()
+    return response.json()
 
-## 3. Functional requirements
-
-- Solve the stated objective.
-- Use readable names and small functions or classes with clear responsibilities.
-- Validate input before processing.
-- Provide useful behaviour for normal and invalid inputs.
-- Keep credentials and sensitive values out of source code.
-
-## 4. Step-by-step implementation plan
-
-1. Create api_client.py with a get_post function.
-2. Read endpoint docs, set timeout, check status, parse JSON and validate required fields.
-3. Add main.py to display a summary.
-
-Do not skip steps. Run the program after each meaningful change. If an error occurs, fix it before adding another feature.
-
-## 5. Suggested folder structure
-
-~~~text
-day_08_project/
-├── api_client.py
-└── main.py
+if __name__ == "__main__":
+    try:
+        posts = get_posts(1)
+        print("Posts returned:", len(posts))
+        if posts:
+            print("First title:", posts[0]["title"])
+        created = create_post("Learning REST APIs", "Sample request", 1)
+        print("Created response:", created)
+    except requests.Timeout:
+        print("The API request timed out.")
+    except requests.HTTPError as error:
+        print("HTTP request failed:", error)
+    except requests.RequestException as error:
+        print("Network request failed:", error)
+    except ValueError as error:
+        print("Response validation failed:", error)
 ~~~
 
-Create only files you actually use. Do not add empty modules merely to make the project look larger.
+## Explanation
+BASE_URL avoids repeating the host. params sends a query parameter. json sends a JSON body. timeout bounds waiting. raise_for_status checks unsuccessful status codes. isinstance validates the top-level response. Specific exception handlers separate timeout, HTTP and network failures. A test API may simulate creation rather than persist data.
 
-## 6. Sample data and expected behaviour
+## Run
+Windows: py api_client.py  
+macOS/Linux: python3 api_client.py
 
-Start with two or three small records. Before running the program, write down the expected result for each record. Compare actual and expected behaviour and explain any difference.
+Network access is required. Record errors honestly if the test endpoint is unreachable.
 
-## 7. Test cases and validation
+## Test cases
+| Test | Expected |
+|---|---|
+| GET userId 1 | List of posts |
+| GET another userId | Filtered list |
+| POST valid payload | JSON response with submitted fields |
+| Network disabled | Request exception handled |
+| Timeout | Timeout handled |
+| Unexpected response type | ValueError |
 
-Test valid and missing IDs, timeout if reproducible and unexpected response using a mock. Do not hardcode secrets or retry every error.
+## Extensions
+1. Add get_post(post_id).
+2. Add DELETE and inspect its status.
+3. Add Accept header.
+4. Read base URL from environment configuration.
+5. Validate required response fields.
 
-Record each test as: input, expected result, actual result and PASS/FAIL. Do not mark a test passed until you have run it.
-
-## 8. Common debugging method
-
-1. Read the full error message.
-2. Confirm the command, file path and active Python environment.
-3. Inspect relevant inputs and variable values.
-4. Reduce the problem to the smallest reproducible example.
-5. Fix the cause and repeat the failing test.
-
-## 9. Submission checklist
-
-- [ ] Source files and folder structure are saved.
-- [ ] Setup and run instructions are written.
-- [ ] Example input and output are recorded.
-- [ ] Normal and invalid cases have been tested.
-- [ ] Known limitations are documented.
-- [ ] No credentials, private data or unnecessary environment files are committed.
-- [ ] I can explain the design and code I wrote.
-
-## 10. Interview explanation
-
-Prepare a 60–90 second explanation covering the problem, your design, the key concepts, one challenge, how you tested the result and one improvement you would make before production.
-
-## 11. Optional extension
-
-Add one small feature only after all required behaviour works. Keep it within concepts already taught; do not introduce an advanced framework early.
+## Submission
+Submit source, setup instructions, sample responses and tests. Never commit credentials.
