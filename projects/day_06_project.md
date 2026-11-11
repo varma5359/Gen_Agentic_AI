@@ -1,79 +1,70 @@
 # Day 6 Project — Reusable Python Logging and Timing Utility
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Approved topic:** Advanced Python: iterators, generators, decorators, context managers and type hints.  
-**Estimated duration:** 30–75 minutes (Day 10 may take longer)  
-**Mode:** Independent self-learning
+## Objective
+Build a decorator that measures function duration and logs safe execution events. Practise decorators, functools.wraps, type hints and logging.
 
-## 1. Problem statement and objective
+## Create timing_utils.py
+~~~python
+import logging
+import time
+from functools import wraps
+from typing import Callable, TypeVar, Any
 
-Build a reusable timing decorator and generator-based record reader, with type hints and a context-managed file example.
+F = TypeVar("F", bound=Callable[..., Any])
+logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
-## 2. Prerequisites
 
-Iterators, generators, decorators, functools.wraps, context managers and type hints.
+def timed(function: F) -> F:
+    @wraps(function)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        start = time.perf_counter()
+        logging.info("Starting %s", function.__name__)
+        try:
+            return function(*args, **kwargs)
+        finally:
+            elapsed = time.perf_counter() - start
+            logging.info("%s completed in %.6f seconds", function.__name__, elapsed)
+    return wrapper  # type: ignore[return-value]
 
-Complete the day's class notes first. Use only concepts already introduced in the pathway. No paid API key is required unless an optional extension explicitly adds one.
 
-## 3. Functional requirements
+@timed
+def process_questions(questions: list[str]) -> list[str]:
+    return [question.strip().lower() for question in questions if question.strip()]
 
-- Solve the stated objective.
-- Use readable names and small functions or classes with clear responsibilities.
-- Validate input before processing.
-- Provide useful behaviour for normal and invalid inputs.
-- Keep credentials and sensitive values out of source code.
 
-## 4. Step-by-step implementation plan
-
-1. Create timing.py and records.py.
-2. Implement a generic timing decorator, a generator yielding IDs and a demo function that consumes it.
-3. Add a with-open file example.
-
-Do not skip steps. Run the program after each meaningful change. If an error occurs, fix it before adding another feature.
-
-## 5. Suggested folder structure
-
-~~~text
-day_06_project/
-├── timing.py
-├── records.py
-└── main.py
+if __name__ == "__main__":
+    result = process_questions(["  What is RAG? ", "", "Explain agents"])
+    print(result)
 ~~~
 
-Create only files you actually use. Do not add empty modules merely to make the project look larger.
+## Explanation
+- perf_counter() is a high-resolution monotonic timer for elapsed duration.
+- wraps preserves the decorated function's metadata.
+- wrapper accepts arbitrary positional and keyword arguments.
+- try/finally ensures duration is logged even if the wrapped function raises.
+- return passes the original result to the caller.
+- TypeVar and Callable describe the callable type. The type-ignore comment acknowledges a limitation in static inference for generic wrappers.
 
-## 6. Sample data and expected behaviour
+## Run
+Windows: py timing_utils.py  
+macOS/Linux: python3 timing_utils.py
 
-Start with two or three small records. Before running the program, write down the expected result for each record. Compare actual and expected behaviour and explain any difference.
+Expected result: ['what is rag?', 'explain agents'] plus start and duration log entries.
 
-## 7. Test cases and validation
+## Tests
+| Case | Expected |
+|---|---|
+| Two valid questions | Two cleaned strings |
+| Blank item | Excluded |
+| Empty list | Empty list |
+| Wrapped function raises | Exception propagates and duration is logged |
+| Inspect __name__ | Remains process_questions |
 
-Test normal return values, empty generator, keyword arguments and a function that raises. Timing must not change the returned value.
+## Extensions
+1. Write a generator yielding cleaned lines.
+2. Add a decorator that counts calls.
+3. Explain why elapsed duration uses perf_counter.
+4. Add type hints to another function.
 
-Record each test as: input, expected result, actual result and PASS/FAIL. Do not mark a test passed until you have run it.
-
-## 8. Common debugging method
-
-1. Read the full error message.
-2. Confirm the command, file path and active Python environment.
-3. Inspect relevant inputs and variable values.
-4. Reduce the problem to the smallest reproducible example.
-5. Fix the cause and repeat the failing test.
-
-## 9. Submission checklist
-
-- [ ] Source files and folder structure are saved.
-- [ ] Setup and run instructions are written.
-- [ ] Example input and output are recorded.
-- [ ] Normal and invalid cases have been tested.
-- [ ] Known limitations are documented.
-- [ ] No credentials, private data or unnecessary environment files are committed.
-- [ ] I can explain the design and code I wrote.
-
-## 10. Interview explanation
-
-Prepare a 60–90 second explanation covering the problem, your design, the key concepts, one challenge, how you tested the result and one improvement you would make before production.
-
-## 11. Optional extension
-
-Add one small feature only after all required behaviour works. Keep it within concepts already taught; do not introduce an advanced framework early.
+## Submission
+Submit source, sample output, test results and an explanation of yield, wrapper and finally.
