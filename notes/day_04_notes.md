@@ -1843,7 +1843,7 @@ Explanation:
 - `pass` means "there is no code here yet"; it is used as a temporary empty body.
 - `Student()` creates an object.
 - `type(student_one)` tells us the object's class.
-- `. __name__` is the class name attribute (without the space after the dot; write `.__name__`).
+- `.__name__` is the class name attribute.
 - `is` checks whether two names refer to the exact same object. These are two different objects, so the result is False.
 
 A class is not itself a student record. Each object is a separate instance.
