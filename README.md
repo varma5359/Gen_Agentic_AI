@@ -19,7 +19,7 @@ Each day has three independent files:
 
 | Phase | Days | Module | Status |
 |---|---:|---|---|
-| 1 | 1–10 | Python and Software Development Foundations | In progress — Day 1 fully rewritten; Days 2–10 pending quality rewrite |
+| 1 | 1–10 | Python and Software Development Foundations | Draft package committed for Days 1–10; final technical review and Phase 1 assessment validation pending |
 | 2 | 11–15 | Generative AI and LLM Foundations | Not started |
 | 3 | 16–20 | LLM Application Development | Not started |
 | 4 | 21–25 | Embeddings and Vector Databases | Not started |
