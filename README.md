@@ -20,7 +20,7 @@ Each day has three independent files:
 | Phase | Days | Module | Status |
 |---|---:|---|---|
 | 1 | 1–10 | Python and Software Development Foundations | Draft package committed for Days 1–10; final technical review and Phase 1 assessment validation pending |
-| 2 | 11–15 | Generative AI and LLM Foundations | Not started |
+| 2 | 11–15 | Generative AI and LLM Foundations | First complete draft package committed; technical/teaching review pending |
 | 3 | 16–20 | LLM Application Development | Not started |
 | 4 | 21–25 | Embeddings and Vector Databases | Not started |
 | 5 | 26–32 | RAG Engineering | Not started |
@@ -47,6 +47,21 @@ Each day has three independent files:
 | 10 | [Notes](notes/day_10_notes.md) | [Interview](interview_questions/day_10_interview.md) | [Project](projects/day_10_project.md) |
 
 [Phase 1 cumulative assessment](assessments/phase_01_assessment.md)
+
+
+## Phase 2 — Generative AI and LLM Foundations
+
+**Outcome:** Understand LLM fundamentals, model settings and prompt engineering.
+
+| Day | Class notes | Interview guide | Approved project |
+|---:|---|---|---|
+| 11 | [Notes](notes/day_11_notes.md) | [Interview](interview_questions/day_11_interview.md) | [Project](projects/day_11_project.md) |
+| 12 | [Notes](notes/day_12_notes.md) | [Interview](interview_questions/day_12_interview.md) | [Project](projects/day_12_project.md) |
+| 13 | [Notes](notes/day_13_notes.md) | [Interview](interview_questions/day_13_interview.md) | [Project](projects/day_13_project.md) |
+| 14 | [Notes](notes/day_14_notes.md) | [Interview](interview_questions/day_14_interview.md) | [Project](projects/day_14_project.md) |
+| 15 | [Notes](notes/day_15_notes.md) | [Interview](interview_questions/day_15_interview.md) | [Project](projects/day_15_project.md) |
+
+[Phase 2 assessment](assessments/phase_02_assessment.md)
 
 ## How students should study
 
