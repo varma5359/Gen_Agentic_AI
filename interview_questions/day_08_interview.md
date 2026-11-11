@@ -1,87 +1,28 @@
-# Day 8 Interview Questions — Day 8 — REST APIs, HTTP methods, status codes, headers, requests and responses
+# Day 8 Interview Guide — REST APIs and HTTP
 
-**Phase:** 1 — Python and Software Development Foundations
+## Q1. What is an API?
+A defined interface that lets software systems communicate. A web API commonly receives HTTP requests and returns HTTP responses. Not every API is REST.
 
-## How to use this guide
+## Q2. Explain GET, POST, PUT, PATCH and DELETE.
+GET retrieves; POST commonly creates/submits; PUT commonly replaces; PATCH partially updates; DELETE requests removal. The API contract determines exact behaviour.
 
-Answer each question aloud before reading the suggested answer. Use your own words. A strong fresher answer defines the concept, explains its purpose and gives a relevant example.
+## Q3. What are HTTP headers?
+They carry request/response metadata such as Content-Type, Accept, caching instructions and authorization. Never log authorization tokens.
 
-## Section 1 — Core interview questions
+## Q4. Path versus query parameter?
+A path parameter identifies a resource, e.g. /posts/12. A query parameter filters or modifies a request, e.g. /posts?userId=3. Query parameters are often used for pagination.
 
-### Q1. Explain HTTP request-response.
+## Q5. Explain common status codes.
+200 success, 201 created, 204 no content, 400 bad request, 401 unauthenticated, 403 forbidden, 404 missing, 409 conflict, 422 validation issue, 429 rate limited, 500 server error. 401 and 403 are not the same.
 
-**Answer:** A client sends a request with method, URL and optional headers/body. The server processes it and returns status, headers and optional body.
+## Q6. Why set a timeout?
+It bounds waiting and protects resources. A client timeout does not prove the server did not process a POST.
 
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
+## Q7. Why call raise_for_status()?
+It raises for unsuccessful status codes so error responses are not mistaken for normal success. Not every error should be retried.
 
-### Q2. GET versus POST?
+## Q8. How validate an API response?
+Check status, content type, JSON parsing, expected top-level type, required keys and business constraints. Valid JSON alone does not guarantee valid business data.
 
-**Answer:** GET retrieves a representation; POST submits data or requests processing. Follow the API contract.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q3. What do 4xx and 5xx mean?
-
-**Answer:** 4xx generally indicates a request or permission problem; 5xx indicates server-side failure.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q4. Why use headers?
-
-**Answer:** Headers carry metadata such as content type, accepted format and authentication information.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q5. How handle API failure?
-
-**Answer:** Set timeout, check status, parse expected formats, catch relevant network errors and use only safe bounded retries.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-## Section 2 — Difference-based questions
-
-Compare the related concepts from today's notes. Explain their meaning, practical difference and when you would choose each one. Use the comparison table in the class notes as a revision starting point; add an example from your own code.
-
-## Section 3 — Practical implementation questions
-
-1. Explain how you would recreate today's guided example from an empty project.
-2. Which inputs should be validated before the main operation starts?
-3. What should the program return or display on success and failure?
-4. What tests would you write for a normal case, an edge case and an invalid case?
-5. What would you change before using the example in a production application?
-
-## Section 4 — Scenario-based questions
-
-### Scenario A — Your code works for one input but fails for another
-
-**Expected approach**
-1. Reproduce the failure using the exact input.
-2. Read the complete traceback or response details.
-3. Inspect assumptions about types, missing values and boundaries.
-4. Fix the underlying cause instead of hiding the error.
-5. Add a regression test and rerun the relevant tests.
-
-### Scenario B — A prototype must become part of a business application
-
-**Expected approach**
-1. Confirm the business requirement and expected behaviour.
-2. Separate input validation, business logic and external dependencies.
-3. Define clear data structures and interfaces.
-4. Add persistence, security and observability appropriate to the use case.
-5. Add tests, documentation and deployment controls.
-
-## Section 5 — Troubleshooting questions
-
-- What exact error or status code do you see?
-- Can you reproduce the issue with a smaller input?
-- Which line or request boundary first shows incorrect behaviour?
-- What changed immediately before the failure?
-- How will you verify the fix and prevent regression?
-
-## Section 6 — Strong points to remember
-
-- Define the concept directly before giving an example.
-- Explain why the approach fits the requirement.
-- Mention one limitation and how you would handle it.
-- Do not claim a demonstration is production-ready without the persistence, security, testing and operational controls it needs.
-- Explain your own contribution honestly.
+## Practical task
+Write a GET client with query parameters and timeout, parse JSON, validate the structure and handle HTTP/network errors.
