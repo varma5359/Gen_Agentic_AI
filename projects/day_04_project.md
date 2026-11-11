@@ -1,78 +1,92 @@
 # Day 4 Project — AI Application Component Manager
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Approved topic:** Object-oriented programming: classes, objects, inheritance, encapsulation and composition.  
-**Estimated duration:** 30–75 minutes (Day 10 may take longer)  
-**Mode:** Independent self-learning
+## Objective
+Model components of a small AI application using classes and objects. Build a retriever, prompt builder and assistant coordinator. No external model is called.
 
-## 1. Problem statement and objective
+## Requirements
+- Base component with name and describe method.
+- Retriever inherits from the base.
+- Prompt builder formats a prompt.
+- Assistant uses retriever and prompt builder through composition.
+- Validate required text.
+- Demonstrate object instances and tests.
 
-Model a simple AI application using a PromptBuilder class and an AIApplication class that uses it to prepare prompts.
+## Create component_manager.py
 
-## 2. Prerequisites
+~~~python
+class AIComponent:
+    def __init__(self, name):
+        if not name.strip():
+            raise ValueError("Component name cannot be empty")
+        self.name = name
 
-Classes, objects, __init__, instance attributes, methods and composition.
+    def describe(self):
+        return f"Component: {self.name}"
 
-Complete the day's class notes first. Use only concepts already introduced in the pathway. No paid API key is required unless an optional extension explicitly adds one.
 
-## 3. Functional requirements
+class DocumentRetriever(AIComponent):
+    def retrieve(self, query):
+        if not query.strip():
+            raise ValueError("Query cannot be empty")
+        return f"Sample context for: {query}"
 
-- Solve the stated objective.
-- Use readable names and small functions or classes with clear responsibilities.
-- Validate input before processing.
-- Provide useful behaviour for normal and invalid inputs.
-- Keep credentials and sensitive values out of source code.
 
-## 4. Step-by-step implementation plan
+class PromptBuilder:
+    def build(self, question, context):
+        return (
+            "Use the context to answer.\\n"
+            f"Context: {context}\\n"
+            f"Question: {question}"
+        )
 
-1. Create PromptBuilder with a build(question) method.
-2. Create AIApplication that receives a builder object and delegates prompt creation.
-3. Do not call an external LLM.
 
-Do not skip steps. Run the program after each meaningful change. If an error occurs, fix it before adding another feature.
+class Assistant:
+    def __init__(self, retriever, prompt_builder):
+        self.retriever = retriever
+        self.prompt_builder = prompt_builder
 
-## 5. Suggested folder structure
+    def prepare_request(self, question):
+        context = self.retriever.retrieve(question)
+        return self.prompt_builder.build(question, context)
 
-~~~text
-day_04_project/
-├── components.py
-└── main.py
+
+if __name__ == "__main__":
+    retriever = DocumentRetriever("Policy Retriever")
+    builder = PromptBuilder()
+    assistant = Assistant(retriever, builder)
+    print(retriever.describe())
+    print(assistant.prepare_request("What is the leave policy?"))
 ~~~
 
-Create only files you actually use. Do not add empty modules merely to make the project look larger.
+## Code walkthrough
+- AIComponent stores common identity and exposes describe().
+- DocumentRetriever is a kind of AIComponent, so inheritance is appropriate.
+- PromptBuilder has a separate responsibility.
+- Assistant contains a retriever and builder; this is composition.
+- prepare_request coordinates components. It does not perform real search or call an LLM.
 
-## 6. Sample data and expected behaviour
+## Run
+Windows: py component_manager.py  
+macOS/Linux: python3 component_manager.py
 
-Start with two or three small records. Before running the program, write down the expected result for each record. Compare actual and expected behaviour and explain any difference.
+Expected output includes the component name and a prompt containing the sample context and leave-policy question.
 
-## 7. Test cases and validation
+## Test cases
+| Test | Expected |
+|---|---|
+| Create retriever with a name | Object created |
+| Call describe | Component name returned |
+| Retrieve non-empty query | Sample context returned |
+| Retrieve blank query | ValueError |
+| Prepare assistant request | Prompt includes context and question |
+| Create component with blank name | ValueError |
 
-Create two builders and two applications. Confirm each application uses the correct builder. Test empty question handling.
+## Independent extensions
+1. Add a VectorStore class with search().
+2. Add a ChatMessage class with role validation.
+3. Create two retrievers and show their instance names differ.
+4. Draw inheritance and composition relationships.
+5. Replace the retriever with a fake object that returns fixed test context.
 
-Record each test as: input, expected result, actual result and PASS/FAIL. Do not mark a test passed until you have run it.
-
-## 8. Common debugging method
-
-1. Read the full error message.
-2. Confirm the command, file path and active Python environment.
-3. Inspect relevant inputs and variable values.
-4. Reduce the problem to the smallest reproducible example.
-5. Fix the cause and repeat the failing test.
-
-## 9. Submission checklist
-
-- [ ] Source files and folder structure are saved.
-- [ ] Setup and run instructions are written.
-- [ ] Example input and output are recorded.
-- [ ] Normal and invalid cases have been tested.
-- [ ] Known limitations are documented.
-- [ ] No credentials, private data or unnecessary environment files are committed.
-- [ ] I can explain the design and code I wrote.
-
-## 10. Interview explanation
-
-Prepare a 60–90 second explanation covering the problem, your design, the key concepts, one challenge, how you tested the result and one improvement you would make before production.
-
-## 11. Optional extension
-
-Add one small feature only after all required behaviour works. Keep it within concepts already taught; do not introduce an advanced framework early.
+## Submission
+Submit the Python file, sample output, test table and explanation of why Assistant uses composition.
