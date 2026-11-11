@@ -1808,3 +1808,607 @@ The trainer should correct misunderstandings before moving forward.
 **Mastery evidence:** the student can independently demonstrate "Choosing class design" and explain why the output is correct.
 
 ---
+
+
+---
+
+# 14. Learn classes and objects by running each example
+
+Create a file called `practice_oop.py`. Type and run each section separately.
+
+## 14.1 Class vs object
+
+A class describes what a kind of object can store and do. An object is one actual instance of that class.
+
+```python
+class Student:
+    pass
+
+student_one = Student()
+student_two = Student()
+
+print(type(student_one).__name__)
+print(student_one is student_two)
+```
+
+Output:
+
+```text
+Student
+False
+```
+
+Explanation:
+- `class Student:` defines a new class.
+- `pass` means "there is no code here yet"; it is used as a temporary empty body.
+- `Student()` creates an object.
+- `type(student_one)` tells us the object's class.
+- `. __name__` is the class name attribute (without the space after the dot; write `.__name__`).
+- `is` checks whether two names refer to the exact same object. These are two different objects, so the result is False.
+
+A class is not itself a student record. Each object is a separate instance.
+
+## 14.2 __init__ and self
+
+`__init__` is an initializer method. Python calls it after creating a new instance. `self` is the conventional name for the current instance.
+
+```python
+class Student:
+    def __init__(self, name, course):
+        self.name = name
+        self.course = course
+
+student_one = Student("Anu", "Python")
+student_two = Student("Ravi", "GenAI")
+
+print(student_one.name)
+print(student_two.name)
+print(student_one.course)
+```
+
+Output:
+
+```text
+Anu
+Ravi
+Python
+```
+
+Understand `self.name = name`:
+- The right-side `name` is the argument received by the initializer.
+- The left-side `self.name` is an attribute stored on this particular object.
+- `student_one.name` reads the attribute from student_one.
+- `student_two.name` reads the separate attribute from student_two.
+
+Do not write `self = name`; that would only reassign the local parameter name and would not create the intended attribute.
+
+## 14.3 Attributes and instance methods
+
+An attribute stores information. A method is a function defined inside a class.
+
+```python
+class Student:
+    def __init__(self, name):
+        self.name = name
+        self.completed_days = 0
+
+    def complete_day(self):
+        self.completed_days += 1
+
+    def show_progress(self):
+        return f"{self.name} completed {self.completed_days} days"
+
+student = Student("Meena")
+student.complete_day()
+student.complete_day()
+print(student.show_progress())
+```
+
+Output:
+
+```text
+Meena completed 2 days
+```
+
+- `complete_day()` changes this student's progress.
+- `+= 1` means add one to the current value and store the result.
+- `show_progress()` returns a string; it does not print by itself.
+- `student.show_progress()` calls the method on this object.
+
+When you call `student.complete_day()`, Python passes the student object as `self) automatically. You do not pass self yourself.
+
+## 14.4 Instance attribute vs class attribute
+
+```python
+class Course:
+    platform = "TechPhile"
+
+    def __init__(self, title):
+        self.title = title
+
+python_course = Course("Python")
+genai_course = Course("GenAI")
+
+print(python_course.title)
+print(genai_course.title)
+print(python_course.platform)
+print(genai_course.platform)
+```
+
+Output:
+
+```text
+Python
+GenAI
+TechPhile
+TechPhile
+```
+
+- `title` is an instance attribute; each course has its own value.
+- `platform` is a class attribute shared through the class.
+- Be careful with mutable class attributes such as lists: all instances may share the same list. Put per-object lists inside `__init__`.
+
+## 14.5 Encapsulation and validation
+
+Encapsulation means grouping the data and the operations that manage it. Python uses naming conventions; a leading underscore means "internal use", not secure privacy.
+
+```python
+class Wallet:
+    def __init__(self, opening_balance=0):
+        if opening_balance < 0:
+            raise ValueError("Opening balance cannot be negative")
+        self._balance = opening_balance
+
+    def deposit(self, amount):
+        if amount <= 0:
+            raise ValueError("Deposit must be greater than zero")
+        self._balance += amount
+
+    def get_balance(self):
+        return self._balance
+
+
+wallet = Wallet(100)
+wallet.deposit(50)
+print(wallet.get_balance())
+```
+
+Output:
+
+```text
+150
+```
+
+- `raise ValueError(...)` deliberately reports invalid input.
+- `self._balance` is an internal attribute by convention.
+- `deposit()` checks the amount before changing the balance.
+- The public method controls how the value changes.
+
+### Use a property
+
+A property lets code access a method using attribute-like syntax.
+
+```python
+class Student:
+    def __init__(self, name):
+        self._name = name
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, new_name):
+        cleaned = new_name.strip()
+        if not cleaned:
+            raise ValueError("Name cannot be empty")
+        self._name = cleaned
+
+
+student = Student("Anu")
+student.name = "  Ravi  "
+print(student.name)
+```
+
+Output:
+
+```text
+Ravi
+```
+
+- `@property` makes `name()` available as `student.name`.
+- `@name.setter` runs when assigning `student.name = ...`.
+- The setter strips outside spaces and rejects an empty value.
+- A leading underscore is not a security boundary. Never store passwords or API keys in an object and assume the underscore protects them.
+
+## 14.6 Inheritance and method overriding
+
+Inheritance models an "is-a" relationship. A child class can reuse and specialize a parent class.
+
+```python
+class Notification:
+    def send(self, message):
+        return f"Notification: {message}"
+
+
+class EmailNotification(Notification):
+    def send(self, message):
+        return f"Email sent: {message}"
+
+
+class ConsoleNotification(Notification):
+    pass
+
+
+email = EmailNotification()
+console = ConsoleNotification()
+
+print(email.send("Welcome"))
+print(console.send("Course starts today"))
+```
+
+Output:
+
+```text
+Email sent: Welcome
+Notification: Course starts today
+```
+
+- Both child classes inherit from `Notification`.
+- `EmailNotification` overrides `send()` with its own behavior.
+- `ConsoleNotification` does not override it, so it uses the parent's method.
+
+### What does super() do?
+
+`super()` gives access to the next class in the method resolution order, commonly used to call a parent implementation.
+
+```python
+class Tool:
+    def __init__(self, name):
+        self.name = name
+
+
+class SearchTool(Tool):
+    def __init__(self, name, max_results):
+        super().__init__(name)
+        self.max_results = max_results
+
+
+tool = SearchTool("Course Search", 5)
+print(tool.name)
+print(tool.max_results)
+```
+
+Output:
+
+```text
+Course Search
+5
+```
+
+The child initializer reuses the parent's initialization for `name`, then stores its own `max_results`.
+
+## 14.7 Composition and dependency injection
+
+Composition means an object uses another object as a component. Dependency injection means the component is supplied from outside instead of being secretly created inside the class.
+
+```python
+class MessageStore:
+    def __init__(self):
+        self.messages = []
+
+    def add(self, message):
+        self.messages.append(message)
+
+    def get_all(self):
+        return self.messages
+
+
+class Assistant:
+    def __init__(self, store):
+        self.store = store
+
+    def receive(self, message):
+        self.store.add(message)
+
+    def history(self):
+        return self.store.get_all()
+
+
+store = MessageStore()
+assistant = Assistant(store)
+assistant.receive("Explain classes")
+assistant.receive("Show a project")
+print(assistant.history())
+```
+
+Output:
+
+```text
+['Explain classes', 'Show a project']
+```
+
+The `Assistant` has a `MessageStore`. The store is passed into the assistant through its initializer. Later, we can replace it with a different store (for example, one that saves to a database) without rewriting the assistant's main behavior.
+
+## 14.8 When should you use a class?
+
+| Situation | Good starting choice | Reason |
+|---|---|---|
+| Convert Celsius to Fahrenheit once | Function | No stored object state needed |
+| Store one student's name and progress | Class | Related data and behavior belong together |
+| Keep a sequence of messages | List | Ordered collection |
+| Represent one message with role and content | Dictionary or small class | Named fields |
+| Use a replaceable message store in an assistant | Composition | Components can be substituted |
+| Share a common interface for email and SMS notifications | Inheritance or a protocol-like design | Same operation, different implementation |
+
+Do not turn every function into a class. Choose the simplest design that makes the code easier to understand.
+
+---
+
+# 15. Complete guided mini-project — AI Application Component Manager
+
+## Project goal
+
+Build a small plain-Python program that represents components in a future AI application:
+- A `Prompt` stores the instruction sent to an AI system.
+- A `MessageStore` stores conversation messages.
+- A `TextAssistant` uses both components.
+- A `SafeTextAssistant` specializes the assistant with input validation.
+
+This project does **not** call an AI model or an external API. It teaches object-oriented design before we connect real AI services in later phases.
+
+## Step 1 — create the folder
+
+```text
+day_04_project/
+└── main.py
+```
+
+## Step 2 — type this complete code
+
+```python
+class Prompt:
+    def __init__(self, instruction):
+        cleaned = instruction.strip()
+        if not cleaned:
+            raise ValueError("Prompt instruction cannot be empty")
+        self.instruction = cleaned
+
+    def build(self, question):
+        return f"{self.instruction}\nUser question: {question.strip()}"
+
+
+class MessageStore:
+    def __init__(self):
+        self._messages = []
+
+    def add(self, role, content):
+        message = {
+            "role": role,
+            "content": content
+        }
+        self._messages.append(message)
+
+    def get_all(self):
+        return self._messages.copy()
+
+    def count(self):
+        return len(self._messages)
+
+
+class TextAssistant:
+    def __init__(self, prompt, store):
+        self.prompt = prompt
+        self.store = store
+
+    def receive_question(self, question):
+        prepared_prompt = self.prompt.build(question)
+        self.store.add("user", question)
+        return prepared_prompt
+
+    def history(self):
+        return self.store.get_all()
+
+
+class SafeTextAssistant(TextAssistant):
+    def receive_question(self, question):
+        if not question.strip():
+            raise ValueError("Question cannot be empty")
+        return super().receive_question(question)
+
+
+def main():
+    prompt = Prompt("You are a patient Python tutor. Explain in simple steps.")
+    store = MessageStore()
+    assistant = SafeTextAssistant(prompt, store)
+
+    prepared = assistant.receive_question("What is a Python class?")
+
+    print("--- PROMPT PREPARED FOR A FUTURE AI MODEL ---")
+    print(prepared)
+
+    print("\n--- CONVERSATION HISTORY ---")
+    for message in assistant.history():
+        print(message["role"], ":", message["content"])
+
+    print("\nTotal stored messages:", store.count())
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Step 3 — run the project
+
+Open a terminal inside the `day_04_project` folder.
+
+Windows:
+
+```bash
+py main.py
+```
+
+macOS / Linux:
+
+```bash
+python3 main.py
+```
+
+No package installation, API key, database or internet connection is needed.
+
+## Step 4 — expected output
+
+```text
+--- PROMPT PREPARED FOR A FUTURE AI MODEL ---
+You are a patient Python tutor. Explain in simple steps.
+User question: What is a Python class?
+
+--- CONVERSATION HISTORY ---
+user : What is a Python class?
+
+Total stored messages: 1
+```
+
+## Step 5 — understand every component
+
+| Component | Responsibility | OOP idea |
+|---|---|---|
+| `Prompt` | Stores and builds an instruction | Class, attributes, methods, validation |
+| `MessageStore` | Keeps message dictionaries | Encapsulation, list attribute |
+| `TextAssistant` | Coordinates prompt and store | Composition, dependency injection |
+| `SafeTextAssistant` | Rejects blank questions | Inheritance, overriding, super() |
+| `main()` | Creates and connects the objects | Application entry point |
+
+### Follow one question through the program
+
+```text
+User types question
+       |
+       v
+SafeTextAssistant.receive_question()
+       |
+       +---- Is the question blank?
+       |          |
+       |          +---- Yes -> raise ValueError
+       |          |
+       |          +---- No
+       v
+TextAssistant.receive_question()
+       |
+       +---- Prompt.build(question)
+       |
+       +---- MessageStore.add("user", question)
+       |
+       v
+Return prepared prompt
+       |
+       v
+Display prompt and stored history
+```
+
+### Important code details
+
+- `instruction.strip()` removes whitespace at the start and end of the instruction.
+- `if not cleaned` checks whether the resulting string is empty.
+- `raise ValueError(...)` stops the operation with a clear input error.
+- `self.instruction` stores data on the Prompt object.
+- `self._messages = []` creates a separate list for each MessageStore object.
+- `append()` adds one message dictionary to that list.
+- `copy()` returns a shallow copy of the message list so a caller cannot add/remove entries in the store's outer list by modifying the returned list. The dictionaries inside are still shared; this is a shallow copy.
+- `super().receive_question(question)` calls the inherited implementation after the child class validates the question.
+- The assistant receives prompt and store objects from outside. This is dependency injection.
+
+## Step 6 — test the project
+
+Try each test by changing the question in main().
+
+| Test | Input | Expected behaviour |
+|---|---|---|
+| Normal question | `What is a class?` | Prompt prepared and message stored |
+| Empty question | `""` | ValueError with clear message |
+| Spaces only | `"   "` | ValueError with clear message |
+| Different prompt | Change Prompt instruction | Prepared prompt uses new instruction |
+| Two questions | Call receive_question twice | Store count becomes 2 |
+
+To see the empty-question error, temporarily replace the call with:
+
+```python
+prepared = assistant.receive_question("   ")
+```
+
+Expected error:
+
+```text
+ValueError: Question cannot be empty
+```
+
+This is intentional input validation, not a Python installation problem.
+
+## Step 7 — common mistakes
+
+| Error | Cause | Fix |
+|---|---|---|
+| `TypeError: ... missing 1 required positional argument` | An initializer or method argument was not supplied | Check the constructor call and method parameters |
+| `AttributeError` | The object does not have the attribute/method being used | Check spelling and whether the object is the expected class |
+| `NameError` | Class name is misspelled or referenced before definition | Check spelling and definition order |
+| `IndentationError` | Method body is not nested correctly inside the class | Use consistent four-space indentation |
+| Prompt is blank | Empty instruction was supplied | Give a non-empty instruction |
+| Store count does not increase | The assistant did not call store.add() | Trace receive_question() step by step |
+
+## Step 8 — independent project extensions
+
+Complete in order:
+
+1. Add an `assistant` role message to the store after preparing the prompt. Explain that it is a placeholder, not a real model response.
+2. Add a `clear()` method to MessageStore.
+3. Add a `last_message()` method that returns the latest message or None if the store is empty.
+4. Create a second MessageStore and a second assistant. Prove that their histories are independent.
+5. Create another child class called `ShortQuestionAssistant` that rejects questions shorter than five characters.
+6. Explain why composition is used for Prompt and MessageStore, while inheritance is used for SafeTextAssistant.
+
+## Step 9 — project submission checklist
+
+- [ ] I created and ran main.py.
+- [ ] I can explain class vs object.
+- [ ] I can explain `self` and `__init__`.
+- [ ] I can identify instance attributes and methods.
+- [ ] I can explain why the message list is internal.
+- [ ] I can explain the child class and `super()`.
+- [ ] I can explain how the assistant receives its components.
+- [ ] I tested blank and normal questions.
+- [ ] I understand that this project prepares a prompt but does not call an LLM.
+- [ ] I can add one feature without copying a finished answer.
+
+---
+
+# 16. Day 4 knowledge check — answers included
+
+Try to answer each question before reading the answer.
+
+1. **What is a class?** A definition describing the attributes and behavior that its objects can have.
+2. **What is an object?** A particular instance created from a class.
+3. **What does `__init__` do?** It initializes a newly created object.
+4. **What is `self`?** The conventional parameter referring to the current instance.
+5. **What is an instance attribute?** Data stored on one particular object.
+6. **What is an instance method?** A function defined in a class that works with an instance.
+7. **What is encapsulation?** Keeping related data and behavior together and controlling changes through methods or properties.
+8. **Does an underscore make an attribute private and secure?** No. It is a convention that signals internal use.
+9. **What is inheritance?** A child class reuses or specializes behavior from a parent.
+10. **What is overriding?** A child class supplies its own implementation of an inherited method.
+11. **What does `super()` do?** It provides access to the next implementation in the method resolution order, often the parent implementation.
+12. **What is composition?** One object contains or uses another object.
+13. **What is dependency injection?** Supplying a dependency from outside an object rather than creating it internally.
+14. **Should every function become a class?** No. Use a function when there is no useful object state or behavior to group.
+
+## Day 4 readiness gate
+
+Do not move to Day 5 until you can:
+- Create a class and two independent objects.
+- Explain `__init__`, `self`, attributes and instance methods.
+- Explain instance vs class attributes.
+- Add a property setter that validates a value.
+- Explain inheritance, overriding and `super()`.
+- Explain composition and dependency injection with the project.
+- Run the AI Application Component Manager.
+- Test invalid input and explain the resulting error.
+- Explain why the project does not yet call an AI model.
