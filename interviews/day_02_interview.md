@@ -403,3 +403,212 @@ Ask the student to explain one code example in this order: input, variable, oper
 
 ### Student reflection
 Write down the question that was hardest to answer. Revisit the matching class-note section, create a smaller example and explain it again the next day.
+
+
+---
+
+## 8. List-method interview questions — know the exact behaviour
+
+### Q7. What is the difference between append() and extend()?
+
+`append(x)` adds x as one item. `extend(items)` adds each item from an iterable separately.
+
+```python
+a = ["Hi"]
+a.append(["Hello", "Bye"])
+
+b = ["Hi"]
+b.extend(["Hello", "Bye"])
+
+print(a)
+print(b)
+```
+
+Output:
+
+```text
+['Hi', ['Hello', 'Bye']]
+['Hi', 'Hello', 'Bye']
+```
+
+### Q8. Does append() return the updated list?
+
+No. It changes the existing list and returns `None`.
+
+```python
+names = ["Anu"]
+result = names.append("Ravi")
+print(names)
+print(result)
+```
+
+Output:
+
+```text
+['Anu', 'Ravi']
+None
+```
+
+### Q9. What is the difference between remove() and pop()?
+
+- `remove(value)` removes the first matching value.
+- `pop(index)` removes the item at an index and returns that item. Without an index, it removes the last item.
+
+### Q10. What is the difference between sort() and sorted()?
+
+- `list.sort()` changes the original list and returns `None`.
+- `sorted(list)` returns a new sorted list and leaves the original unchanged.
+
+### Q11. What is the difference between reverse() and sort(reverse=True)?
+
+- `reverse()` reverses the current order.
+- `sort(reverse=True)` arranges values in descending sorted order.
+
+### Q12. What does copy() do?
+
+It creates a shallow copy of a list. The outer list is new, but nested mutable objects may still be shared.
+
+### Q13. Which list methods change the original list?
+
+`append()`, `extend()`, `insert()`, `remove()`, `pop()`, `clear()`, `sort()` and `reverse()` change the list. `index()` and `count()` only return information. `copy()` creates another list.
+
+## 9. Code-output interview drills
+
+Predict the output before reading the answer.
+
+### Drill 1
+
+```python
+items = [1, 2]
+items.append([3, 4])
+print(len(items))
+```
+
+**Answer:** `3`. The nested list is one item.
+
+### Drill 2
+
+```python
+items = [1, 2]
+items.extend([3, 4])
+print(len(items))
+```
+
+**Answer:** `4`. Two items were added separately.
+
+### Drill 3
+
+```python
+items = ["a", "b", "a"]
+print(items.count("a"))
+print(items.index("a"))
+```
+
+**Answer:** `2`, then `0`.
+
+### Drill 4
+
+```python
+scores = [30, 10, 20]
+result = scores.sort()
+print(scores)
+print(result)
+```
+
+**Answer:** `[10, 20, 30]`, then `None`.
+
+### Drill 5
+
+```python
+items = ["first", "second", "third"]
+removed = items.pop()
+print(removed)
+print(items)
+```
+
+**Answer:** `third`, then `['first', 'second']`.
+
+### Drill 6
+
+```python
+message = "  HELLO Python  "
+print(message.strip().lower())
+```
+
+**Answer:** `hello python`. strip() removes surrounding spaces; lower() returns lowercase text.
+
+## 10. Mini-project interview answers
+
+### Q14. Why did you represent conversation history as a list?
+
+Because a conversation is an ordered sequence of messages. A list preserves the order and allows new messages to be appended.
+
+### Q15. Why is each message a dictionary?
+
+Each message has named fields such as role and content. A dictionary lets the program access them by meaningful keys rather than remembering numeric positions.
+
+### Q16. Why did you use a set for unique words?
+
+A set keeps only unique values, so repeated words are stored once. Sets do not guarantee a display order, so the project uses `sorted()` when it needs predictable display.
+
+### Q17. Why did you write separate functions?
+
+Each function performs one focused task: create a message, display history, count user messages or collect unique words. This makes code easier to read, test and reuse.
+
+### Q18. What tests did you perform?
+
+I tested a normal message, an empty message, uppercase text and repeated words. I checked that empty input is not added and duplicate words appear only once in the unique-word result.
+
+### Q19. What would you improve before production?
+
+I would validate allowed roles, limit message length, persist the conversation in a database, add automated tests and avoid storing sensitive information unnecessarily.
+
+## 11. Practical coding interview challenge
+
+**Task:** Write a function that receives a list of message dictionaries and returns only the user messages.
+
+Starter data:
+
+```python
+conversation = [
+    {"role": "user", "content": "Hi"},
+    {"role": "assistant", "content": "Hello"},
+    {"role": "user", "content": "Explain lists"}
+]
+```
+
+**One possible solution:**
+
+```python
+def get_user_messages(conversation):
+    user_messages = []
+
+    for message in conversation:
+        if message["role"] == "user":
+            user_messages.append(message["content"])
+
+    return user_messages
+
+
+print(get_user_messages(conversation))
+```
+
+Output:
+
+```text
+['Hi', 'Explain lists']
+```
+
+**Explain your solution:** the function receives a list, creates an empty result list, checks each dictionary's role, appends matching content and returns the result. The original conversation is not changed.
+
+## 12. Final interview readiness checklist
+
+- [ ] I can define all five data structures with a practical example.
+- [ ] I can explain append vs extend without hesitation.
+- [ ] I know which list methods mutate and which return a value.
+- [ ] I can explain the return value of append, sort and reverse.
+- [ ] I can distinguish remove from pop.
+- [ ] I can explain shallow copy at a beginner level.
+- [ ] I can explain list-of-dictionaries conversation history.
+- [ ] I can write and explain the practical coding challenge.
+- [ ] I can discuss the mini-project honestly, including its limitations.
