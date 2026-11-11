@@ -402,3 +402,195 @@ Ask the student to explain one code example in this order: input, variable, oper
 
 ### Student reflection
 Write down the question that was hardest to answer. Revisit the matching class-note section, create a smaller example and explain it again the next day.
+
+
+---
+
+## 6. Detailed interview answers
+
+### Q7. What is the difference between a module and a package?
+
+A module is a Python file that contains reusable code. A package organizes related modules in a directory. A regular package commonly contains an `__init__.py` file. A package helps keep a larger application organized.
+
+### Q8. What is the difference between import and from ... import?
+
+`import math` makes the module name available, so we call `math.sqrt(25)`.  
+`from math import sqrt` imports the selected name, so we call `sqrt(25)`.
+
+Avoid importing everything with `from module import *` in normal application code because it can make names unclear.
+
+### Q9. What is an exception?
+
+An exception is a Python object that represents an error or unusual condition during execution. Examples include `ValueError`, `TypeError`, `FileNotFoundError` and `JSONDecodeError`.
+
+### Q10. Why should we catch specific exceptions?
+
+Specific exceptions let us handle problems we understand. A broad `except Exception` can hide programming mistakes and make debugging harder. Catch the narrowest useful exception and show a helpful message.
+
+### Q11. What is the purpose of finally?
+
+A `finally` block runs whether the try block succeeds or raises an exception. It is useful for cleanup. When using `with open(...)`, Python already handles closing the file, so a separate finally block is usually unnecessary.
+
+### Q12. What is JSON serialization?
+
+Serialization converts a Python value such as a dictionary or list into JSON text so it can be stored or sent. Deserialization parses JSON text back into Python values.
+
+### Q13. Explain load(), loads(), dump() and dumps().
+
+- `json.load(file)`: reads JSON from an open file.
+- `json.loads(text)`: parses JSON from a string.
+- `json.dump(data, file)`: writes Python data as JSON to an open file.
+- `json.dumps(data)`: returns JSON text as a string.
+
+### Q14. Why use pathlib?
+
+`pathlib.Path` represents filesystem paths using an object-oriented interface. It helps build paths across operating systems and makes operations such as checking existence and creating directories clearer.
+
+### Q15. What is logging and why is it better than print() for application diagnostics?
+
+Logging records events with levels, timestamps and configurable destinations. Print is useful for simple interactive output, but logging can write to files and distinguish informational events, warnings and errors. Do not log passwords, API keys or sensitive personal data.
+
+### Q16. What are common logging levels?
+
+- DEBUG: detailed diagnostic information.
+- INFO: normal application events.
+- WARNING: something unexpected that did not stop the program.
+- ERROR: an operation failed.
+- CRITICAL: a serious failure that may prevent the application from continuing.
+
+### Q17. What does the main guard do?
+
+`if __name__ == "__main__":` runs code only when the file is executed directly. If another module imports the file, the guarded code does not automatically run.
+
+## 7. Code-output interview drills
+
+### Drill 1 — import a function
+
+```python
+# maths_tools.py
+def double(number):
+    return number * 2
+
+# main.py
+from maths_tools import double
+print(double(6))
+```
+
+**Answer:** `12`. The function is imported from the module and called with 6.
+
+### Drill 2 — exception handling
+
+```python
+try:
+    number = int("abc")
+except ValueError:
+    print("Invalid number")
+```
+
+**Answer:** `Invalid number`. int() cannot convert the text "abc" into an integer, so ValueError is handled.
+
+### Drill 3 — JSON serialization
+
+```python
+import json
+student = {"name": "Anu", "score": 90}
+text = json.dumps(student)
+print(type(text).__name__)
+```
+
+**Answer:** `str`. dumps() returns JSON text.
+
+### Drill 4 — JSON deserialization
+
+```python
+import json
+student = json.loads('{"name": "Anu"}')
+print(student["name"])
+```
+
+**Answer:** `Anu`. loads() parses the JSON string into a Python dictionary.
+
+### Drill 5 — file context manager
+
+```python
+with open("notes.txt", "w", encoding="utf-8") as file:
+    file.write("Python")
+print("Finished")
+```
+
+**Answer:** `Finished`. The file is closed when execution leaves the with block.
+
+## 8. Practical coding interview challenge
+
+**Task:** Write a function that saves a list of student dictionaries to a JSON file and another function that reads the file back.
+
+**One possible solution:**
+
+```python
+import json
+
+
+def save_students(students, file_path):
+    with open(file_path, "w", encoding="utf-8") as file:
+        json.dump(students, file, indent=4)
+
+
+def read_students(file_path):
+    with open(file_path, "r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+records = [
+    {"name": "Anu", "course": "Python"},
+    {"name": "Ravi", "course": "GenAI"}
+]
+
+save_students(records, "students.json")
+loaded_records = read_students("students.json")
+print(loaded_records)
+```
+
+Output:
+
+```text
+[{'name': 'Anu', 'course': 'Python'}, {'name': 'Ravi', 'course': 'GenAI'}]
+```
+
+Explanation:
+- The first function opens a file in write mode and serializes the list as JSON.
+- The second opens the file in read mode and parses JSON into Python objects.
+- Both use `with` so the file is closed automatically.
+- In a real application, add handling for missing files, invalid JSON and permission errors.
+
+## 9. Project discussion — Student Records application
+
+Be prepared to explain:
+
+1. **What does the application do?** It adds and lists student/course records and keeps them in a JSON file between runs.
+2. **Why are there multiple Python files?** Each module has one responsibility, making code easier to understand and maintain.
+3. **Why does students.py contain create_student()?** It validates the input and creates a consistent dictionary.
+4. **Why does storage.py import json?** It converts Python dictionaries/lists to JSON text and back.
+5. **Why use pathlib?** It builds file paths based on the location of the Python file, not only the terminal's current directory.
+6. **Why use with?** It ensures the file is closed after reading or writing.
+7. **Why catch ValueError?** It handles invalid student data and invalid JSON structure reported by the storage layer.
+8. **Why catch OSError?** It handles filesystem problems such as permission or disk errors.
+9. **Why use logging?** It records important events and diagnostic information in a log file.
+10. **Why is the main guard useful?** Importing a module should not unexpectedly start the interactive menu.
+11. **Does the project use a database?** No. It uses a JSON file for simple local persistence.
+12. **What are its limitations?** It has no multi-user access control, database transactions, duplicate prevention by default or web interface.
+13. **What would you improve?** Add unique IDs, duplicate checks, automated tests, a database and a web API in later lessons.
+
+## 10. Final interview readiness checklist
+
+- [ ] I can explain module vs package.
+- [ ] I can write and use import statements.
+- [ ] I can explain try, except, else and finally.
+- [ ] I can choose a specific exception to catch.
+- [ ] I can explain JSON serialization and deserialization.
+- [ ] I know load, loads, dump and dumps.
+- [ ] I can read and write a text file using with.
+- [ ] I can build paths using pathlib.
+- [ ] I can explain logging levels and avoid logging secrets.
+- [ ] I can explain the main guard.
+- [ ] I can describe each file in the Student Records project.
+- [ ] I can discuss the project's limitations honestly.
