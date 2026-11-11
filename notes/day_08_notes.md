@@ -1,88 +1,139 @@
-# Day 8 — REST APIs, HTTP methods, status codes, headers, requests and responses.
+# Day 8 — REST APIs, HTTP methods, status codes, headers, requests and responses
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Duration:** 2–3 hours  
-**Level:** Intermediate
+**Phase 1 | 2–3 hours | Project: External API Integration Client**
 
-> **Self-learning instruction:** Read one section at a time. Type the code yourself, run it and compare the result. These notes are designed to teach without a trainer or video.
+## Learning objectives
+Explain API and REST-style resource concepts; describe request/response components; use HTTP methods; understand status families; send query parameters and JSON; handle errors and timeouts.
 
-## 1. Understand the topic
+## 1. What is an API?
+An API is a defined interface through which one software system requests data or capabilities from another. A REST-style web API commonly exposes resources through URLs and uses HTTP methods to describe operations.
 
-An API defines how software communicates. REST-style APIs expose resources through URLs and HTTP methods. GET retrieves, POST submits, PUT replaces, PATCH partially updates and DELETE requests removal. 2xx indicates success, 4xx request or permission issues, 5xx server failures. Requests can include headers, query parameters and a body. Set timeouts and validate responses.
+## 2. Request-response flow
+~~~text
+Python client
+  | HTTP request: method + URL + headers + optional body
+  v
+API server
+  | HTTP response: status + headers + body
+  v
+Python client parses and handles result
+~~~
 
-## 2. Why this matters in an AI application
+Request components:
+- Method: GET, POST, PUT, PATCH or DELETE.
+- URL: target resource.
+- Headers: metadata such as content type and authorization.
+- Query parameters: filters or pagination.
+- Body: optional data, often JSON.
 
-A GenAI application is still software. It needs input handling, business logic, APIs, data, validation, security, tests and deployment. Today's concepts are building blocks for those responsibilities. A small example demonstrates one concept; it is not automatically production-ready.
+Response components: status code, headers and body.
 
-## 3. Guided coding walkthrough
+## 3. HTTP methods
+| Method | Common intent | Example |
+|---|---|---|
+| GET | Read resource | Retrieve student |
+| POST | Create/submit | Create student |
+| PUT | Replace resource | Replace profile |
+| PATCH | Partially update | Change one field |
+| DELETE | Request removal | Delete record |
 
-### Step 1 — Understand the task
+Actual behaviour depends on the API's documented contract.
 
-Read the code and predict the output. Identify the input, the main operation and the value produced.
+## 4. Status code families
+| Range | Meaning |
+|---|---|
+| 2xx | Success |
+| 3xx | Redirection |
+| 4xx | Client request/authentication issue |
+| 5xx | Server-side failure |
 
-### Step 2 — Code
+Common examples: 200 OK, 201 Created, 204 No Content, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 409 Conflict, 422 validation issue, 429 rate limited, 500 Internal Server Error.
+
+HTTP success does not prove business data is correct. Validate response shape and meaning.
+
+## 5. Headers and content types
+Content-Type describes the body format, commonly application/json. Accept indicates response formats the client accepts. Authorization carries credentials where required. Never paste a real token into source code or logs.
+
+## 6. Query and path parameters
+A path parameter identifies a resource, such as /posts/12. A query parameter filters a collection, such as /posts?userId=3.
 
 ~~~python
 import requests
-url = "https://jsonplaceholder.typicode.com/posts/1"
-try:
-    response = requests.get(url, timeout=10)
-    response.raise_for_status()
-    post = response.json()
-    print(post["title"])
-except requests.Timeout:
-    print("Request timed out")
-except requests.RequestException as error:
-    print("Request failed:", error)
+
+response = requests.get(
+    "https://jsonplaceholder.typicode.com/posts",
+    params={"userId": 1},
+    timeout=10
+)
+response.raise_for_status()
+posts = response.json()
+print(len(posts))
 ~~~
 
-### Step 3 — Expected output
+params encodes query values. timeout bounds waiting. raise_for_status raises for unsuccessful HTTP status. json parses the response.
 
-~~~text
-sunt aut facere repellat provident occaecati excepturi optio reprehenderit
+## 7. POST JSON
+~~~python
+payload = {"title": "Learn APIs", "body": "Practice requests", "userId": 1}
+response = requests.post(
+    "https://jsonplaceholder.typicode.com/posts",
+    json=payload,
+    timeout=10
+)
+response.raise_for_status()
+print(response.json())
 ~~~
 
-### Step 4 — Explain the code line by line
+json serializes the Python object and sets the appropriate content type. The public test service may simulate creation rather than persist data permanently.
 
-- GET sends a read request.
-- timeout bounds waiting.
-- raise_for_status raises for unsuccessful status codes.
-- json parses the response body.
-- 401 means missing/invalid authentication; 403 means access is refused; respect 429 rate limits.
+## 8. PUT, PATCH and DELETE
+PUT commonly replaces a resource; PATCH partially updates; DELETE requests removal. Inspect API documentation and status codes. Do not assume every API implements all methods.
 
-### Step 5 — Interpret the result
+## 9. Robust client checklist
+1. Set base URL.
+2. Set timeout.
+3. Send documented method and parameters.
+4. Check status.
+5. Parse response.
+6. Validate expected fields.
+7. Handle timeout, connection and HTTP errors.
+8. Protect credentials.
 
-Answer in your own words: What input did the program receive? What operation did it perform? What result did it produce? What would change if the input changed? What should be validated before using this in a larger application?
+## 10. Common errors
+| Problem | Likely cause | Action |
+|---|---|---|
+| 401 | Missing/invalid authentication | Check credential setup |
+| 403 | Insufficient permission | Check access rights |
+| 404 | Wrong path or ID | Verify endpoint |
+| 429 | Rate limit | Respect retry guidance |
+| 5xx | Server-side failure | Log safe details; bounded retry if appropriate |
+| JSONDecodeError | Invalid/non-JSON body | Check response content type |
+| Timeout | Slow server/network | Handle timeout |
 
-## 4. Common mistakes and troubleshooting
+## 11. Exercises
+1. GET from a public test API.
+2. Filter using query parameters.
+3. Submit JSON using POST.
+4. Print status and content type.
+5. Handle timeout and HTTP errors.
+6. Explain path versus query parameters.
+7. Explain why status 200 alone does not prove business correctness.
 
-- Read the complete traceback and identify the exception type and line.
-- Confirm the active Python interpreter, installed packages, current folder and filename.
-- Check types, missing values, boundaries and external response formats.
-- Reduce a complex failure to the smallest reproducible example.
-- Fix the cause rather than hiding errors with broad exception handling.
+## 12. Five-question quiz
+1. Read a resource: A GET B POST C DELETE D PATCH. **Answer A.**
+2. Not Found: A 200 B 401 C 404 D 500. **Answer C.**
+3. Filtering values commonly go in: A query string B comment C file name D status. **Answer A.**
+4. Content-Type describes: A body format B user role C host D method. **Answer A.**
+5. 429 means: A Created B Rate limited C Missing D Redirect. **Answer B.**
 
-## 5. Independent practice
+## Completion checklist
+- [ ] Explain API and REST-style resources.
+- [ ] Identify request and response parts.
+- [ ] Explain GET/POST/PUT/PATCH/DELETE.
+- [ ] Read status code families.
+- [ ] Use headers and query parameters.
+- [ ] Send JSON and parse responses.
+- [ ] Handle timeouts and errors.
+- [ ] Complete External API Integration Client.
 
-1. Recreate the example from a blank file.
-2. Change at least two inputs and predict the output before running.
-3. Add one validation or failure case relevant to this topic.
-4. Explain the changed output in your own words.
-5. Save the code in a clearly named project folder.
-
-## 6. Interview-ready summary
-
-- Define the concept directly.
-- Explain the problem it solves.
-- Explain when to use it and when a simpler approach is better.
-- Give one practical AI-application example.
-- Mention one limitation or common failure mode.
-
-## 7. Completion checklist
-
-- [ ] I can explain the concept without copying the definition.
-- [ ] I typed and ran the example.
-- [ ] I understand the expected output.
-- [ ] I completed the independent practice.
-- [ ] I can identify and fix a common error.
-- [ ] I am ready to attempt the approved project.
+**Next:** Day 9 — FastAPI, routes, Pydantic models, request validation and response models.
