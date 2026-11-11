@@ -1,78 +1,82 @@
 # Day 3 Project — Reusable Text Processing Toolkit
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Approved topic:** Functions, parameters, arguments, return values, scope and comprehensions.  
-**Estimated duration:** 30–75 minutes (Day 10 may take longer)  
-**Mode:** Independent self-learning
+## Objective
+Build reusable functions to clean text, count words, extract non-empty lines and summarise multiple questions. This is a Python utility, not an LLM.
 
-## 1. Problem statement and objective
+## Requirements
+- Accept text as function input.
+- Return results rather than only printing inside utility functions.
+- Count words safely, including empty input.
+- Extract non-empty lines.
+- Summarise a list of questions.
+- Demonstrate a comprehension.
 
-Build reusable functions to normalize messages, count words, extract unique terms and filter messages by minimum length.
+## Create text_toolkit.py
 
-## 2. Prerequisites
+~~~python
+def clean_text(text):
+    return " ".join(text.strip().split())
 
-Functions, parameters, defaults, return values, scope, loops and comprehensions.
 
-Complete the day's class notes first. Use only concepts already introduced in the pathway. No paid API key is required unless an optional extension explicitly adds one.
+def count_words(text):
+    cleaned = clean_text(text)
+    if not cleaned:
+        return 0
+    return len(cleaned.split())
 
-## 3. Functional requirements
 
-- Solve the stated objective.
-- Use readable names and small functions or classes with clear responsibilities.
-- Validate input before processing.
-- Provide useful behaviour for normal and invalid inputs.
-- Keep credentials and sensitive values out of source code.
+def extract_lines(text):
+    return [line.strip() for line in text.splitlines() if line.strip()]
 
-## 4. Step-by-step implementation plan
 
-1. Create text_tools.py.
-2. Implement normalize_text, count_words, unique_words and filter_messages.
-3. Add main.py to demonstrate each function.
+def summarize_questions(questions):
+    summaries = []
+    for question in questions:
+        cleaned = clean_text(question)
+        summaries.append({
+            "question": cleaned,
+            "word_count": count_words(cleaned)
+        })
+    return summaries
 
-Do not skip steps. Run the program after each meaningful change. If an error occurs, fix it before adding another feature.
 
-## 5. Suggested folder structure
-
-~~~text
-day_03_project/
-├── text_tools.py
-└── main.py
+if __name__ == "__main__":
+    samples = ["  What is Python?  ", "Explain embeddings", "   "]
+    print("Clean:", clean_text("  Learn   Python  "))
+    print("Word count:", count_words("Build AI applications with Python"))
+    print("Lines:", extract_lines("First question\n\nSecond question"))
+    print("Summary:", summarize_questions(samples))
 ~~~
 
-Create only files you actually use. Do not add empty modules merely to make the project look larger.
+## Explain the code
+- clean_text trims the ends, splits on whitespace and rejoins using one space.
+- count_words handles blank input before dividing or counting.
+- splitlines separates a multiline string.
+- The list comprehension keeps only non-empty trimmed lines.
+- summarize_questions reuses the other functions instead of duplicating their logic.
+- The main guard runs the demonstration only when this file is executed directly. When imported, its function definitions are available without running the demo.
 
-## 6. Sample data and expected behaviour
+## Run
+Windows: py text_toolkit.py  
+macOS/Linux: python3 text_toolkit.py
 
-Start with two or three small records. Before running the program, write down the expected result for each record. Compare actual and expected behaviour and explain any difference.
+Expected key results: Clean text is Learn Python; word count is 5; extracted lines are First question and Second question; the blank question has word_count 0.
 
-## 7. Test cases and validation
+## Test cases
+| Input | Expected |
+|---|---|
+| Empty string | Word count 0 |
+| Spaces only | Clean result empty; count 0 |
+| Learn with three spaces then Python | Clean result has one space |
+| A, blank line, B | Two extracted lines |
+| Two normal questions and one blank | Three summary records |
 
-Test empty text, mixed case, repeated words and short/long messages. Core functions should return results instead of printing unexpectedly.
+## Extensions
+1. Add character_count(text).
+2. Add longest_word(text), including empty-input behaviour.
+3. Add a second file that imports clean_text().
+4. Explain one situation where lowercasing could be unsafe.
 
-Record each test as: input, expected result, actual result and PASS/FAIL. Do not mark a test passed until you have run it.
-
-## 8. Common debugging method
-
-1. Read the full error message.
-2. Confirm the command, file path and active Python environment.
-3. Inspect relevant inputs and variable values.
-4. Reduce the problem to the smallest reproducible example.
-5. Fix the cause and repeat the failing test.
-
-## 9. Submission checklist
-
-- [ ] Source files and folder structure are saved.
-- [ ] Setup and run instructions are written.
-- [ ] Example input and output are recorded.
-- [ ] Normal and invalid cases have been tested.
-- [ ] Known limitations are documented.
-- [ ] No credentials, private data or unnecessary environment files are committed.
-- [ ] I can explain the design and code I wrote.
-
-## 10. Interview explanation
-
-Prepare a 60–90 second explanation covering the problem, your design, the key concepts, one challenge, how you tested the result and one improvement you would make before production.
-
-## 11. Optional extension
-
-Add one small feature only after all required behaviour works. Keep it within concepts already taught; do not introduce an advanced framework early.
+## Submission
+Submit the Python file, sample output, test results and a short explanation of why utility functions return values instead of printing them.
+**Completion standard:** Rebuild one new text utility from a blank file and explain its inputs, output and empty-input behaviour.
