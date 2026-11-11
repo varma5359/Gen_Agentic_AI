@@ -1,80 +1,123 @@
 # Day 5 Project — AI Configuration and File Management Utility
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Approved topic:** Python modules, packages, exceptions, JSON, file handling and logging.  
-**Estimated duration:** 30–75 minutes (Day 10 may take longer)  
-**Mode:** Independent self-learning
+## Objective
+Build a command-line utility that reads a JSON configuration, validates required fields, writes a report and records safe events in a log. No API credentials are needed.
 
-## 1. Problem statement and objective
-
-Create a command-line utility that writes a JSON configuration, reads it back, validates required keys and logs operations.
-
-## 2. Prerequisites
-
-Modules, pathlib, JSON, exceptions, context managers and logging.
-
-Complete the day's class notes first. Use only concepts already introduced in the pathway. No paid API key is required unless an optional extension explicitly adds one.
-
-## 3. Functional requirements
-
-- Solve the stated objective.
-- Use readable names and small functions or classes with clear responsibilities.
-- Validate input before processing.
-- Provide useful behaviour for normal and invalid inputs.
-- Keep credentials and sensitive values out of source code.
-
-## 4. Step-by-step implementation plan
-
-1. Create config_utils.py, validation.py and main.py.
-2. Use Path, UTF-8 JSON and specific exception handling.
-3. Create the data folder when required.
-
-Do not skip steps. Run the program after each meaningful change. If an error occurs, fix it before adding another feature.
-
-## 5. Suggested folder structure
-
+## Folder structure
 ~~~text
 day_05_project/
-├── config_utils.py
-├── validation.py
-├── main.py
-└── data/
+    app.py
+    config.json
+    output/
+    logs/
 ~~~
 
-Create only files you actually use. Do not add empty modules merely to make the project look larger.
+## config.json
+~~~json
+{
+  "application_name": "TechPhile Learning Utility",
+  "provider": "demo",
+  "model_name": "sample-model",
+  "temperature": 0.2
+}
+~~~
 
-## 6. Sample data and expected behaviour
+## app.py
+~~~python
+import json
+import logging
+from pathlib import Path
 
-Start with two or three small records. Before running the program, write down the expected result for each record. Compare actual and expected behaviour and explain any difference.
+BASE_DIR = Path(__file__).resolve().parent
+CONFIG_PATH = BASE_DIR / "config.json"
+OUTPUT_DIR = BASE_DIR / "output"
+LOG_DIR = BASE_DIR / "logs"
 
-## 7. Test cases and validation
+OUTPUT_DIR.mkdir(exist_ok=True)
+LOG_DIR.mkdir(exist_ok=True)
 
-Test valid config, missing file, malformed JSON, missing key and a path that cannot be written. Keep credentials out of files and logs.
+logging.basicConfig(
+    filename=LOG_DIR / "application.log",
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s"
+)
 
-Record each test as: input, expected result, actual result and PASS/FAIL. Do not mark a test passed until you have run it.
 
-## 8. Common debugging method
+def load_config(path):
+    with open(path, "r", encoding="utf-8") as file:
+        config = json.load(file)
 
-1. Read the full error message.
-2. Confirm the command, file path and active Python environment.
-3. Inspect relevant inputs and variable values.
-4. Reduce the problem to the smallest reproducible example.
-5. Fix the cause and repeat the failing test.
+    required = ["application_name", "provider", "model_name"]
+    for field in required:
+        if field not in config:
+            raise ValueError(f"Missing required setting: {field}")
+    return config
 
-## 9. Submission checklist
 
-- [ ] Source files and folder structure are saved.
-- [ ] Setup and run instructions are written.
-- [ ] Example input and output are recorded.
-- [ ] Normal and invalid cases have been tested.
-- [ ] Known limitations are documented.
-- [ ] No credentials, private data or unnecessary environment files are committed.
-- [ ] I can explain the design and code I wrote.
+def write_report(config, path):
+    with open(path, "w", encoding="utf-8") as file:
+        file.write(f"Application: {config['application_name']}\\n")
+        file.write(f"Provider: {config['provider']}\\n")
+        file.write(f"Model: {config['model_name']}\\n")
 
-## 10. Interview explanation
 
-Prepare a 60–90 second explanation covering the problem, your design, the key concepts, one challenge, how you tested the result and one improvement you would make before production.
+def main():
+    logging.info("Utility started")
+    try:
+        config = load_config(CONFIG_PATH)
+        report = OUTPUT_DIR / "configuration_report.txt"
+        write_report(config, report)
+        logging.info("Configuration report created")
+        print(f"Report created: {report}")
+    except FileNotFoundError:
+        logging.error("Configuration file missing")
+        print("Configuration file is missing.")
+    except json.JSONDecodeError:
+        logging.error("Configuration contains invalid JSON")
+        print("Configuration file is not valid JSON.")
+    except ValueError as error:
+        logging.error("Configuration validation failed: %s", error)
+        print("Configuration problem:", error)
 
-## 11. Optional extension
 
-Add one small feature only after all required behaviour works. Keep it within concepts already taught; do not introduce an advanced framework early.
+if __name__ == "__main__":
+    main()
+~~~
+
+## Walkthrough
+- Path(__file__).resolve().parent finds the script's folder, not the terminal's current folder.
+- mkdir(exist_ok=True) creates output folders if absent.
+- basicConfig writes safe log messages to a file.
+- json.load parses configuration into a dictionary.
+- The required-field loop validates before using values.
+- with open closes the report file.
+- Specific except branches handle expected failures separately.
+- The main guard starts the utility only when run directly.
+
+## Run
+Windows: py app.py  
+macOS/Linux: python3 app.py
+
+Expected: a report-created message. Open output/configuration_report.txt and confirm the three fields. Inspect logs/application.log.
+
+## Test cases
+| Test | Change | Expected |
+|---|---|---|
+| TC01 | Valid JSON | Report created |
+| TC02 | Rename config.json | Friendly missing-file message |
+| TC03 | Break JSON syntax | Invalid JSON message |
+| TC04 | Remove model_name | Validation message |
+| TC05 | Run twice | Report safely regenerated |
+| TC06 | Inspect log | Events present, no credentials |
+
+Restore the valid JSON after negative tests.
+
+## Extensions
+1. Validate temperature is numeric and between 0 and 1.
+2. Move configuration validation to config_utils.py.
+3. Add a safe DEBUG event.
+4. Add an append-only audit file for report creation.
+5. Explain why secrets must not be committed.
+
+## Submission
+Submit app.py, non-secret config.json, generated report, test table and a short explanation of exception handling and logging.
