@@ -1,87 +1,28 @@
-# Day 7 Interview Questions — Day 7 — Asynchronous Python: async, await, asyncio, HTTP fundamentals and concurrent API requests
+# Day 7 Interview Guide — Asynchronous Python and HTTP
 
-**Phase:** 1 — Python and Software Development Foundations
+## Q1. What is asynchronous programming?
+It lets a coroutine pause during I/O so the event loop can run other ready tasks. It is useful for network or database waits, not automatically CPU-heavy calculations. Follow-up: Give an I/O-bound example.
 
-## How to use this guide
+## Q2. What is a coroutine?
+A coroutine is an awaitable computation typically defined with async def. Calling it creates a coroutine object; an event loop runs it. Calling alone does not guarantee completion.
 
-Answer each question aloud before reading the suggested answer. Use your own words. A strong fresher answer defines the concept, explains its purpose and gives a relevant example.
+## Q3. What does await do?
+It suspends the current coroutine until the awaited operation completes, allowing other tasks to progress. The object must be awaitable.
 
-## Section 1 — Core interview questions
+## Q4. gather versus sequential awaits?
+Sequential awaits wait for each operation in order. asyncio.gather schedules multiple awaitables so independent I/O can overlap. Bound concurrency to avoid overwhelming resources or triggering limits.
 
-### Q1. Synchronous versus asynchronous?
+## Q5. Concurrency versus parallelism?
+Concurrency is overlapping progress; parallelism is simultaneous execution. Asyncio typically provides cooperative I/O concurrency. CPU-heavy work may need a process pool or other parallel strategy.
 
-**Answer:** Synchronous code waits for an operation before proceeding; asynchronous code can pause at await so other tasks progress during I/O waits.
+## Q6. What is an HTTP status code?
+It communicates request outcome. Examples: 200 success, 201 created, 400 bad request, 401 unauthenticated, 403 forbidden, 404 missing, 429 rate limited and 500 server error. Not every error should be retried.
 
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
+## Q7. Why use timeouts?
+They bound waiting and protect resources. A client timeout does not prove the server did not process a request.
 
-### Q2. What does await do?
+## Q8. What does a semaphore do?
+It limits tasks that can enter a protected section concurrently. It is not the same as a rate limiter, which controls operations over time.
 
-**Answer:** It suspends the current coroutine until an awaitable completes, allowing the event loop to run other tasks.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q3. What is an event loop?
-
-**Answer:** The scheduler that runs asynchronous tasks and resumes coroutines when awaited operations are ready.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q4. When use gather?
-
-**Answer:** When independent awaitables should run concurrently and their results should be collected.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q5. Does async speed up CPU-heavy work?
-
-**Answer:** Not automatically. Async primarily improves concurrency for I/O-bound workloads.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-## Section 2 — Difference-based questions
-
-Compare the related concepts from today's notes. Explain their meaning, practical difference and when you would choose each one. Use the comparison table in the class notes as a revision starting point; add an example from your own code.
-
-## Section 3 — Practical implementation questions
-
-1. Explain how you would recreate today's guided example from an empty project.
-2. Which inputs should be validated before the main operation starts?
-3. What should the program return or display on success and failure?
-4. What tests would you write for a normal case, an edge case and an invalid case?
-5. What would you change before using the example in a production application?
-
-## Section 4 — Scenario-based questions
-
-### Scenario A — Your code works for one input but fails for another
-
-**Expected approach**
-1. Reproduce the failure using the exact input.
-2. Read the complete traceback or response details.
-3. Inspect assumptions about types, missing values and boundaries.
-4. Fix the underlying cause instead of hiding the error.
-5. Add a regression test and rerun the relevant tests.
-
-### Scenario B — A prototype must become part of a business application
-
-**Expected approach**
-1. Confirm the business requirement and expected behaviour.
-2. Separate input validation, business logic and external dependencies.
-3. Define clear data structures and interfaces.
-4. Add persistence, security and observability appropriate to the use case.
-5. Add tests, documentation and deployment controls.
-
-## Section 5 — Troubleshooting questions
-
-- What exact error or status code do you see?
-- Can you reproduce the issue with a smaller input?
-- Which line or request boundary first shows incorrect behaviour?
-- What changed immediately before the failure?
-- How will you verify the fix and prevent regression?
-
-## Section 6 — Strong points to remember
-
-- Define the concept directly before giving an example.
-- Explain why the approach fits the requirement.
-- Mention one limitation and how you would handle it.
-- Do not claim a demonstration is production-ready without the persistence, security, testing and operational controls it needs.
-- Explain your own contribution honestly.
+## Practical task
+Explain one async GET request from URL construction through JSON parsing and error handling.
