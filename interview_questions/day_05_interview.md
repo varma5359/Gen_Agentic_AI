@@ -1,87 +1,28 @@
-# Day 5 Interview Questions — Day 5 — Python modules, packages, exceptions, JSON, file handling and logging
+# Day 5 Interview Guide — Modules, Exceptions, Files, JSON and Logging
 
-**Phase:** 1 — Python and Software Development Foundations
+## Q1. What is a Python module?
+A module is a Python source file that can be imported. It separates reusable code from application entry points. Follow-up: What is a package? A package groups related modules in a directory structure.
 
-## How to use this guide
+## Q2. Why use exception handling?
+It lets an application respond to expected runtime failures rather than terminating unexpectedly. Catch specific exceptions, provide a useful message and preserve diagnostics. Follow-up: Why avoid except Exception: pass? It hides defects and makes debugging difficult.
 
-Answer each question aloud before reading the suggested answer. Use your own words. A strong fresher answer defines the concept, explains its purpose and gives a relevant example.
+## Q3. Explain try, except, else and finally.
+try contains risky operations; except handles a matching exception; else runs if try succeeds; finally runs as control leaves the structure and is useful for cleanup. Follow-up: Does finally normally run after an exception? Yes, as control exits the try structure.
 
-## Section 1 — Core interview questions
+## Q4. Compare file modes r, w and a.
+r reads an existing file; w creates or truncates a file; a appends or creates. Follow-up: Which mode can destroy existing content? w.
 
-### Q1. Module versus package?
+## Q5. Why use with open?
+It uses a context manager to close the file when the block exits, including when an exception occurs. It does not prevent missing-path or permission errors.
 
-**Answer:** A module is a Python file; a package is a directory grouping modules.
+## Q6. dumps versus dump?
+json.dumps returns JSON text from a Python object. json.dump writes JSON to a file-like object. loads parses text; load reads from a file. Malformed JSON raises JSONDecodeError.
 
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
+## Q7. Why use logging instead of print?
+Logging supports severity levels, timestamps and configurable destinations. print is useful for simple learning output, but not a full diagnostics strategy. Never log passwords, API keys, tokens or sensitive user content.
 
-### Q2. Why use a context manager for files?
+## Q8. How should application secrets be stored?
+Use environment variables or a managed secrets service, restrict access and never commit secrets. A private repository is not a safe secrets vault.
 
-**Answer:** The with block ensures a file is closed when the block exits, including after an exception.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q3. What is JSON?
-
-**Answer:** A text format for exchanging structured data. Python provides load/dump and loads/dumps functions.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q4. Why catch exceptions specifically?
-
-**Answer:** Specific handlers respond to expected failures without hiding unrelated defects.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-### Q5. What is logging for?
-
-**Answer:** It records application events and severity to help diagnose behaviour after execution.
-
-**Practical follow-up:** Give an example from today's approved project and explain one limitation.
-
-## Section 2 — Difference-based questions
-
-Compare the related concepts from today's notes. Explain their meaning, practical difference and when you would choose each one. Use the comparison table in the class notes as a revision starting point; add an example from your own code.
-
-## Section 3 — Practical implementation questions
-
-1. Explain how you would recreate today's guided example from an empty project.
-2. Which inputs should be validated before the main operation starts?
-3. What should the program return or display on success and failure?
-4. What tests would you write for a normal case, an edge case and an invalid case?
-5. What would you change before using the example in a production application?
-
-## Section 4 — Scenario-based questions
-
-### Scenario A — Your code works for one input but fails for another
-
-**Expected approach**
-1. Reproduce the failure using the exact input.
-2. Read the complete traceback or response details.
-3. Inspect assumptions about types, missing values and boundaries.
-4. Fix the underlying cause instead of hiding the error.
-5. Add a regression test and rerun the relevant tests.
-
-### Scenario B — A prototype must become part of a business application
-
-**Expected approach**
-1. Confirm the business requirement and expected behaviour.
-2. Separate input validation, business logic and external dependencies.
-3. Define clear data structures and interfaces.
-4. Add persistence, security and observability appropriate to the use case.
-5. Add tests, documentation and deployment controls.
-
-## Section 5 — Troubleshooting questions
-
-- What exact error or status code do you see?
-- Can you reproduce the issue with a smaller input?
-- Which line or request boundary first shows incorrect behaviour?
-- What changed immediately before the failure?
-- How will you verify the fix and prevent regression?
-
-## Section 6 — Strong points to remember
-
-- Define the concept directly before giving an example.
-- Explain why the approach fits the requirement.
-- Mention one limitation and how you would handle it.
-- Do not claim a demonstration is production-ready without the persistence, security, testing and operational controls it needs.
-- Explain your own contribution honestly.
+## Practical task
+Write a program that loads JSON configuration, validates a required key and gives friendly messages for a missing file or malformed JSON. Explain each exception branch.
