@@ -1,77 +1,104 @@
 # Day 9 Project — Student Information REST API
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Approved topic:** FastAPI, routes, Pydantic models, request validation and response models.  
-**Estimated duration:** 30–75 minutes (Day 10 may take longer)  
-**Mode:** Independent self-learning
+## Objective
+Build a FastAPI service to create and retrieve student records with request validation and response schemas. The first version uses in-memory storage, not a production database.
 
-## 1. Problem statement and objective
-
-Build a Student Information REST API with create and read endpoints, validated request bodies and documented response models.
-
-## 2. Prerequisites
-
-FastAPI, Uvicorn, Pydantic, routes, HTTP methods, status codes and request validation.
-
-Complete the day's class notes first. Use only concepts already introduced in the pathway. No paid API key is required unless an optional extension explicitly adds one.
-
-## 3. Functional requirements
-
-- Solve the stated objective.
-- Use readable names and small functions or classes with clear responsibilities.
-- Validate input before processing.
-- Provide useful behaviour for normal and invalid inputs.
-- Keep credentials and sensitive values out of source code.
-
-## 4. Step-by-step implementation plan
-
-1. Create request/response models and POST /students and GET /students/{student_id}.
-2. Start Uvicorn and test valid and invalid requests in /docs.
-
-Do not skip steps. Run the program after each meaningful change. If an error occurs, fix it before adding another feature.
-
-## 5. Suggested folder structure
-
-~~~text
-day_09_project/
-├── main.py
-└── requirements.txt
+## Setup
+Create and activate a virtual environment:
+~~~bash
+python -m venv .venv
+~~~
+Install:
+~~~bash
+python -m pip install fastapi uvicorn
 ~~~
 
-Create only files you actually use. Do not add empty modules merely to make the project look larger.
+## Create main.py
+~~~python
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
 
-## 6. Sample data and expected behaviour
+app = FastAPI(title="TechPhile Student Information API")
+students = {}
+next_id = 1
 
-Start with two or three small records. Before running the program, write down the expected result for each record. Compare actual and expected behaviour and explain any difference.
+class StudentCreate(BaseModel):
+    name: str = Field(min_length=2, max_length=60)
+    email: str
+    course: str = Field(min_length=2, max_length=80)
+    score: float = Field(ge=0, le=100)
 
-## 7. Test cases and validation
+class StudentResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+    course: str
+    score: float
 
-Test valid create, short name, invalid age, existing ID and missing ID. In-memory storage is a learning shortcut and resets on restart.
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
-Record each test as: input, expected result, actual result and PASS/FAIL. Do not mark a test passed until you have run it.
+@app.post("/students", response_model=StudentResponse, status_code=201)
+def create_student(student: StudentCreate):
+    global next_id
+    student_id = next_id
+    next_id += 1
+    record = {"id": student_id, **student.model_dump()}
+    students[student_id] = record
+    return record
 
-## 8. Common debugging method
+@app.get("/students/{student_id}", response_model=StudentResponse)
+def get_student(student_id: int):
+    if student_id not in students:
+        raise HTTPException(status_code=404, detail="Student not found")
+    return students[student_id]
 
-1. Read the full error message.
-2. Confirm the command, file path and active Python environment.
-3. Inspect relevant inputs and variable values.
-4. Reduce the problem to the smallest reproducible example.
-5. Fix the cause and repeat the failing test.
+@app.get("/students")
+def list_students():
+    return list(students.values())
+~~~
 
-## 9. Submission checklist
+## Run
+~~~bash
+uvicorn main:app --reload
+~~~
+Open /docs on the local server and use Try it out.
 
-- [ ] Source files and folder structure are saved.
-- [ ] Setup and run instructions are written.
-- [ ] Example input and output are recorded.
-- [ ] Normal and invalid cases have been tested.
-- [ ] Known limitations are documented.
-- [ ] No credentials, private data or unnecessary environment files are committed.
-- [ ] I can explain the design and code I wrote.
+POST body:
+~~~json
+{
+  "name": "Asha",
+  "email": "asha@example.test",
+  "course": "GenAI",
+  "score": 88
+}
+~~~
+Expected: 201 with an id and validated fields.
 
-## 10. Interview explanation
+## Test cases
+| Test | Request | Expected |
+|---|---|---|
+| TC01 | GET /health | 200 and status ok |
+| TC02 | POST valid student | 201 |
+| TC03 | GET /students/1 after create | 200 |
+| TC04 | GET /students/999 | 404 |
+| TC05 | POST score 120 | Validation error |
+| TC06 | POST one-character name | Validation error |
+| TC07 | GET /students | List of records |
 
-Prepare a 60–90 second explanation covering the problem, your design, the key concepts, one challenge, how you tested the result and one improvement you would make before production.
+## Important limitations
+- Dictionary data disappears when server restarts.
+- Global integer ID is only a single-process teaching example.
+- Email is a string here; production validation should verify format and ownership.
+- There is no authentication or authorisation. Do not expose this demo with real student data.
 
-## 11. Optional extension
+## Extensions
+1. Add PATCH to update a field.
+2. Add DELETE.
+3. Add response model for list.
+4. Add pytest tests after Day 10.
+5. Draw request → validation → route → response.
 
-Add one small feature only after all required behaviour works. Keep it within concepts already taught; do not introduce an advanced framework early.
+## Submission
+Submit main.py, API request/response evidence, test table and a paragraph describing in-memory storage limitations.
