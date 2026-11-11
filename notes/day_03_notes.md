@@ -2368,8 +2368,8 @@ Enter a sentence:   Python helps students learn AI. Python is useful!
 
 --- TEXT REPORT ---
 Cleaned text: Python helps students learn AI. Python is useful!
-Characters: 50
-Words: 9
+Characters: 49
+Words: 8
 Unique words: ['ai', 'helps', 'is', 'learn', 'python', 'students', 'useful']
 Long words: ['python', 'helps', 'students', 'learn', 'python', 'useful']
 ```
