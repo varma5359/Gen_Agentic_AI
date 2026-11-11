@@ -442,3 +442,218 @@ Ask the student to explain one code example in this order: input, variable, oper
 
 ### Student reflection
 Write down the question that was hardest to answer. Revisit the matching class-note section, create a smaller example and explain it again the next day.
+
+
+---
+
+## 6. Function coding interview — complete answers
+
+### Q8. What is the difference between print() and return?
+
+`print()` displays output for a person. `return` sends a value to the caller so the program can use it.
+
+```python
+def show_total():
+    print(10 + 5)
+
+def calculate_total():
+    return 10 + 5
+
+first = show_total()
+second = calculate_total()
+print(first)
+print(second)
+```
+
+Output:
+
+```text
+15
+None
+15
+```
+
+The first function prints 15 and implicitly returns None. The second function returns 15.
+
+### Q9. What is variable scope?
+
+Scope is where a variable name can be accessed. A local variable is defined inside a function. A module-level variable is defined outside functions.
+
+Prefer passing values through parameters and receiving results through return values. This makes functions easier to test and understand.
+
+### Q10. What are default arguments?
+
+A default argument is used when the caller does not supply a value for that parameter.
+
+```python
+def greet(name, course="Python"):
+    return f"Hello {name}, welcome to {course}"
+
+print(greet("Anu"))
+print(greet("Ravi", "GenAI"))
+```
+
+Output:
+
+```text
+Hello Anu, welcome to Python
+Hello Ravi, welcome to GenAI
+```
+
+Avoid mutable defaults such as `items=[]`. The same list can be reused across calls. Use `None` and create a new list inside the function instead.
+
+### Q11. What are *args and **kwargs?
+
+- `*args` collects extra positional arguments into a tuple.
+- `**kwargs` collects extra keyword arguments into a dictionary.
+
+Use them when a function genuinely needs a variable number of arguments, not automatically in every function.
+
+### Q12. What is a comprehension?
+
+A comprehension creates a new collection from an iterable, optionally transforming or filtering its values.
+
+```python
+scores = [40, 75, 90]
+passed = [score for score in scores if score >= 50]
+print(passed)
+```
+
+Output:
+
+```text
+[75, 90]
+```
+
+A normal loop may be clearer when the logic has several steps.
+
+## 7. Code-output interview drills
+
+### Drill 1 — no explicit return
+
+```python
+def greet():
+    print("Hi")
+
+result = greet()
+print(result)
+```
+
+**Answer:**
+
+```text
+Hi
+None
+```
+
+### Drill 2 — parameter and argument
+
+```python
+def multiply(number, factor):
+    return number * factor
+
+print(multiply(4, 3))
+```
+
+**Answer:** `12`.
+
+### Drill 3 — keyword arguments
+
+```python
+def profile(name, course):
+    return name + " - " + course
+
+print(profile(course="Python", name="Anu"))
+```
+
+**Answer:** `Anu - Python`.
+
+### Drill 4 — default value
+
+```python
+def welcome(name, course="Python"):
+    return f"{name}: {course}"
+
+print(welcome("Ravi"))
+```
+
+**Answer:** `Ravi: Python`.
+
+### Drill 5 — comprehension
+
+```python
+values = [1, 2, 3, 4]
+squares = [value * value for value in values if value % 2 == 0]
+print(squares)
+```
+
+**Answer:** `[4, 16]`. Only even values are selected and squared.
+
+## 8. Practical coding interview challenge
+
+**Task:** Write a function that accepts a list of text messages and returns the number of non-empty messages.
+
+Starter data:
+
+```python
+messages = ["Hello", "", "Explain Python", "   ", "Thanks"]
+```
+
+**One possible solution:**
+
+```python
+def count_non_empty_messages(messages):
+    count = 0
+
+    for message in messages:
+        if message.strip():
+            count += 1
+
+    return count
+
+
+print(count_non_empty_messages(messages))
+```
+
+Output:
+
+```text
+3
+```
+
+Explanation:
+- The function receives a list parameter.
+- The for loop visits each message.
+- `strip()` removes surrounding whitespace and returns a new string.
+- An empty string is false in a condition.
+- The counter increases for each non-empty message.
+- `return` sends the final integer to the caller.
+- The original list is not modified.
+
+## 9. Project discussion — Reusable Text Processing Toolkit
+
+Be ready to explain:
+
+1. **What problem does it solve?** It accepts a text input and reports cleaned text, character count, word count, unique words and long words.
+2. **Why did you create separate functions?** Each function has one responsibility and can be checked independently.
+3. **Why does clean_text() return a string?** Other functions need to use the cleaned value.
+4. **Why does analyze_text() return a dictionary?** Each result has a meaningful name such as `words` or `unique_words`.
+5. **Why is set() used?** It removes duplicate words.
+6. **Why is sorted() used after set()?** It gives predictable alphabetical display order.
+7. **How does the program handle empty input?** main() checks whether the stripped input is empty and displays a helpful message.
+8. **Does it use an AI model?** No. It is a plain Python text-processing foundation, not an LLM application.
+9. **What are its limitations?** Simple whitespace splitting does not fully handle every punctuation mark, abbreviation or language. It does not identify sentence meaning.
+10. **What would you add next?** Automated tests, stronger text normalization and a reusable module.
+
+## 10. Final interview readiness checklist
+
+- [ ] I can define and call a function.
+- [ ] I can explain parameters and arguments.
+- [ ] I can explain positional, keyword and default arguments.
+- [ ] I can explain `*args` and `**kwargs`.
+- [ ] I can explain print versus return.
+- [ ] I can explain local and global scope.
+- [ ] I can read and write a simple list comprehension.
+- [ ] I can explain every function in the Text Processing Toolkit.
+- [ ] I can solve the non-empty message challenge.
+- [ ] I can explain one project limitation honestly.
