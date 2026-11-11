@@ -1,101 +1,153 @@
-# Day 6 — Advanced Python: iterators, generators, decorators, context managers and type hints.
+# Day 6 — Advanced Python: iterators, generators, decorators, context managers and type hints
 
-**Phase:** 1 — Python and Software Development Foundations  
-**Duration:** 2–3 hours  
-**Level:** Beginner to Intermediate
+**Phase 1 | 2–3 hours | Project: Reusable Python Logging and Timing Utility**
 
-> **Self-learning instruction:** Read one section at a time. Type the code yourself, run it and compare the result. These notes are designed to teach without a trainer or video.
+## Learning objectives
+Explain iterable and iterator; use iter() and next(); create generators with yield; explain decorators; use context managers; add type hints to functions.
 
-## 1. Understand the topic
+## 1. Iterable and iterator
+An iterable can produce an iterator. Lists, tuples and strings are iterable.
 
-An iterable can provide an iterator. An iterator produces the next value and remembers its position. A generator uses yield to produce values lazily. A decorator wraps a callable to add behaviour. functools.wraps preserves metadata. A context manager manages setup and cleanup around with. Type hints document expectations but do not enforce runtime types.
+~~~python
+topics = ["Python", "RAG", "Agents"]
+iterator = iter(topics)
+print(next(iterator))
+print(next(iterator))
+print(next(iterator))
+~~~
 
-## 2. Why this matters in an AI application
+Output: Python, RAG, Agents.
 
-A GenAI application is still software. It needs input handling, business logic, APIs, data, validation, security, tests and deployment. Today's concepts are building blocks for those responsibilities. A small example demonstrates one concept; it is not automatically production-ready.
+iter() obtains an iterator. next() asks for its next item. After the last item, next() raises StopIteration. A for loop handles this stopping signal automatically.
 
-## 3. Guided coding walkthrough
+## 2. Build a simple iterator
+~~~python
+class NumberRange:
+    def __init__(self, stop):
+        self.current = 0
+        self.stop = stop
 
-### Step 1 — Understand the task
+    def __iter__(self):
+        return self
 
-Read the code and predict the output. Identify the input, the main operation and the value produced.
+    def __next__(self):
+        if self.current >= self.stop:
+            raise StopIteration
+        value = self.current
+        self.current += 1
+        return value
 
-### Step 2 — Code
+for number in NumberRange(3):
+    print(number)
+~~~
+
+Output: 0, 1, 2. __iter__ returns the iterator. __next__ returns a value or signals completion. Most everyday code uses built-in iterables or generators rather than custom iterator classes.
+
+## 3. Generators and yield
+A generator produces values lazily, one at a time.
+
+~~~python
+def read_questions(lines):
+    for line in lines:
+        cleaned = line.strip()
+        if cleaned:
+            yield cleaned
+
+for question in read_questions([" What is RAG? ", "", "Explain embeddings"]):
+    print(question)
+~~~
+
+yield produces one value and pauses execution. The next iteration resumes from that point. Generators can save memory when processing large files or streams. An exhausted generator does not restart; call the generator function again to obtain a new one.
+
+## 4. Decorators
+A decorator wraps a function to add behaviour without rewriting the function's main logic.
 
 ~~~python
 from functools import wraps
-from time import perf_counter
-from typing import Iterator
 
-def timed(function):
+def announce_call(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
-        start = perf_counter()
+        print("Starting operation")
         result = function(*args, **kwargs)
-        print(f"Elapsed: {perf_counter() - start:.4f}s")
+        print("Operation finished")
         return result
     return wrapper
 
-def ids(total: int) -> Iterator[int]:
-    for value in range(1, total + 1):
-        yield value
+@announce_call
+def clean_question(question):
+    return question.strip().lower()
 
-@timed
-def total_ids(total: int) -> int:
-    return sum(ids(total))
-
-print(total_ids(5))
+print(clean_question("  Explain RAG  "))
 ~~~
 
-### Step 3 — Expected output
+The decorator syntax is equivalent to assigning clean_question = announce_call(clean_question). wrapper accepts positional and keyword arguments. wraps preserves useful metadata. This simple wrapper prints "Operation finished" only when the function returns normally; use try/finally if cleanup or timing must occur even after an exception.
 
-~~~text
-Elapsed: 0.0000s
-15
-(Timing varies.)
+## 5. Context managers
+A context manager controls setup and cleanup around a block. You have already used one with files.
+
+~~~python
+with open("sample.txt", "w", encoding="utf-8") as file:
+    file.write("Hello")
 ~~~
 
-### Step 4 — Explain the code line by line
+The file is closed when the block exits. The context manager protocol uses __enter__ and __exit__. Prefer with for resources that need cleanup.
 
-- yield produces values one at a time.
-- The decorator receives a function and returns a wrapper.
-- wraps preserves original function metadata.
-- sum consumes the generator.
-- Generators are usually exhausted after one pass; type hints are not runtime validation.
+## 6. Type hints
+Type hints describe expected input and output types. Python does not automatically enforce them at runtime.
 
-### Step 5 — Interpret the result
+~~~python
+def word_count(text: str) -> int:
+    return len(text.split())
 
-Answer in your own words: What input did the program receive? What operation did it perform? What result did it produce? What would change if the input changed? What should be validated before using this in a larger application?
+count: int = word_count("Learn Python today")
+print(count)
+~~~
 
-## 4. Common mistakes and troubleshooting
+text: str documents the expected input. -> int documents the expected return type. Editors and static type checkers can use hints to detect mistakes.
 
-- Read the complete traceback and identify the exception type and line.
-- Confirm the active Python interpreter, installed packages, current folder and filename.
-- Check types, missing values, boundaries and external response formats.
-- Reduce a complex failure to the smallest reproducible example.
-- Fix the cause rather than hiding errors with broad exception handling.
+For collections:
+~~~python
+def normalize_all(items: list[str]) -> list[str]:
+    return [item.strip().lower() for item in items]
+~~~
 
-## 5. Independent practice
+## 7. Industry scenario
+A document ingestion pipeline may process a large source one record at a time. A generator avoids loading every record into memory. A decorator can measure duration. A context manager closes files. Type hints make reusable utility contracts clearer.
 
-1. Recreate the example from a blank file.
-2. Change at least two inputs and predict the output before running.
-3. Add one validation or failure case relevant to this topic.
-4. Explain the changed output in your own words.
-5. Save the code in a clearly named project folder.
+## 8. Common mistakes
+| Mistake | Fix |
+|---|---|
+| next() after exhaustion | Use for loops or handle StopIteration |
+| Expect generator to replay | Create a new generator |
+| Decorator forgets return | Return the wrapped function's result |
+| Wrapper hides metadata | Use functools.wraps |
+| Assume hints validate input | Add explicit runtime validation |
+| Forget resource cleanup | Use a context manager |
 
-## 6. Interview-ready summary
+## 9. Exercises
+1. Create an iterator from a list and call next() three times.
+2. Write a generator that yields even numbers below a limit.
+3. Write a decorator that prints a function name.
+4. Add type hints to a function accepting a list of strings.
+5. Use with to write and read a text file.
+6. Explain one benefit of lazy generation.
 
-- Define the concept directly.
-- Explain the problem it solves.
-- Explain when to use it and when a simpler approach is better.
-- Give one practical AI-application example.
-- Mention one limitation or common failure mode.
+## 10. Five-question quiz
+1. iter() returns: A iterator B list always C string D class. **Answer A:** it obtains an iterator.
+2. yield: A ends program B produces a value and suspends generator C writes a file D imports module. **Answer B.**
+3. Iterator exhaustion raises: A KeyError B StopIteration C ValueError D SyntaxError. **Answer B.**
+4. functools.wraps preserves: A database B function metadata C API keys D memory. **Answer B.**
+5. Are type hints enforced automatically at runtime? A always B no C strings only D classes only. **Answer B.**
 
-## 7. Completion checklist
+## Completion checklist
+- [ ] Explain iterable versus iterator.
+- [ ] Use iter() and next().
+- [ ] Explain StopIteration.
+- [ ] Write a generator.
+- [ ] Explain and write a decorator.
+- [ ] Explain context-manager cleanup.
+- [ ] Add type hints.
+- [ ] Complete the project.
 
-- [ ] I can explain the concept without copying the definition.
-- [ ] I typed and ran the example.
-- [ ] I understand the expected output.
-- [ ] I completed the independent practice.
-- [ ] I can identify and fix a common error.
-- [ ] I am ready to attempt the approved project.
+**Next:** Day 7 — Asynchronous Python: async, await, asyncio, HTTP fundamentals and concurrent API requests.
