@@ -646,7 +646,7 @@ def show_learning_topics():
         "AI Agents"
     ]
 
-    print("\\nTopics in this career pathway:")
+    print("\nTopics in this career pathway:")
 
     for topic in topics:
         print("-", topic)
@@ -671,20 +671,20 @@ def main():
     if student_name == "":
         student_name = "Learner"
 
-    print("\\nWelcome,", student_name)
+    print("\nWelcome,", student_name)
 
     show_learning_topics()
 
-    print("\\nChoose your Python experience:")
+    print("\nChoose your Python experience:")
     print("1. beginner")
     print("2. some")
 
     level = input("Enter beginner or some: ").strip().lower()
     advice = recommend_next_step(level)
 
-    print("\\nYour learning guidance:")
+    print("\nYour learning guidance:")
     print(advice)
-    print("\\nKeep practising. Type every example yourself!")
+    print("\nKeep practising. Type every example yourself!")
 
 
 main()
